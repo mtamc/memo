@@ -1,4 +1,4 @@
-exports.handler = () => {
+exports.handler = async () => {
   try {
     return {
       statusCode: 200,
