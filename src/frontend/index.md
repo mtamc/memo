@@ -9,6 +9,7 @@ layout: layouts/base.njk
       <hr>
       <ul class="nav nav-pills nav-stacked">
         <li><a href="/">Home</a></li>
+        <li><div data-netlify-identity-button></div> </li>
       </ul>
     </div>
     <div class="col-xs-12 col-sm-9 col-md-9">

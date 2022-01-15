@@ -3,7 +3,7 @@
 interface Work {
    // internally attributed
   id: string
-  entryType: 'Game' | 'Movie' | 'TVShow' | 'Book'
+  entryType: 'Game' | 'Film' | 'TVShow' | 'Book'
 
   // retrieved with external api
   englishTranslatedTitle: string
@@ -26,8 +26,8 @@ interface Game extends Work {
   publisher?: string[] // Linked with Wikipedia Feeling Lucky
 }
 
-interface Movie extends Work {
-  entryType: 'Movie'
+interface Film extends Work {
+  entryType: 'Film'
 
   // retrieved with external api
   staff?: [] // Full data..? Linked with Wikipedia Feeling Lucky
@@ -38,7 +38,7 @@ interface TVShow extends Work {
   entryType: 'TVShow'
 
   // retrieved with external api
-  staff?: [] // same as Movie
+  staff?: [] // same as Film
   episodes?: number
 }
 
@@ -54,6 +54,7 @@ interface UserListEntry<EntryType extends Work> {
   commonMetadata: EntryType
 
   // User-specific data
+  userId: string
   status: 'InProgress' | 'Completed' | 'Dropped' | 'Planned'
   score?: number
   startedDate?: number // UNIX Timestamp
