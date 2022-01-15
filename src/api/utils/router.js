@@ -2,8 +2,10 @@ const { Result } = require('neverthrow')
 const { reqError } = require('./errors')
 const { create, findByRef } = require('./db')
 const responses = require('./responses')
+const { match } = require('ts-pattern')
+const { length } = require('ramda')
 
-const segments = (event) =>
+const getUrlSegments = (event) =>
   event.path
     .replace(/\.netlify\/functions\/[^/]+/, '')
     .replace(/api\/[^/]+/, '')
@@ -21,8 +23,11 @@ const getReqBodyAndCreate = (collection, event) =>
 const getUrlSegmentAndFind = (collection, event) =>
   findByRef(collection, routeArg(event))
 
+const matchVerbAndNumberOfUrlSegment = (event) =>
+  match([event.httpMethod, length(getUrlSegments(event))])
+
 module.exports = {
-  segments,
+  getUrlSegments,
   routeArg,
   getReqBodyAndCreate,
   getUrlSegmentAndFind,
