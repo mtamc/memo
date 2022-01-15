@@ -56,7 +56,7 @@ interface UserListEntry<EntryType extends Work> {
   // User-specific data
   userId: string
   status: 'InProgress' | 'Completed' | 'Dropped' | 'Planned'
-  score?: number
+  score?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
   startedDate?: number // UNIX Timestamp
   completedDate?: number // Unix Timestamp
   review?: string
