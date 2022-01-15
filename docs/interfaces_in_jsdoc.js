@@ -1,5 +1,5 @@
 // Interfaces can be used in JSDoc with the following syntax
-// They can also be imported just by requiring the file they come from
+// They can also be imported with techniques: https://stackoverflow.com/questions/45836847/how-to-get-vs-code-to-understand-jsdocs-typedef-across-multiple-files/55767692#55767692
 
 /**
  * @typedef User

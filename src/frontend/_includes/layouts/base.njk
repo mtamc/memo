@@ -20,6 +20,7 @@
     {{ content | safe }}
 
     <!-- JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
@@ -31,7 +32,9 @@
     {% set js %}
       {% include "js/old_main.js" %}
       {% include "js/packages/neverthrow.js" %}
-      {% include "js/utils.js" %}
+      {% include "js/utils/Utils.js" %}
+      {% include "js/utils/Nullable.js" %}
+      {% include "js/utils/Http.js" %}
       {% include "js/main.js" %}
     {% endset %}
     <script>{{ js | jsmin | safe }}</script>

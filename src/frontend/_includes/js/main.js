@@ -23,7 +23,7 @@ const warnFailedToRetrieveTable = (id) => (statusCode) =>
   $(id).html(failedToRetrieve(statusCode))
 
 const fetchDataThenInitTable = (endpoint, id) =>
-  http.get(endpoint).match(initTable(id), warnFailedToRetrieveTable(id))
+  Http.get(endpoint).match(initTable(id), warnFailedToRetrieveTable(id))
 
 fetchDataThenInitTable('/api/games_list', '#home-games')
 
