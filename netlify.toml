@@ -12,3 +12,13 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[context.production.environment]
+# https://docs.netlify.com/functions/build-with-javascript/#runtime-settings
+# https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
+NODE_VERSION = "14"
+AWS_LAMBDA_JS_RUNTIME = "nodejs14.x"
+
+[context.deploy-preview.environment]
+NODE_VERSION = "14"
+AWS_LAMBDA_JS_RUNTIME = "nodejs14.x"
