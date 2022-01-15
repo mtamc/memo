@@ -1,4 +1,12 @@
-const responses = require('../utils/responses')
+// const responses = require('../utils/responses')
+
+const response = (statusCode) => (body) => ({ statusCode, body })
+
+const responses = {
+  ok: response(200),
+  badRequest: response(400),
+  internalError: response(500),
+}
 
 exports.handler = () => responses.ok(JSON.stringify(dummy))
 
