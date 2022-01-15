@@ -19,17 +19,15 @@ layout: layouts/base.njk
       <hr>
       <div class="row">
         <div class="col-md-6">
-          <h3><a href="films">Films</a></h3>
+          <h3><a href="list">Films</a></h3>
           <table id="home-films" > </table>
         </div>
         <div class="col-md-6">
-          <h3><a href="video-games">Video Games</a></h3>
+          <h3><a href="list">Video Games</a></h3>
           <table id="home-games" > </table>
         </div>
       </div>
       <hr>
     </div>
   </div>
-  <hr>
-  <footer> &nbsp; </footer>
 </div>
