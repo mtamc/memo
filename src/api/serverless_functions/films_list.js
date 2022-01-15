@@ -1,37 +1,37 @@
-const responses = require('../utils/responses')
+// const responses = require('../utils/responses')
+exports.handler = async (event, context) => {
+  try {
+    return { statusCode: 200, body: `Hello from a serverless function!` };
+  } catch (err) {
+    return { statusCode: 500, body: err.toString() };
+  }
+// exports.handler = ({}, {}, cb) => cb(responses.ok(JSON.stringify(dummy)))
 
-exports.handler = () => ({
-  statusCode: 200,
-  body: "test"
-})
-
-  // responses.ok(JSON.stringify(dummy))
-
-const dummy = [
-  {
-    commonMetadata: {
-      id: '0',
-      entryType: 'Movie',
-      originalTitle: 'Fake movie',
-      englishTranslatedTitle: 'English fake movie',
-      duration: 2.5,
-      imageUrl: 'https://preview.redd.it/y5tsbhhdmla81.jpg',
-      genres: ['drama', 'thriller'],
-      staff: ['Woody Allen']
-    },
-    score: 7
-  },
-  {
-    commonMetadata: {
-      id: '1',
-      entryType: 'Movie',
-      originalTitle: 'Fake movie 2',
-      englishTranslatedTitle: 'English fake movie 2',
-      duration: 1,
-      imageUrl: 'https://i.redd.it/i30zk1372na81.jpg',
-      genres: ['adventure', 'superhero'],
-      staff: ['Robert Downey Jr.']
-    },
-    score: 5,
-  },
-]
+// const dummy = [
+  // {
+    // commonMetadata: {
+      // id: '0',
+      // entryType: 'Movie',
+      // originalTitle: 'Fake movie',
+      // englishTranslatedTitle: 'English fake movie',
+      // duration: 2.5,
+      // imageUrl: 'https://preview.redd.it/y5tsbhhdmla81.jpg',
+      // genres: ['drama', 'thriller'],
+      // staff: ['Woody Allen']
+    // },
+    // score: 7
+  // },
+  // {
+    // commonMetadata: {
+      // id: '1',
+      // entryType: 'Movie',
+      // originalTitle: 'Fake movie 2',
+      // englishTranslatedTitle: 'English fake movie 2',
+      // duration: 1,
+      // imageUrl: 'https://i.redd.it/i30zk1372na81.jpg',
+      // genres: ['adventure', 'superhero'],
+      // staff: ['Robert Downey Jr.']
+    // },
+    // score: 5,
+  // },
+// ]
