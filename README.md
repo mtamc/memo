@@ -27,3 +27,20 @@ The project scaffold originally includes:
 - [Eleventy](https://11ty.io)
 - A tiny inline JS pipeline
 - Serverless (FaaS) development pipeline with [Netlify Dev](https://www.netlify.com/products/dev) and [Netlify Functions](https://www.netlify.com/products/functions)
+
+## Credentials
+
+This project is deployed via netlify with the account `m.tam.carre@gmail.com`
+(ask Tam for password).
+
+You might need to run `npx netlify login` inside the project.
+
+## Netlify plugins
+
+### Identity
+
+Managed at https://app.netlify.com/sites/td-memo/identity
+
+### FaunaDB
+
+Managed at https://dashboard.fauna.com by logging in with netlify account integration.

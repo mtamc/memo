@@ -28,3 +28,5 @@ const fetchDataThenInitTable = (endpoint, id) =>
 fetchDataThenInitTable('/api/games_list', '#home-games')
 
 fetchDataThenInitTable('/api/films_list', '#home-films')
+
+netlifyIdentity.on('login', console.log)
