@@ -23,7 +23,7 @@ const getReqBodyAndCreate = (collection, event) =>
 const getUrlSegmentAndFind = (collection, event) =>
   findByRef(collection, routeArg(event))
 
-const matchVerbAndNumberOfUrlSegment = (event) =>
+const matchVerbAndNumberOfUrlSegments = (event) =>
   match([event.httpMethod, length(getUrlSegments(event))])
 
 module.exports = {
@@ -31,6 +31,7 @@ module.exports = {
   routeArg,
   getReqBodyAndCreate,
   getUrlSegmentAndFind,
+  matchVerbAndNumberOfUrlSegments
 }
 
 ///////////////////////////////////////////////////////////////////////////////
