@@ -1,6 +1,11 @@
 const responses = require('../utils/responses')
 
-exports.handler = () => responses.ok(JSON.stringify(dummy))
+exports.handler = () => ({
+  statusCode: 200,
+  body: "test"
+})
+
+  // responses.ok(JSON.stringify(dummy))
 
 const dummy = [
   {
