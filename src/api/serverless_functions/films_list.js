@@ -1,5 +1,5 @@
 // const responses = require('../utils/responses')
-exports.handler = () => {
+exports.handler = (a, b) => {
   try {
     return { statusCode: 200, body: `Hello from a serverless function!` };
   } catch (err) {
