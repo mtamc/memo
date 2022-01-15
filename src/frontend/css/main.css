@@ -1,0 +1,39 @@
+a {
+  color: #0e9ce0;
+}
+span:lang(ja) {
+  font-family: sans-serif;
+}
+span:lang(cn) {
+  font-family: sans-serif;
+}
+
+/* Styling for images included in comments that resize appropriately.
+*/
+.responsive-image {
+  width: 100%;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Styling for headers which collapse the subsequent element. It acts like a
+ * link and uses Font-Awesome unicode to indicate whether it's collapsed.
+*/
+.collapsible {
+  color: #0e9ce0;
+  cursor: pointer;
+}
+.collapsible:before {
+  content: "\f106";  /* angle-up */
+  font-family: FontAwesome;
+  padding-right: 5px;
+}
+.is-collapsed:before {
+  content: "\f107";  /* angle-down */
+  font-family: FontAwesome;
+  padding-right: 5px;
+}
+.collapsible:hover {
+  text-decoration: underline;
+}

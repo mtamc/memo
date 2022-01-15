@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2020",
+    "checkJs": true
+  },
+  "include": [
+    "src/api/**/*",
+    "docs/interfaces_in_jsdoc.js"
+  ]
+}
