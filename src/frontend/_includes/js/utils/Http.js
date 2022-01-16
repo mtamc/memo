@@ -1,5 +1,3 @@
-// EXPORTED
-
 const getToken = () => netlifyIdentity?.currentUser()?.token?.access_token
 
 const get = (url) =>
@@ -14,8 +12,6 @@ window.Http = {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
-// unexported
 
 const toAuthHeader = (token) => ({ Authorization: `Bearer ${token}` })
 

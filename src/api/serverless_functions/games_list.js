@@ -1,3 +1,4 @@
+// Test file, will be deleted
 exports.handler = async () => {
   try {
     return {

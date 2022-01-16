@@ -1,3 +1,4 @@
+// Test file, will be deleted
 const responses = require('../utils/responses')
 
 exports.handler = async () => responses.ok(JSON.stringify(dummy))
