@@ -17,9 +17,13 @@ const safeJSONStringify = Result.fromThrowable(JSON.stringify, String)
 /** @type {<T,U>(x: [T, U]) => x} */
 const tuple = (x) => x
 
+/** @type {<T,U,V>(x: [T, U, V]) => x} */
+const triplet = (x) => x
+
 module.exports = {
   log,
   warn,
   safeJSONStringify,
   tuple,
+  triplet,
 }
