@@ -1,6 +1,8 @@
 /** @typedef {import('@netlify/functions').HandlerContext} Context */
 /** @typedef {import('@netlify/functions').HandlerEvent} Event */
 /** @typedef {import('../responses').Response} Response */
+/** @typedef {import('../errors').Error} Error */
+const { ResultAsync } = require('neverthrow')
 const {identity} = require('ramda')
 const db = require('../db')
 const responses = require('../responses')
@@ -16,6 +18,11 @@ const findOwnName = (context) =>
     )
     .map(result => responses.ok(result?.data?.username))
     .match(identity, identity)
+
+/** @type {(name: string) => ResultAsync<string, Error>} */
+const findIdOfName_ = (name) =>
+  db.findOneByField_('users', 'username', name)
+    .map(result => result?.data?.userId)
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
 const setOwnName = (event, context) => {
@@ -33,6 +40,7 @@ const setOwnName = (event, context) => {
 
 
 module.exports = {
+  findIdOfName_,
   findOwnName,
   setOwnName
 }

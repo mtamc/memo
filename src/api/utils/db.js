@@ -36,9 +36,22 @@ const findByRef = (collection, ref) =>
 const findOneByField = (collection, field, value) =>
   query(Get(Match(Index(`${collection}__${field}`), value)))
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>} */
+/**
+ * NOTE: You must create a FaunaDB index named ${collection}__${field}
+ * @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>}
+ */
 const findOneByField_ = (collection, field, value) =>
   query_(Get(Match(Index(`${collection}__${field}`), value)))
+
+/**
+ * NOTE: You must create a FaunaDB index named ${collection}__${field}
+ * @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<Response>}
+ */
+const findAllByField = (collection, field, value) =>
+  query(q.Map(
+    Paginate(Match(Index(`${collection}__${field}`), value)),
+    Lambda(x => Get(x))
+  ))
 
 /** @type {(collection: ValidCollection) => Promise<Response>} */
 const findAll = (collection) =>
@@ -61,6 +74,7 @@ const create = (collection, data) =>
 module.exports = {
   findByRef,
   findAll,
+  findAllByField,
   findOneByField,
   findOneByField_,
   updateByRef,
