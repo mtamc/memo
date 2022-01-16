@@ -1,3 +1,5 @@
+/** @typedef {import('./works').Work} Work */
+/** @typedef {import('./entries').Entry} Entry */
 /**
  * @template T
  * @typedef {import('./utils').Validator<T>} Validator
