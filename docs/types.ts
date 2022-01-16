@@ -1,8 +1,6 @@
 /** This file only exists for developer reference. */
 
-interface Work {
-   // internally attributed
-  id: string
+interface Work { // IDs are Fauna refs, present in parent
   entryType: 'Game' | 'Film' | 'TVShow' | 'Book'
 
   // retrieved with external api
@@ -47,7 +45,7 @@ interface Book extends Work {
   // duration in words maybe?
 
   // retrieved with external api
-  author?: string
+  authors?: string[]
 }
 
 interface UserListEntry<EntryType extends Work> {
