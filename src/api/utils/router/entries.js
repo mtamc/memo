@@ -6,9 +6,9 @@
 const responses = require('../responses')
 const { Result, ResultAsync, combine, err, ok, okAsync } = require('neverthrow')
 const errors = require('../errors')
-const { getUserId, getSegment } = require('./utils')
+const { getUserId, getSegment, getReqBody } = require('./utils')
 const { identity } = require('ramda')
-const { tuple } = require('../general')
+const { tuple, triplet } = require('../general')
 const db = require('../db')
 const { match } = require('ts-pattern')
 const { findIdOfName_ } = require('./users')
@@ -39,9 +39,24 @@ const getAllEntriesForUser = (event) =>
     .map(([collection, id]) => db.findAllByField(collection, 'userId', id))
     .match(identity, responses.fromError)
 
+/** @type {(event: Event, context: Context) => Promise<Response>} */
+const createNewUserListEntry = (event, context) =>
+  combine(
+    triplet([
+      getUserId(context),
+      getReqBody(event),
+      toEntryCollection(getSegment(0, event)),
+    ]),
+  )
+    .asyncMap(([userId, body, collection]) =>
+      db.create(collection, { ...body, userId }),
+    )
+    .match(identity, responses.fromError)
+
 module.exports = {
   getFirstUrlSegmentAsEntryTypeAndFindByUser,
-  getAllEntriesForUser
+  getAllEntriesForUser,
+  createNewUserListEntry
 }
 
 ////////////////////////////////////////////////////////////////////////////////
