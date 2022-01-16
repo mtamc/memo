@@ -25,8 +25,10 @@ const warnFailedToRetrieveTable = (id) => (statusCode) =>
 const fetchDataThenInitTable = (endpoint, id) =>
   Http.get(endpoint).match(initTable(id), warnFailedToRetrieveTable(id))
 
-fetchDataThenInitTable('/api/games_list', '#home-games')
+window.setTimeout(() => {
+  fetchDataThenInitTable('/api/games_list', '#home-games')
 
-fetchDataThenInitTable('/api/films_list', '#home-films')
+  fetchDataThenInitTable('/api/films_list', '#home-films')
+}, 1000)
 
 netlifyIdentity.on('login', console.log)

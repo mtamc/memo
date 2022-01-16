@@ -9,6 +9,8 @@
 /** @typedef {import('./errors').Error} Error */
 const { Result } = require('neverthrow')
 const { z } = require('zod')
+const validator = require('validator')
+const { isAlphanumeric } = validator.default
 const errors = require('./errors')
 
 /**
@@ -16,11 +18,30 @@ const errors = require('./errors')
  * @typedef {(x: any) => Result<T, Error>} Validator
  */
 
-/** @typedef {'films' | 'games'} ValidCollection */
+/** @typedef {(
+ * 'films' | 'games' | 'tvShows' | 'books'
+ * | 'filmEntries' | 'gameEntries' | 'tvShowEntries' | 'bookEntries' | 'users'
+ * )} ValidCollection */
 
 /** @type {<T>(parser: ZodType, x: T) => Result<T, Error>} */
 const validate = (parser, x) =>
   Result.fromThrowable(parser.parse, (e) => errors.req(JSON.stringify(e)))(x)
+
+// User ============================================================
+
+const userParser = z.object({
+  userId: z.string(),
+  username: z.string().max(16).min(2).refine((val) => isAlphanumeric(val)),
+})
+
+/**
+ * @typedef {object} User
+ * @property {string} userId
+ * @property {string} username
+ */
+
+/** @type Validator<User> */
+const users = (x) => validate(userParser, x)
 
 // Work (abstract) =================================================
 
@@ -126,12 +147,89 @@ const bookParser = workParser.extend({
 /** @type Validator<Book> */
 const books = (x) => validate(bookParser, x)
 
+// Entries =========================================================
+
+const statusParser = z.enum(['InProgress', 'Completed', 'Dropped', 'Planned'])
+
+const scoreParser = z.union([
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+  z.literal(5),
+  z.literal(6),
+  z.literal(7),
+  z.literal(8),
+  z.literal(9),
+  z.literal(10)
+])
+
+/** @param {ZodType} specificWorkParser */
+const entryParser = (specificWorkParser) => z.object({
+  commonMetadata: specificWorkParser,
+  status: statusParser,
+  score: scoreParser.or(z.undefined()),
+  startedDate: z.number().or(z.undefined()),
+  completedDate: z.number().or(z.undefined()),
+  review: z.string().or(z.undefined())
+})
+
+/**
+ * @typedef {object} Entry
+ * @property {'InProgress'|'Completed'|'Dropped'|'Planned'} status
+ * @property {1|2|3|4|5|6|7|8|9|10} [score]
+ * @property {number} [startedDate]
+ * @property {number} [completedDate]
+ * @property {string} [review]
+ */
+
+/**
+ * @typedef {object} FilmEntryProps
+ * @property {Film} commonMetadata
+ * @typedef {Entry & FilmEntryProps} FilmEntry
+ */
+
+/** @type Validator<FilmEntry> */
+const filmEntries = (x) => validate(entryParser(filmParser), x)
+
+/**
+ * @typedef {object} GameEntryProps
+ * @property {Game} commonMetadata
+ * @typedef {Entry & GameEntryProps} GameEntry
+ */
+
+/** @type Validator<GameEntry> */
+const gameEntries = (x) => validate(entryParser(gameParser), x)
+
+/**
+ * @typedef {object} TVShowEntryProps
+ * @property {TVShow} commonMetadata
+ * @typedef {Entry & TVShowEntryProps} TVShowEntry
+ */
+
+/** @type Validator<TVShowEntry> */
+const tvShowEntries = (x) => validate(entryParser(tvShowParser), x)
+
+/**
+ * @typedef {object} BookEntryProps
+ * @property {Book} commonMetadata
+ * @typedef {Entry & BookEntryProps} BookEntry
+ */
+
+/** @type Validator<BookEntry> */
+const bookEntries = (x) => validate(entryParser(bookParser), x)
+
 // Exports =========================================================
 
-/**@type {Object.<ValidCollection, Validator<any>>} */
+/** @type {Record<ValidCollection, Validator<any>>} */
 module.exports = {
   films,
   games,
   tvShows,
-  books
+  books,
+  filmEntries,
+  gameEntries,
+  tvShowEntries,
+  bookEntries,
+  users
 }

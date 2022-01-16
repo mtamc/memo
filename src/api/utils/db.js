@@ -15,16 +15,41 @@
 /** @typedef {import('zod').ZodType} ZodType */
 /** @typedef {import('./responses').Response} Response */
 /** @typedef {import('./parsers').ValidCollection} ValidCollection */
+/** @typedef {import('./errors').Error} Error */
 const faunadb = require('faunadb')
 const responses = require('./responses')
 const { match } = require('ts-pattern')
 const errors = require('./errors')
-const { Get, Ref, Collection, Create } = faunadb.query
+const q = faunadb.query
+const { Get, Ref, Collection, Create, Match, Index, Paginate, Documents, Lambda, Update, Select } = q
 const parsers = require('./parsers')
+const { fromPromise, ResultAsync } = require('neverthrow')
 
 /** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */
 const findByRef = (collection, ref) =>
   query(Get(Ref(Collection(collection), ref)))
+
+/**
+ * NOTE: You must create a FaunaDB index named ${collection}__${field}
+ * @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<Response>}
+ */
+const findOneByField = (collection, field, value) =>
+  query(Get(Match(Index(`${collection}__${field}`), value)))
+
+/** @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>} */
+const findOneByField_ = (collection, field, value) =>
+  query_(Get(Match(Index(`${collection}__${field}`), value)))
+
+/** @type {(collection: ValidCollection) => Promise<Response>} */
+const findAll = (collection) =>
+  query(q.Map(
+    Paginate(Documents(Collection(collection))),
+    Lambda(x => Get(x))
+  ))
+
+/** @type {(ref: ExprArg, updat: ExprArg) => Promise<Response>} */
+const updateByRef = (ref, update) =>
+  query(Update(Ref(ref), update))
 
 /** @type {(collection: ValidCollection, data: ExprArg) => Promise<Response>} */
 const create = (collection, data) =>
@@ -35,7 +60,11 @@ const create = (collection, data) =>
 
 module.exports = {
   findByRef,
-  create,
+  findAll,
+  findOneByField,
+  findOneByField_,
+  updateByRef,
+  create
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,6 +78,10 @@ const query = (queryContent) =>
     .query(queryContent)
     .then((doc) => responses.ok(doc)) // Dunno why the typechecker requires pointful here
     .catch(dbErrToResponse)
+
+/** @type {(queryContent: ExprArg) => ResultAsync<object, Error> } */
+const query_ = (queryContent) =>
+  fromPromise(db.query(queryContent), errors.db)
 
 /** @type {(err: any) => Response} */
 const dbErrToResponse = (err) => {

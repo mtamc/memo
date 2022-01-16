@@ -12,6 +12,8 @@ const error = (name) => (context) => ({ error: name, context: String(context) })
 module.exports = {
   db: error('DBError'),
   req: error('RequestError'),
+  unauthorized: error('UnauthorizedError'),
+  notFound: error('NotFound'),
   internal: error('InternalError')
 }
 
