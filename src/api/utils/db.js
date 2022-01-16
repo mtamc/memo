@@ -22,7 +22,7 @@ const { match } = require('ts-pattern')
 const errors = require('./errors')
 const q = faunadb.query
 const { Get, Ref, Collection, Create, Match, Index, Paginate, Documents, Lambda, Update, Select } = q
-const parsers = require('./parsers')
+const parsers = require('./parsers/')
 const { fromPromise, ResultAsync } = require('neverthrow')
 
 /** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */

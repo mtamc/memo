@@ -8,5 +8,4 @@ exports.handler = async (event, context) =>
   matchVerbAndNumberOfUrlSegments(event)
     .with(['GET', 0], () => findOwnName(context))
     .with(['GET', 1], () => setOwnName(event, context))
-
     .otherwise(() => responses.badRequest())
