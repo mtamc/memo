@@ -18,6 +18,7 @@ const scoreParser = z.union([
 /** @param {ZodType} specificWorkParser */
 const entryParser = (specificWorkParser) => z.object({
   commonMetadata: specificWorkParser,
+  userId: z.string(),
   status: statusParser,
   score: scoreParser.or(z.undefined()),
   startedDate: z.number().or(z.undefined()),
@@ -28,6 +29,7 @@ const entryParser = (specificWorkParser) => z.object({
 /**
  * @typedef {object} Entry
  * @property {'InProgress'|'Completed'|'Dropped'|'Planned'} status
+ * @property {string} userId
  * @property {1|2|3|4|5|6|7|8|9|10} [score]
  * @property {number} [startedDate]
  * @property {number} [completedDate]
