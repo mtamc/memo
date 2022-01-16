@@ -28,6 +28,7 @@ const entryTypeParser = z.enum(['Game', 'Film', 'TVShow', 'Book'])
 
 /**
  * @typedef {object} Work
+ * @property {string} [apiRef]
  * @property {'Game'|'Film'|'TVShow'|'Book'} entryType
  * @property {string} englishTranslatedTitle
  * @property {string} [originalTitle]
@@ -38,6 +39,7 @@ const entryTypeParser = z.enum(['Game', 'Film', 'TVShow', 'Book'])
  */
 
 const workParser = z.object({
+  apiRef: z.string().or(z.undefined()),
   entryType: entryTypeParser,
   englishTranslatedTitle: z.string(),
   originalTitle: z.string().or(z.undefined()),
