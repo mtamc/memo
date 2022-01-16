@@ -12,20 +12,26 @@
  */
 /** @typedef {import('faunadb').Client} Client */
 /** @typedef {import('faunadb').ExprArg} ExprArg */
-/** @typedef {import('../responses').Response} Response */
+/** @typedef {import('zod').ZodType} ZodType */
+/** @typedef {import('./responses').Response} Response */
+/** @typedef {import('./parsers').ValidCollection} ValidCollection */
 const faunadb = require('faunadb')
-const responses = require('../responses')
+const responses = require('./responses')
 const { match } = require('ts-pattern')
-const errors = require('../errors')
+const errors = require('./errors')
 const { Get, Ref, Collection, Create } = faunadb.query
+const parsers = require('./parsers')
 
-/** @type {(collection: ExprArg, ref: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */
 const findByRef = (collection, ref) =>
   query(Get(Ref(Collection(collection), ref)))
 
-/** @type {(collection: ExprArg, data: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, data: ExprArg) => Promise<Response>} */
 const create = (collection, data) =>
-  query(Create(Collection(collection), { data }))
+  parsers[collection](data).match(
+    (data) => query(Create(Collection(collection), { data })),
+    (err) => Promise.resolve(responses.badRequest(err)),
+  )
 
 module.exports = {
   findByRef,
@@ -39,8 +45,9 @@ const db = new faunadb.Client({ secret: process.env.FAUNADB_SERVER_SECRET })
 
 /** @type {(queryContent: ExprArg) => Promise<Response>} */
 const query = (queryContent) =>
-  db.query(queryContent)
-    .then(doc => responses.ok(doc)) // Dunno why the typechecker requires pointful here
+  db
+    .query(queryContent)
+    .then((doc) => responses.ok(doc)) // Dunno why the typechecker requires pointful here
     .catch(dbErrToResponse)
 
 /** @type {(err: any) => Response} */
@@ -50,6 +57,5 @@ const dbErrToResponse = (err) => {
     .with('NotFound', () => responses.notFound)
     .otherwise(() => responses.internalError)
 
-  return response(errors.db(err))
+  return response(errors.db(err?.description))
 }
-

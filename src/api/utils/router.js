@@ -10,8 +10,8 @@
 /** @typedef {import('./responses').Response} Response */
 /** @typedef {import('./errors').Error} Error */
 const { Result } = require('neverthrow')
-const { reqError } = require('./errors')
-const { create, findByRef } = require('./db')
+const errors = require('./errors')
+const db = require('./db')
 const responses = require('./responses')
 const { match } = require('ts-pattern')
 const { length } = require('ramda')
@@ -32,17 +32,17 @@ const matchVerbAndNumberOfUrlSegments = (event) =>
 /** @type {(collection: string, event: Event) => Promise<Response> } */
 const getReqBodyAndCreate = (collection, event) =>
   getReqBody(event).match(
-    (body) => create(collection, body),
+    (body) => db.create(collection, body),
     (err) => Promise.resolve(responses.badRequest(err)),
   )
 
 /** @type {(collection: string, event: Event) => Promise<Response> } */
 const getFirstUrlSegmentAndFind = (collection, event) =>
-  findByRef(collection, getFirstSegment(event))
+  db.findByRef(collection, getFirstSegment(event))
 
 module.exports = {
   getReqBodyAndCreate,
-  getUrlSegmentAndFind: getFirstUrlSegmentAndFind,
+  getFirstUrlSegmentAndFind,
   matchVerbAndNumberOfUrlSegments,
 }
 
@@ -51,7 +51,7 @@ module.exports = {
 /** @type {(event: Event) => Result<any, Error>} */
 const getReqBody = Result.fromThrowable(
   (event) => JSON.parse(event.body),
-  (err) => reqError(String(err)),
+  (err) => errors.req(String(err)),
 )
 
 /** @type {(event: Event) => string} */

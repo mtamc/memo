@@ -22,15 +22,15 @@ interface Game extends Work {
 
   // retrieved with external api
   platforms?: string[]
-  studio?: string[] // Linked with Wikipedia Feeling Lucky
-  publisher?: string[] // Linked with Wikipedia Feeling Lucky
+  studios?: string[] // Linked with Wikipedia Feeling Lucky
+  publishers?: string[] // Linked with Wikipedia Feeling Lucky
 }
 
 interface Film extends Work {
   entryType: 'Film'
 
   // retrieved with external api
-  staff?: [] // Full data..? Linked with Wikipedia Feeling Lucky
+  staff?: string[] // Full data..? Linked with Wikipedia Feeling Lucky
              // Filtered by whitelist at DB query time or table render time
 }
 

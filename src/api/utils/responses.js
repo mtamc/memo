@@ -4,18 +4,18 @@
  */
 const { safeJSONStringify, warn } = require('./general')
 
-/** @typedef {{ statusCode: Number, body?: any }} Response */
+/** @typedef {{ statusCode: number, body?: any }} Response */
 
 /** @typedef {(body?: any) => Response} ResponseCreator */
 
-/** @type {(statusCode: Number) => ResponseCreator} */
+/** @type {(statusCode: number) => ResponseCreator} */
 const response = (statusCode) => (body) =>
   safeJSONStringify(body).match(
     (body) => ({ statusCode, body }),
     (err) => (warn(err), { statusCode: 500 }),
   )
 
-/** @type {Object.<String, ResponseCreator>} */
+/** @type {Object.<string, ResponseCreator>} */
 module.exports = {
   ok: response(200),
   badRequest: response(400),
