@@ -1,5 +1,5 @@
 /** @typedef {import('./works').Work} Work */
-/** @typedef {import('./entries').Entry} entry */
+/** @typedef {import('./entries').Entry} Entry */
 /**
  * @template T
  * @typedef {import('./utils').Validator<T>} Validator
@@ -7,6 +7,7 @@
 const { workParser } = require('./works')
 const { validate } = require('./utils')
 const { z } = require('zod')
+const { entryParser } = require('./entries')
 
 const filmParser = workParser.extend({
   entryType: z.literal('Film'),
