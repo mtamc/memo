@@ -26,6 +26,14 @@ layout: layouts/base.njk
           <h3><a href="list">Video Games</a></h3>
           <table id="home-games" > </table>
         </div>
+        <div class="col-md-6">
+          <h3><a href="list">Books</a></h3>
+          <table id="home-books" > </table>
+        </div>
+        <div class="col-md-6">
+          <h3><a href="list">TV Shows</a></h3>
+          <table id="home-tv-shows" > </table>
+        </div>
       </div>
       <hr>
     </div>
