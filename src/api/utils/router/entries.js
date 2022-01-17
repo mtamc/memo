@@ -9,7 +9,7 @@ const errors = require('../errors')
 const { getUserId, getSegment, getReqBody } = require('./utils')
 const { identity } = require('ramda')
 const { tuple, triplet } = require('../general')
-const db = require('../db')
+const db = require('../db/')
 const { match } = require('ts-pattern')
 const { findIdOfName_ } = require('./users')
 
