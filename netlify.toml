@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  functions = "src/api/serverless_functions"
+  functions = "src/api/routes"
   NODE_ENV = "14.15.3"
 
 [dev]

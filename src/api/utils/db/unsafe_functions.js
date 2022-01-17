@@ -65,10 +65,12 @@ module.exports = {
 ///////////////////////////////////////////////////////////////////////////////
 
 /** @type {(ref: faunadb.ExprArg) => Promise<object>} */
-const findOne = compose(db.query, Get)
+const findOne = (ref) =>
+  db.query(Get(ref))
 
 /** @type {(ref: ExprArg, params: ExprArg) => Promise<object>} */
-const updateOne = compose(db.query, Update)
+const updateOne = (ref, params) =>
+  db.query(Update(ref, params))
 
 /** @type {(ref: ExprArg, params: ExprArg) => Promise<object>} */
 const unsafeCreateDoc = (collection, data) =>
