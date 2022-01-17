@@ -6,7 +6,6 @@
 /** @typedef {import('../responses').Response} Response */
 /** @typedef {import('../errors').Error} Error */
 /** @typedef {import('../parsers').ValidCollection} ValidCollection */
-const db = require('../db')
 const { match } = require('ts-pattern')
 const { length } = require('ramda')
 const { tuple } = require('../general')

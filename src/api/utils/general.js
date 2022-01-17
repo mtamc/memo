@@ -20,10 +20,14 @@ const tuple = (x) => x
 /** @type {<T,U,V>(x: [T, U, V]) => x} */
 const triplet = (x) => x
 
+/** @type {(err: any) => never} */
+const throwIt = (err) => { throw err }
+
 module.exports = {
   log,
   warn,
   safeJSONStringify,
   tuple,
   triplet,
+  throwIt
 }
