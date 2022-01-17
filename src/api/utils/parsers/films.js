@@ -1,5 +1,4 @@
 /** @typedef {import('./works').Work} Work */
-/** @typedef {import('./entries').Entry} Entry */
 /**
  * @template T
  * @typedef {import('./utils').Validator<T>} Validator
@@ -14,22 +13,14 @@ const filmParser = workParser.extend({
   staff: z.array(z.string()).or(z.undefined()),
 })
 
-/**
- * @typedef {object} FilmProps
- * @property {'Film'} entryType
- * @property {string[]} [staff]
- *
- * @typedef {Work & FilmProps} Film
- */
+/** @typedef {z.infer<typeof filmParser>} Film */
 
-/**
- * @typedef {object} FilmEntryProps
- * @property {Film} commonMetadata
- * @typedef {Entry & FilmEntryProps} FilmEntry
- */
+const filmEntryParser = entryParser(filmParser)
+
+/** @typedef {z.infer<typeof filmEntryParser>} FilmEntry */
 
 /** @type Validator<FilmEntry> */
-const filmEntries = (x) => validate(entryParser(filmParser), x)
+const filmEntries = (x) => validate(filmEntryParser, x)
 
 module.exports = {
   filmEntries

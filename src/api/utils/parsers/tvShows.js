@@ -1,5 +1,4 @@
 /** @typedef {import('./works').Work} Work */
-/** @typedef {import('./entries').Entry} Entry */
 /**
  * @template T
  * @typedef {import('./utils').Validator<T>} Validator
@@ -16,23 +15,14 @@ const tvShowParser = workParser.extend({
   episodes: z.number().or(z.undefined()),
 })
 
-/**
- * @typedef {object} TVShowProps
- * @property {'TVShow'} entryType
- * @property {string[]} [staff]
- * @property {number} [episodes]
- *
- * @typedef {Work & TVShowProps} TVShow
- */
+/** @typedef {z.infer<typeof tvShowParser>} TVShow */
 
-/**
- * @typedef {object} TVShowEntryProps
- * @property {TVShow} commonMetadata
- * @typedef {Entry & TVShowEntryProps} TVShowEntry
- */
+const tvShowEntryParser = entryParser(tvShowParser)
+
+/** @typedef {z.infer<typeof tvShowEntryParser>} TVShowEntry */
 
 /** @type Validator<TVShowEntry> */
-const tvShowEntries = (x) => validate(entryParser(tvShowParser), x)
+const tvShowEntries = (x) => validate(tvShowEntryParser, x)
 
 module.exports = {
   tvShowEntries
