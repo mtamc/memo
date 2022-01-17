@@ -1,17 +1,16 @@
 /** @typedef {import('@netlify/functions').HandlerEvent} Event */
 /** @typedef {import('@netlify/functions').HandlerContext} Context */
-/** @typedef {import('../parsers').ValidCollection} ValidCollection */
-/** @typedef {import('../errors').Error} Error */
-/** @typedef {import('../responses').Response} Response */
-const responses = require('../responses')
+/** @typedef {import('../utils/parsers').ValidCollection} ValidCollection */
+/** @typedef {import('../utils/errors').Error} Error */
+/** @typedef {import('../utils/responses').Response} Response */
+const responses = require('../utils/responses')
 const { Result, ResultAsync, combine, err, ok, okAsync } = require('neverthrow')
-const errors = require('../errors')
-const { getUserId, getSegment, getReqBody } = require('./utils')
+const errors = require('../utils/errors')
+const { getUserId, getSegment, getReqBody, findIdOfName } = require('./utils')
 const { identity } = require('ramda')
-const { tuple, triplet } = require('../general')
-const db = require('../db/')
+const { tuple, triplet } = require('../utils/general')
+const db = require('../utils/db/')
 const { match } = require('ts-pattern')
-const { findIdOfName_ } = require('./users')
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
 const getFirstUrlSegmentAsEntryTypeAndFindByUser = (event, context) => {
@@ -33,7 +32,7 @@ const getAllEntriesForUser = (event) =>
   combine(
     tuple([
       toEntryCollection(getSegment(0, event)).asyncAndThen(okAsync),
-      findIdOfName_(getSegment(1, event)),
+      findIdOfName(getSegment(1, event)),
     ]),
   )
     .map(([collection, id]) => db.findAllByField(collection, 'userId', id))

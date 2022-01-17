@@ -1,8 +1,9 @@
 /** @typedef {import('@netlify/functions').HandlerEvent} Event */
 /** @typedef {import('@netlify/functions').HandlerContext} Context */
 /** @typedef {import('../errors').Error} Error */
-const { Result, ok, err } = require('neverthrow')
-const errors = require('../errors')
+const { Result, ok, err, ResultAsync } = require('neverthrow')
+const errors = require('../utils/errors')
+const db = require('../utils/db')
 
 /** @type {(context: Context) => Result<string, Error>} */
 const getUserId = (context) => {
@@ -30,10 +31,16 @@ const getReqBody = Result.fromThrowable(
   (err) => errors.req(String(err)),
 )
 
+/** @type {(name: string) => ResultAsync<string, Error>} */
+const findIdOfName = (name) =>
+  db.findOneByField_('users', 'username', name)
+    .map(result => result?.data?.userId)
+
 module.exports = {
   getUserId,
   getSegment,
   getUrlSegments,
-  getReqBody
+  getReqBody,
+  findIdOfName
 }
 
