@@ -1,5 +1,4 @@
 /** @typedef {import('./works').Work} Work */
-/** @typedef {import('./entries').Entry} Entry */
 /**
  * @template T
  * @typedef {import('./utils').Validator<T>} Validator
@@ -16,23 +15,14 @@ const gameParser = workParser.extend({
   publishers: z.array(z.string()).or(z.undefined()),
 })
 
-/**
- * @typedef {object} GameProps
- * @property {'Game'} entryType
- * @property {string[]} [studios]
- * @property {string[]} [publishers]
- *
- * @typedef {Work & GameProps} Game
- */
+/** @typedef {z.infer<typeof gameParser>} Game */
 
-/**
- * @typedef {object} GameEntryProps
- * @property {Game} commonMetadata
- * @typedef {Entry & GameEntryProps} GameEntry
- */
+const gameEntryParser = entryParser(gameParser)
+
+/** @typedef {z.infer<typeof gameEntryParser>} GameEntry */
 
 /** @type Validator<GameEntry> */
-const gameEntries = (x) => validate(entryParser(gameParser), x)
+const gameEntries = (x) => validate(gameEntryParser, x)
 
 module.exports = {
   gameEntries

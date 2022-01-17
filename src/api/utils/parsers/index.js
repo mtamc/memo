@@ -1,9 +1,6 @@
 /**
  * @file This file exports parsers which verify that
  * data POSTed by user matches the shape of our data structures.
- *
- * NOTE: DOUBLE-CHECK THAT THE JSDOC TYPEDEFS MATCH THE ZOD
- * PARSERS. IT CANNOT BE DONE AUTOMATICALLY WITHOUT TS.
  */
 /**
  * @template T

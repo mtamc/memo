@@ -26,16 +26,6 @@ const entryParser = (specificWorkParser) => z.object({
   review: z.string().or(z.undefined())
 })
 
-/**
- * @typedef {object} Entry
- * @property {'InProgress'|'Completed'|'Dropped'|'Planned'} status
- * @property {string} userId
- * @property {1|2|3|4|5|6|7|8|9|10} [score]
- * @property {number} [startedDate]
- * @property {number} [completedDate]
- * @property {string} [review]
- */
-
 module.exports = {
   entryParser
 }

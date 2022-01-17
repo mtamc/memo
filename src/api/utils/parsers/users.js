@@ -12,11 +12,7 @@ const userParser = z.object({
   username: z.string().max(16).min(2).refine((val) => isAlphanumeric(val)),
 })
 
-/**
- * @typedef {object} User
- * @property {string} userId
- * @property {string} username
- */
+/** @typedef {z.infer<typeof userParser>} User
 
 /** @type Validator<User> */
 const users = (x) => validate(userParser, x)

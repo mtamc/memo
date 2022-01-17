@@ -1,5 +1,4 @@
 /** @typedef {import('./works').Work} Work */
-/** @typedef {import('./entries').Entry} Entry */
 /**
  * @template T
  * @typedef {import('./utils').Validator<T>} Validator
@@ -14,22 +13,14 @@ const bookParser = workParser.extend({
   authors: z.array(z.string()).or(z.undefined()),
 })
 
-/**
- * @typedef {object} BookProps
- * @property {'Book'} entryType
- * @property {string[]} [authors]
- *
- * @typedef {Work & BookProps} Book
- */
+/** @typedef {z.infer<typeof bookParser>} Book */
 
-/**
- * @typedef {object} BookEntryProps
- * @property {Book} commonMetadata
- * @typedef {Entry & BookEntryProps} BookEntry
- */
+const bookEntryParser = entryParser(bookParser)
+
+/** @typedef {z.infer<typeof bookEntryParser>} BookEntry */
 
 /** @type Validator<BookEntry> */
-const bookEntries = (x) => validate(entryParser(bookParser), x)
+const bookEntries = (x) => validate(bookEntryParser, x)
 
 module.exports = {
   bookEntries
