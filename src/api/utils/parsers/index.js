@@ -1,6 +1,8 @@
 /**
  * @file This file exports parsers which verify that
  * data POSTed by user matches the shape of our data structures.
+ *
+ * Exports MUST be named after a valid DB collection.
  */
 /**
  * @template T
