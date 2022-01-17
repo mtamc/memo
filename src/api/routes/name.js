@@ -1,7 +1,7 @@
 /** @typedef {import('@netlify/functions').Handler} Handler */
 const responses = require('../utils/responses')
 const { matchVerbAndNumberOfUrlSegments, } = require('../router')
-const { findOwnName, setOwnName } = require('../controllers/users')
+const { findOwnName, setOwnName } = require('../controllers/name')
 
 /** @type Handler */
 exports.handler = async (event, context) =>
