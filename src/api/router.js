@@ -14,6 +14,9 @@ const { getUrlSegments } = require('./controllers/utils')
 
 /**
  * This is the main routing utility we use in our Netlify functions.
+ * Refer to the ts-pattern API to understand how it works, but the
+ * provided example should suffice.
+ * ts-pattern API: https://github.com/gvergnaud/ts-pattern
  * @param {Event} event
  * @example
  *     matchVerbAndNumberOfUrlSegments(event)

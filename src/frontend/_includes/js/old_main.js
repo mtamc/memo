@@ -1,4 +1,7 @@
-﻿// MathJax
+﻿/**
+ * @file nil's old main file, preserved
+ */
+// MathJax
 init_mathjax = function() {
   if (window.MathJax) {
     // MathJax loaded

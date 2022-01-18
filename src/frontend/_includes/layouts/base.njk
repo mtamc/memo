@@ -10,16 +10,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
-
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon"/>
 
-    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  </head>
-  <body>
-
-    {{ content | safe }}
-
     <!-- JavaScript -->
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -35,9 +29,30 @@
       {% include "js/utils/Utils.js" %}
       {% include "js/utils/Nullable.js" %}
       {% include "js/utils/Http.js" %}
-      {% include "js/main.js" %}
+      {% include "js/utils/Netlify.js" %}
+      {% include "js/utils/Tables.js" %}
+      {% include "js/components/index.js" %}
+      {% include "js/components/home.js" %}
     {% endset %}
     <script>{{ js | jsmin | safe }}</script>
+  </head>
+  <body>
+    <div id="site"></div>
+    <script>
+      window.setTimeout(async () => {
+        // Include the current page's JS
+        {{ content | safe }}
+
+        // Set the page content to the current page's defined value
+        $('#site').html(window.pageContentAndInitializer[0])
+
+        // Run the current page's defined initializer
+        await window.pageContentAndInitializer[1]()
+
+        // Init the netlify login widget
+        netlifyIdentity.init({ container: '#netlify-identity' })
+      }, 0)
+    </script>
   </body>
 </html>
 

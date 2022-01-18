@@ -4,6 +4,7 @@
 /** @typedef {import('../utils/errors').Error} Error */
 const {identity} = require('ramda')
 const db = require('../utils/db')
+const {log} = require('../utils/general')
 const responses = require('../utils/responses')
 const { getUserId, getSegment } = require('./utils')
 
