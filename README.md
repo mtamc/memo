@@ -46,3 +46,9 @@ Managed at https://app.netlify.com/sites/td-memo/identity
 ### FaunaDB
 
 Managed at https://dashboard.fauna.com by logging in with netlify account integration.
+
+## Error handling
+
+Error handling is done using `neverthrow`, which is similar to
+Rust Result or FP Either. Learn more about its API at:
+https://github.com/supermacro/neverthrow

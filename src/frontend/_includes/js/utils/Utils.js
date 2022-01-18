@@ -1,3 +1,7 @@
+/**
+ * @file General utility functions
+ */
+
 /** A tag`function` that does nothing, for syntax-highlighting purposes */
 const html = function (t) {
   for (var s = t[0], i = 1, l = arguments.length; i < l; i++)
@@ -5,6 +9,9 @@ const html = function (t) {
   return s
 }
 
+const noOp = () => undefined
+
 window.Utils = {
   html,
+  noOp
 }
