@@ -23,25 +23,35 @@
        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
 
-    {% set js %}
-      {% include "js/old_main.js" %}
-      {% include "js/packages/neverthrow.js" %}
-      {% include "js/utils/Utils.js" %}
-      {% include "js/utils/Nullable.js" %}
-      {% include "js/utils/Http.js" %}
-      {% include "js/utils/Netlify.js" %}
-      {% include "js/utils/Tables.js" %}
-      {% include "js/components/index.js" %}
-      {% include "js/components/home.js" %}
+    {# macro to include JS with its own const variable scope
+       to not have `const` assignments pollute projectwide scope #}
+    {% macro js(path) %}
+        (() => {
+          {% include path %}
+        })();
+    {% endmacro %}
+
+    {% set scripts %}
+      {{ js("js/old_main.js") }}
+      {{ js("js/packages/neverthrow.js") }}
+      {{ js("js/utils/Utils.js") }}
+      {{ js("js/utils/Nullable.js") }}
+      {{ js("js/utils/Http.js") }}
+      {{ js("js/utils/Netlify.js") }}
+      {{ js("js/utils/Tables.js") }}
+      {{ js("js/components/index.js") }}
+      {{ js("js/components/home.js") }}
     {% endset %}
-    <script>{{ js | jsmin | safe }}</script>
+    <script>
+      {{ scripts | jsmin | safe }}
+    </script>
   </head>
   <body>
     <div id="site"></div>
     <script>
       window.setTimeout(async () => {
         // Include the current page's JS
-        {{ content | safe }}
+        {{ content | jsmin | safe }}
 
         // Set the page content to the current page's defined value
         $('#site').html(window.pageContentAndInitializer[0])

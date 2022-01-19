@@ -1,3 +1,5 @@
+const { html } = Utils
+
 const HomePage = (content) => html`
   <div class="container">
     <div class="row" style="padding:20px">

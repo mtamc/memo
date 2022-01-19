@@ -12,6 +12,8 @@ const getEntries = (type, username) => Http.get(ENDPOINTS.entries(type, username
 
 const entryTypes = ['games', 'films', 'books', 'tv_shows']
 
+const getToken = Http.getToken
+
 const isLoggedIn = () => !R.isNil(getToken())
 
 window.Netlify = {

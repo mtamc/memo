@@ -15,12 +15,11 @@ module.exports = (config) => {
 
   // compress and combine js files
   config.addFilter('jsmin', (code) => {
-    return code
-    // const minified = UglifyJS.minify(code)
-    // if (minified.error) {
-      // console.log('UglifyJS error: ', minified.error)
-    // }
-    // return minified.error ? code : minified.code
+    const minified = UglifyJS.minify(code)
+    if (minified.error) {
+      console.log('UglifyJS error: ', minified.error)
+    }
+    return minified.error ? code : minified.code
   })
 
   // pass some assets right through

@@ -11,6 +11,6 @@ exports.handler = async (event, context) =>
     .with(['GET', 0], () => findOwnName(context))
 
     // GET /api/name/:newName
-    .with(['GET', 1], () => setOwnName(event, context))
+    .with(['POST', 1], () => setOwnName(event, context))
 
     .otherwise(() => responses.badRequest())
