@@ -25,7 +25,7 @@ const Menu = html`
 `
 
 const HomeLists = html`
-  <div class="row">
+  <div id="home-lists" class="row" style="display: none">
     <div class="col-md-6">
       <h3><a href="list">Films</a></h3>
       <table id="home-films" > </table>
@@ -45,13 +45,38 @@ const HomeLists = html`
   </div>
 `
 
+const FailedToRetrieve = (statusCode) => html`
+  <div class="failed-table">Failed to retrieve data. (${statusCode})</div>
+`
+
 const UnauthenticatedWelcome = html`
   <div>Welcome to memo. Log in to start listing.</div>
 `
 
-window.Components.Home = {
+const UsernameSetter = [
+  html`
+    <label for="new-name">Pick a username to start using Memo.</label><br>
+    <input type="text" id="new-name"><br>
+    <a id="submit-new-name">Submit</a>
+    <div id="new-name-error"></div>
+  `,
+  () => {
+    document.querySelector('#submit-new-name')
+      .addEventListener('click', () => {
+        Netlify.setName($('#new-name').val())
+          .map(({error}) => error
+            ? $('#new-name-error').html(`${error}`)
+            : location.reload()
+          )
+      })
+  }
+]
+
+Components.Home = {
   HomePage,
   Menu,
   HomeLists,
-  UnauthenticatedWelcome
+  UnauthenticatedWelcome,
+  FailedToRetrieve,
+  UsernameSetter
 }
