@@ -8,6 +8,8 @@ const getUserName = () => Http.get(ENDPOINTS.name)
 
 const getEntries = (type, username) => Http.get(ENDPOINTS.entries(type, username))
 
+const setName = (newName) => Http.post(ENDPOINTS.name, { newName })
+
 // UTILITY
 
 const entryTypes = ['games', 'films', 'books', 'tv_shows']
@@ -16,10 +18,11 @@ const getToken = Http.getToken
 
 const isLoggedIn = () => !R.isNil(getToken())
 
-window.Netlify = {
+Netlify = {
   getToken,
   getUserName,
   getEntries,
+  setName,
   entryTypes,
   isLoggedIn
 }

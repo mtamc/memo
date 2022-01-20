@@ -1,5 +1,9 @@
 const col = (field, title) => ({ field, title })
 
-window.Tables = {
-  col
+const createInitTableFunction = (settings) => (id, data) =>
+  $(id).bootstrapTable({ ...settings, data })
+
+Tables = {
+  col,
+  createInitTableFunction,
 }

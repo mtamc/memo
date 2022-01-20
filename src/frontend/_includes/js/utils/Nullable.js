@@ -9,6 +9,6 @@ const map = (nullable, fn) =>
     ? fn(nullable)
     : nullable
 
-window.Nullable = {
+Nullable = {
   map
 }

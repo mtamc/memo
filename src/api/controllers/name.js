@@ -2,40 +2,52 @@
 /** @typedef {import('@netlify/functions').HandlerEvent} Event */
 /** @typedef {import('../utils/responses').Response} Response */
 /** @typedef {import('../utils/errors').Error} Error */
-const { combine } = require('neverthrow')
-const { identity } = require('ramda')
-const db = require('../utils/db')
-const { tuple } = require('../utils/general')
+const { combine, okAsync, ResultAsync } = require('neverthrow')
+const { findOneByField_, updateByRef, create } = require('../utils/db')
+const { tuple, toPromise } = require('../utils/general')
 const responses = require('../utils/responses')
 const { getUserId, getReqBody } = require('./utils')
 
 /** @type {(context: Context) => Promise<Response>} */
 const findOwnName = (context) =>
   getUserId(context)
-    .mapErr(responses.unauthorized)
-    .asyncAndThen((userId) =>
-      db.findOneByField_('users', 'userId', userId).mapErr(responses.notFound),
+    .asyncAndThen((userId) => findOneByField_('users', 'userId', userId))
+    .match(
+      ({ data }) => responses.ok({ username: data?.username }),
+      (err) =>
+        err.context?.startsWith?.('NotFound')
+          ? responses.ok({ error: 'NoUsernameSet' })
+          : responses.fromError(err),
     )
-    .map((result) => responses.ok(result?.data?.username))
-    .match(identity, identity)
 
+// TODO: dont allow people to take an existing name
 /** @type {(event: Event, context: Context) => Promise<Response>} */
 const setOwnName = (event, context) =>
-  combine(tuple([getUserId(context), getReqBody(event)]))
-    .asyncMap(([userId, { newName }]) =>
-      db
-        .findOneByField_('users', 'userId', userId)
-        .map((result) =>
-          result?.data?.username === newName
-            ? responses.badRequest('Name must be different from old one')
-            : db.updateByRef(result.ref, { data: { username: newName } }),
-        )
-        .mapErr(() => db.create('users', { userId, username: newName }))
-        .match(identity, identity)
-    )
-    .unwrapOr(responses.unauthorized())
+  toPromise(
+    combine(tuple([getUserId(context), getReqBody(event)])).asyncAndThen(
+      assignNameIfNotTaken,
+    ),
+  )
 
 module.exports = {
   findOwnName,
   setOwnName,
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** @type {([userId, req]: [string, any]) => ResultAsync<Response, Response>} */
+const assignNameIfNotTaken = ([userId, req]) =>
+  findOneByField_('users', 'username', req.newName)
+    .map(async () => responses.ok({ error: 'This name is already taken.'}))
+    .mapErr((err) =>
+      err.context?.startsWith('NotFound')
+        ? (assignName(userId, req.newName), responses.ok())
+        : responses.fromError(err)
+    )
+
+/** @type {(userId: string, newName: string) => ResultAsync<Response, Response>} */
+const assignName = (userId, newName) =>
+  findOneByField_('users', 'userId', userId)
+    .map(({ ref }) => updateByRef(ref, { data: { username: newName } }))
+    .mapErr(() => create('users', { userId, username: newName }))

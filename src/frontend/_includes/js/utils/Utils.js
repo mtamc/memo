@@ -11,7 +11,13 @@ const html = function (t) {
 
 const noOp = () => undefined
 
-window.Utils = {
+const setContent = (selector, content) =>
+  Array.isArray(content)
+    ? ( $(selector).html(content[0]), content[1]?.() )
+    : $(selector).html(content)
+
+Utils = {
   html,
-  noOp
+  noOp,
+  setContent
 }
