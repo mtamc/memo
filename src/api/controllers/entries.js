@@ -4,56 +4,41 @@
 /** @typedef {import('../utils/errors').Error} Error */
 /** @typedef {import('../utils/responses').Response} Response */
 const responses = require('../utils/responses')
-const { Result, ResultAsync, combine, err, ok, okAsync } = require('neverthrow')
+const { Result, combine, err, ok, okAsync } = require('neverthrow')
 const errors = require('../utils/errors')
 const { getUserId, getSegment, getReqBody, findIdOfName } = require('./utils')
-const { identity } = require('ramda')
-const { tuple, triplet } = require('../utils/general')
+const { tuple, triplet, toPromise } = require('../utils/general')
 const db = require('../utils/db/')
 const { match } = require('ts-pattern')
 
-/** @type {(event: Event, context: Context) => Promise<Response>} */
-const getFirstUrlSegmentAsEntryTypeAndFindByUser = (event, context) => {
-  const userId = getUserId(context)
-  const collection = toEntryCollection(getSegment(0, event))
-  const entries = combine(tuple([userId, collection])).asyncAndThen(
-    ([uid, col]) =>
-      ResultAsync.fromPromise(
-        db.findOneByField(col, 'userId', uid),
-        errors.notFound,
-      ),
-  )
-
-  return entries.match(identity, responses.fromError)
-}
-
 /** @type {(event: Event) => Promise<Response>} */
 const getAllEntriesForUser = (event) =>
-  combine(
-    tuple([
-      toEntryCollection(getSegment(0, event)).asyncAndThen(okAsync),
-      findIdOfName(getSegment(1, event)),
-    ]),
+  toPromise(
+    combine(
+      tuple([
+        findIdOfName(getSegment(1, event)),
+        toEntryCollection(getSegment(0, event)).asyncAndThen(okAsync),
+      ]),
+    )
+      .map(getUserEntries)
+      .mapErr(responses.fromError)
   )
-    .map(([collection, id]) => db.findAllByField(collection, 'userId', id))
-    .match(identity, responses.fromError)
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
 const createNewUserListEntry = (event, context) =>
-  combine(
-    triplet([
-      getUserId(context),
-      getReqBody(event),
-      toEntryCollection(getSegment(0, event)),
-    ]),
-  )
-    .asyncMap(([userId, body, collection]) =>
-      db.create(collection, { ...body, userId }),
+  toPromise(
+    combine(
+      triplet([
+        getUserId(context),
+        getReqBody(event),
+        toEntryCollection(getSegment(0, event)),
+      ]),
     )
-    .match(identity, responses.fromError)
+      .asyncMap(createEntry)
+      .mapErr(responses.fromError)
+  )
 
 module.exports = {
-  getFirstUrlSegmentAsEntryTypeAndFindByUser,
   getAllEntriesForUser,
   createNewUserListEntry
 }
@@ -71,3 +56,11 @@ const toEntryCollection = (segment) =>
 
 /** @type {(collection: ValidCollection) => Result<ValidCollection, Error>} */
 const okEntry = (collection) => ok(collection)
+
+/** @type {([uid, col]: [string, ValidCollection]) => Promise<any>} */
+const getUserEntries = ([uid, col]) =>
+  db.findAllByField(col, 'userId', uid)
+
+/** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<any>} */
+const createEntry = ([userId, body, collection]) =>
+  db.create(collection, { ...body, userId })

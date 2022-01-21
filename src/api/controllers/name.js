@@ -10,14 +10,15 @@ const { getUserId, getReqBody } = require('./utils')
 
 /** @type {(context: Context) => Promise<Response>} */
 const findOwnName = (context) =>
-  getUserId(context)
-    .asyncAndThen((userId) => findOneByField_('users', 'userId', userId))
-    .match(
-      ({ data }) => responses.ok(
-        data ? { username: data.username } : { error: 'NoUsernameSet' }
-      ),
-      responses.fromError
-    )
+  toPromise(
+    getUserId(context)
+      .asyncAndThen((userId) => findOneByField_('users', 'userId', userId))
+      .map(({ data }) => data
+        ? responses.ok({ username: data.username })
+        : responses.ok({ error: 'NoUsernameSet' })
+      )
+      .mapErr(responses.fromError)
+  )
 
 // TODO: dont allow people to take an existing name
 /** @type {(event: Event, context: Context) => Promise<Response>} */
@@ -27,6 +28,7 @@ const setOwnName = (event, context) =>
       tuple([getUserId(context), getReqBody(event)])
     )
       .asyncAndThen(assignNameIfNotTaken)
+      .mapErr(responses.fromError)
   )
 
 module.exports = {
@@ -36,14 +38,13 @@ module.exports = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** @type {([userId, req]: [string, any]) => ResultAsync<Response, Response>} */
+/** @type {([userId, req]: [string, any]) => ResultAsync<Response, Error>} */
 const assignNameIfNotTaken = ([userId, req]) =>
   findOneByField_('users', 'username', req.newName)
     .map(({ data }) => data
         ? responses.ok({ error: 'This name is already taken.'})
         : (assignName(userId, req.newName), responses.ok())
     )
-    .mapErr(responses.fromError)
 
 /** @type {(userId: string, newName: string) => ResultAsync<Response, Error>} */
 const assignName = (userId, newName) =>
