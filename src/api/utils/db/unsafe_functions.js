@@ -67,6 +67,7 @@ module.exports = {
 /** @type {(ref: faunadb.ExprArg) => Promise<object>} */
 const findOne = (ref) =>
   db.query(Get(ref))
+    .catch((e) => e.name === 'NotFound' ? {} : throwIt(e))
 
 /** @type {(ref: ExprArg, params: ExprArg) => Promise<object>} */
 const updateOne = (ref, params) =>

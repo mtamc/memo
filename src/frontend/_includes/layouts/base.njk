@@ -40,7 +40,9 @@
       {{ js("js/utils/Netlify.js") }}
       {{ js("js/utils/Tables.js") }}
       {{ js("js/components/index.js") }}
-      {{ js("js/components/home.js") }}
+      {{ js("js/components/home/username_setter.js") }}
+      {{ js("js/components/home/home_lists.js") }}
+      {{ js("js/components/home/index.js") }}
     {% endset %}
     <script>
       {{ scripts | safe }}
@@ -51,17 +53,13 @@
     <script>
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        // Create the object so pages can do `TdMemo.content =` if they want
-        TdMemoPage = {}
-
         // Include the current page's JS
+        // It should be in the format
+        // `TdMemoPage = Component.Path.To.Component`
         {{ content | safe }}
 
-        // Set the page content to the current page's defined value
-        $('#site').html(TdMemoPage.content)
-
-        // Run the current page's defined initializer
-        await TdMemoPage.initializer?.()
+        // Set the page content to the current page's defined component
+        Utils.setContent('#site', TdMemoPage())
 
         // Init the netlify login widget
         netlifyIdentity.init({ container: '#netlify-identity' })
