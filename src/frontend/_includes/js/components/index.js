@@ -1,3 +1,2 @@
-Components = {
-
-}
+Components = {}
+Components.Home = {}

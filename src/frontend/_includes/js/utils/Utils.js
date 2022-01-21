@@ -9,15 +9,24 @@ const html = function (t) {
   return s
 }
 
+const log = (x) => (console.trace(), x)
+
 const noOp = () => undefined
 
+/**
+ * Sets the HTML content of the selected element to
+ * the provided component. Run the provided initializer
+ * function if one came with the component.
+ */
 const setContent = (selector, content) =>
   Array.isArray(content)
-    ? ( $(selector).html(content[0]), content[1]?.() )
+    ? ( $(selector).html(content[0]), (() => { try { content[1]?.() } catch (e) { console.log('failed'); console.log(content); console.trace() } })())
     : $(selector).html(content)
+
 
 Utils = {
   html,
   noOp,
-  setContent
+  setContent,
+  log
 }
