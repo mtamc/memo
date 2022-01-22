@@ -22,5 +22,5 @@ Utils = {
   html,
   css,
   noOp,
-  log
+  log,
 }

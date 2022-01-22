@@ -26,28 +26,25 @@ const ListsOrUsernameSetter = ({ error, username }) => initComponent({
 })
 
 const HomeLists = (username) => initComponent({
-  content: () => html`
+  content: ({ include }) => html`
     <div class="row">
-      <div class="col-md-6">
-        <h3><a href="list">Films</a></h3>
-        <table id="home-films" > </table>
-      </div>
-      <div class="col-md-6">
-        <h3><a href="list">Video Games</a></h3>
-        <table id="home-games" > </table>
-      </div>
-      <div class="col-md-6">
-        <h3><a href="list">Books</a></h3>
-        <table id="home-books" > </table>
-      </div>
-      <div class="col-md-6">
-        <h3><a href="list">TV Shows</a></h3>
-        <table id="home-tv_shows" > </table>
-      </div>
+      ${include(HomeList(username, 'books', 'Literature'))}
+      ${include(HomeList(username, 'films', 'Films'))}
+      ${include(HomeList(username, 'games', 'Video Games'))}
+      ${include(HomeList(username, 'tv_shows', 'TV'))}
     </div>
+  `
+})
+
+const HomeList = (username, type, typeText) => initComponent({
+  content: () => html`
+      <div class="col-md-6">
+        <h3><a href="/list?type=${type}&user=${username}">${typeText}</a></h3>
+        <table id="home-${type}"></table>
+      </div>
   `,
   initializer: () => {
-    entryTypes.forEach(fetchDataThenInitTable(username))
+    fetchDataThenInitTable(username, type)
   }
 })
 
@@ -75,7 +72,7 @@ const warnFailedToRetrieveTable = (type) => (statusCode) =>
 const initTableFromResp = (type) => (resp) =>
   initHomeTable(typeToCssId(type), toData(resp))
 
-const fetchDataThenInitTable = (username) => (type) =>
+const fetchDataThenInitTable = (username, type) =>
   getEntries(type, username)
     .map(initTableFromResp(type))
     .mapErr(warnFailedToRetrieveTable(type))
