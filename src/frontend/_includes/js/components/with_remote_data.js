@@ -1,5 +1,5 @@
 const { initComponent, setContent } = Components
-const { html } = Utils
+const { html, css } = Utils
 const { identity } = R
 
 const WithRemoteData = (resultAsyncOrPromise, component) => initComponent({
@@ -26,7 +26,7 @@ const Loader = () => initComponent({
   content: () => html`
     <div class="lds-facebook"><div></div><div></div><div></div></div>
   `,
-  style: () => `
+  style: () => css`
     .lds-facebook {
       display: inline-block;
       position: relative;
@@ -38,7 +38,7 @@ const Loader = () => initComponent({
       position: absolute;
       left: 8px;
       width: 16px;
-      background: #fff;
+      background: #ddd;
       animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
     }
     .lds-facebook div:nth-child(1) {

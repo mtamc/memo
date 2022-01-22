@@ -10,7 +10,7 @@ const initComponent = ({ content, initializer, style }) => {
   const id = uniqueId()
 
   if ($('head style').length === 0) {
-    $('head').append('<style></style>')
+    $('head').prepend('<style></style>')
   }
   // TODO: Avoid appending same style multiple times
   $('head style').append(style?.({ id }))

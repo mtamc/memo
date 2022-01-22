@@ -12,12 +12,15 @@ const noOpTagFunction = function (t) {
 /** A tag`function` that does nothing, for syntax-highlighting purposes */
 const html = noOpTagFunction
 
+const css = noOpTagFunction
+
 const log = (x) => (console.trace(), x)
 
 const noOp = () => undefined
 
 Utils = {
   html,
+  css,
   noOp,
   log
 }
