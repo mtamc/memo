@@ -7,36 +7,30 @@ const responses = require('../utils/responses')
 const { Result, combine, err, ok, okAsync } = require('neverthrow')
 const errors = require('../utils/errors')
 const { getUserId, getSegment, getReqBody, findIdOfName } = require('./utils')
-const { tuple, triplet, toPromise } = require('../utils/general')
+const { pair, triplet, toPromise } = require('../utils/general')
 const db = require('../utils/db/')
 const { match } = require('ts-pattern')
 
 /** @type {(event: Event) => Promise<Response>} */
-const getAllEntriesForUser = (event) =>
-  toPromise(
-    combine(
-      tuple([
-        findIdOfName(getSegment(1, event)),
-        toEntryCollection(getSegment(0, event)).asyncAndThen(okAsync),
-      ]),
-    )
-      .map(getUserEntries)
-      .mapErr(responses.fromError)
-  )
+const getAllEntriesForUser = (event) => toPromise(
+  combine(pair([
+    findIdOfName(getSegment(1, event)),
+    toEntryCollection(getSegment(0, event)).asyncAndThen(okAsync),
+  ]))
+    .map(getUserEntries)
+    .mapErr(responses.fromError)
+)
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
-const createNewUserListEntry = (event, context) =>
-  toPromise(
-    combine(
-      triplet([
-        getUserId(context),
-        getReqBody(event),
-        toEntryCollection(getSegment(0, event)),
-      ]),
-    )
-      .asyncMap(createEntry)
-      .mapErr(responses.fromError)
-  )
+const createNewUserListEntry = (event, context) => toPromise(
+  combine(triplet([
+    getUserId(context),
+    getReqBody(event),
+    toEntryCollection(getSegment(0, event)),
+  ]))
+  .asyncMap(createEntry)
+  .mapErr(responses.fromError)
+)
 
 module.exports = {
   getAllEntriesForUser,

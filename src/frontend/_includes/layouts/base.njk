@@ -31,6 +31,10 @@
         })();
     {% endmacro %}
 
+    {# Include *all* your JS files here.
+      The order matters, files above can't use
+      global variables set in files under.
+    #}
     {% set scripts %}
       {{ js("js/old_main.js") }}
       {{ js("js/packages/neverthrow.js") }}
@@ -40,6 +44,7 @@
       {{ js("js/utils/Netlify.js") }}
       {{ js("js/utils/Tables.js") }}
       {{ js("js/components/index.js") }}
+      {{ js("js/components/with_remote_data.js") }}
       {{ js("js/components/home/username_setter.js") }}
       {{ js("js/components/home/home_lists.js") }}
       {{ js("js/components/home/index.js") }}
@@ -52,14 +57,13 @@
     <div id="site"></div>
     <script>
       // The 0 timeout is necessary to detect netlify auth token
-      window.setTimeout(async () => {
+      window.setTimeout(() => {
         // Include the current page's JS
         // It should be in the format
         // `TdMemoPage = Component.Path.To.Component`
         {{ content | safe }}
 
-        // Set the page content to the current page's defined component
-        Utils.setContent('#site', TdMemoPage())
+        Components.setContent('#site', TdMemoPage())
 
         // Init the netlify login widget
         netlifyIdentity.init({ container: '#netlify-identity' })
