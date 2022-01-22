@@ -1,12 +1,27 @@
-const { setContent } = Utils
 const { getUserName, entryTypes, getEntries } = Netlify
 const { col, createInitTableFunction } = Tables
 const { html } = Utils
 const { UsernameSetter } = Components.Home
+const { initComponent, WithRemoteData } = Components
 
-const HomeLists = () => [
-  html`
-    <div id="home-lists" class="row" style="display: none">
+const HomeListsPage = () => initComponent({
+  content: ({ include }) => include(WithRemoteData(getUserName(), ListsOrUsernameSetter))
+})
+
+const ListsOrUsernameSetter = ({ error, username }) => initComponent({
+  content: ({ include }) => html`
+    <div id="home-lists-page">
+      ${error === 'NoUsernameSet'   ? include(UsernameSetter())
+        : typeof error === 'string' ? `${error}`
+                 /* if no error */  : include(HomeLists(username))
+      }
+    </div>
+  `
+})
+
+const HomeLists = (username) => initComponent({
+  content: () => html`
+    <div class="row">
       <div class="col-md-6">
         <h3><a href="list">Films</a></h3>
         <table id="home-films" > </table>
@@ -25,21 +40,10 @@ const HomeLists = () => [
       </div>
     </div>
   `,
-  () => {
-    getUserName()
-    .map(({ error, username }) =>
-        error === 'NoUsernameSet' ? setContent('#home', UsernameSetter())
-      : typeof error === 'string' ? setContent('#home', error)
-      : (
-        $('#home-lists').show(),
-        entryTypes.forEach(fetchDataThenInitTable(username))
-      )
-    )
-    .mapErr((code) =>
-      setContent('#home', `Error ${code} while getting username.`)
-    )
+  initializer: () => {
+    entryTypes.forEach(fetchDataThenInitTable(username))
   }
-]
+})
 
 const initHomeTable = createInitTableFunction({
   iconsPrefix: 'fa',
@@ -68,4 +72,4 @@ const fetchDataThenInitTable = (username) => (type) =>
     .map(initTableFromResp(type))
     .mapErr(warnFailedToRetrieveTable(type))
 
-Components.Home.HomeLists = HomeLists
+Components.Home.HomeListsPage = HomeListsPage

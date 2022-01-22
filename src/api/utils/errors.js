@@ -16,4 +16,3 @@ module.exports = {
   notFound: error('NotFound'),
   internal: error('InternalError')
 }
-

@@ -1,22 +1,27 @@
 const { html } = Utils
+const { initComponent } = Components
 
-const UsernameSetter = () => [
-  html`
-    <label for="new-name">Pick a username to start using Memo.</label><br>
-    <input type="text" id="new-name"><br>
-    <a id="submit-new-name">Submit</a>
-    <div id="new-name-error"></div>
+const UsernameSetter = () => initComponent({
+  content: ({ id }) => html`
+    <label for="${id}-input">Pick a username to start using Memo.</label><br>
+    <input type="text" id="${id}-input"><br>
+    <a id="${id}-submit">Submit</a>
+    <div id="${id}-error"></div>
   `,
-  () => {
-    document.querySelector('#submit-new-name')
-      .addEventListener('click', () => {
-        Netlify.setName($('#new-name').val())
-          .map(({error}) => error
-            ? $('#new-name-error').html(`${error}`)
-            : location.reload()
-          )
-      })
+  initializer: ({ id }) => {
+    $(`#${id}-submit`).click(() => {
+      $(`#${id}-submit`).hide()
+      Netlify.setName($(`${id}-input`).val())
+        .map((resp) => {
+          if (resp.error) {
+            $(`${id}-error`).html(`${resp.error}: ${resp.context ?? ''}`)
+            $(`${id}-submit`).show()
+          } else {
+            setTimeout(() => location.reload(), 100)
+          }
+        })
+    })
   }
-]
+})
 
 Components.Home.UsernameSetter = UsernameSetter

@@ -1,17 +1,15 @@
 /** @typedef {import('@netlify/functions').HandlerEvent} Event */
 /** @typedef {import('@netlify/functions').HandlerContext} Context */
 /** @typedef {import('../errors').Error} Error */
-const { Result, ok, err, ResultAsync } = require('neverthrow')
+const { Result, ResultAsync } = require('neverthrow')
 const errors = require('../utils/errors')
 const db = require('../utils/db')
+const { validateExists } = require('../utils/general')
 
 /** @type {(context: Context) => Result<string, Error>} */
-const getUserId = (context) => {
-  const user = context.clientContext?.user?.sub
-  return user !== undefined
-    ? ok(user)
-    : err(errors.unauthorized())
-}
+const getUserId = (context) =>
+  validateExists(context.clientContext?.user?.sub)
+    .mapErr(errors.unauthorized)
 
 /** @type {(segmentIndex: number, event: Event) => string} */
 const getSegment = (segmentIndex, event) =>

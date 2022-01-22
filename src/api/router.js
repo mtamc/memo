@@ -9,7 +9,7 @@
 /** @typedef {import('./utils/parsers').ValidCollection} ValidCollection */
 const { match } = require('ts-pattern')
 const { length } = require('ramda')
-const { tuple } = require('./utils/general')
+const { pair } = require('./utils/general')
 const { getUrlSegments } = require('./controllers/utils')
 
 /**
@@ -25,7 +25,7 @@ const { getUrlSegments } = require('./controllers/utils')
  *      .otherwise(() => responses.notFound())
  */
 const matchVerbAndNumberOfUrlSegments = (event) =>
-  match(tuple([event.httpMethod, length(getUrlSegments(event))]))
+  match(pair([event.httpMethod, length(getUrlSegments(event))]))
 
 module.exports = {
   matchVerbAndNumberOfUrlSegments,
