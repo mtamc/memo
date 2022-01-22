@@ -1,9 +1,14 @@
-const col = (field, title) => ({ field, title })
+const col = (title, field, options) => ({ title, field, ...options })
 
-const createInitTableFunction = (settings) => (id, data) =>
+const initTable = (id, data, settings) =>
   $(id).bootstrapTable({ ...settings, data })
+
+const wikipediaLinkFormatter = (title) => `
+  <a href="http://en.wikipedia.org/wiki/Special:Search?search=${title}&go=Go">${title}</a>
+`
 
 Tables = {
   col,
-  createInitTableFunction,
+  initTable,
+  wikipediaLinkFormatter
 }

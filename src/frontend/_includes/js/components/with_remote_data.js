@@ -7,14 +7,14 @@ const WithRemoteData = (resultAsyncOrPromise, component) => initComponent({
     <div id="${id}">${include(Loader())}</div>
   `,
   initializer: ({ id }) => {
-    const remoteData =
-      resultAsyncOrPromise instanceof NT.ResultAsync
-        ? resultAsyncOrPromise.match(identity, identity)
-        : resultAsyncOrPromise
-    
-    remoteData
-      .then((data) => setContent(`#${id}`, component(data)))
-      .catch((err) => setContent(`#${id}`, `${err}`))
+    const showComponent = (data) => setContent(`#${id}`, component(data))
+    const showError = (err) => setContent(`#${id}`, `${err}`)
+
+    if (resultAsyncOrPromise instanceof NT.ResultAsync) {
+      resultAsyncOrPromise.map(showComponent).mapErr(showError)
+    } else {
+      resultAsyncOrPromise.then(showComponent).catch(showError)
+    }
   }
 })
 
