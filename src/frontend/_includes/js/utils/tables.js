@@ -19,14 +19,14 @@ const detailFormatter = (_, row) =>
     .map(([_, value]) => `<p><b> Comments:</b> ${marked.parse(value)}</p>`)
     .join('')
 
+const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
+
 const typeToTitle = {
   films: 'Films',
   books: 'Literature',
   games: 'Video Games',
   tv_shows: 'TV',
 }
-
-const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
 
 const byStatus = (status, entries) =>
   entries.filter((e) => e.status === status)
@@ -39,6 +39,42 @@ const basicColumns = [
   col('Date', 'completedDate', { align: 'center' }),
 ]
 
+const entryTypeToExtraColumns = (entryType) => ({
+  films: [
+    col('Staff', 'commonMetadata.staff', { sortable: true })
+  ],
+  tv_shows: [
+    col('Episodes', 'commonMetadata.episodes', { sortable: true }),
+    col('Staff', 'commonMetadata.staff', { sortable: true }),
+  ],
+  games: [
+    col('Platforms', 'commonMetadata.platforms', { sortable: true }),
+    col('Studios', 'commonMetadata.studios', { sortable: true }),
+    col('Publishers', 'commonMetadata.publishers', { sortable: true }),
+  ],
+  books: [
+    col('Authors', 'commonMetadata.authors', { sortable: true }),
+  ],
+}[entryType])
+
+const statusToTitle = (entryType, status) => ({
+  InProgress: {
+    films: 'Watching',
+    tv_shows: 'Watching',
+    games: 'Playing',
+    e: 'Reading'
+  }[entryType],
+  Completed: 'Completed',
+  Dropped: 'Dropped',
+  Planned: {
+    films: 'To watch',
+    tv_shows: 'To watch',
+    games: 'To play',
+    books: 'To read'
+  }[entryType]
+}[status])
+
+
 Tables = {
   col,
   initTable,
@@ -47,5 +83,7 @@ Tables = {
   typeToTitle,
   basicColumns,
   byStatus,
-  statuses
+  statuses,
+  entryTypeToExtraColumns,
+  statusToTitle,
 }
