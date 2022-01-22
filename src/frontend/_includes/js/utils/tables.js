@@ -26,6 +26,8 @@ const typeToTitle = {
   tv_shows: 'TV',
 }
 
+const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
+
 const byStatus = (status, entries) =>
   entries.filter((e) => e.status === status)
 
@@ -45,4 +47,5 @@ Tables = {
   typeToTitle,
   basicColumns,
   byStatus,
+  statuses
 }
