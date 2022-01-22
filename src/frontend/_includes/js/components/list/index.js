@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { initComponent, Error404, WithRemoteData } = Components
-const { col, initTable, linkFormatter, typeToTitle, detailFormatter, basicColumns, byStatus, statuses } = Tables
+const { col, initTable, linkFormatter, typeToTitle, detailFormatter, basicColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle } = Tables
 const { getUserIdFromName, getEntries, toData } = Netlify
 
 const ListPage = () => initComponent({
@@ -74,23 +74,6 @@ const SubList = (status, entryType, data) => initComponent({
   }
 })
 
-const statusToTitle = (entryType, status) => ({
-  InProgress: {
-    films: 'Watching',
-    tv_shows: 'Watching',
-    games: 'Playing',
-    e: 'Reading'
-  }[entryType],
-  Completed: 'Completed',
-  Dropped: 'Dropped',
-  Planned: {
-    films: 'To watch',
-    tv_shows: 'To watch',
-    games: 'To play',
-    books: 'To read'
-  }[entryType]
-}[status])
-
 const initFullTable = (selector, data, entryType) => initTable(selector, data, {
   detailView: true,
   detailView: true,
@@ -107,24 +90,6 @@ const initFullTable = (selector, data, entryType) => initTable(selector, data, {
     ...entryTypeToExtraColumns(entryType)
   ]
 })
-
-const entryTypeToExtraColumns = (entryType) => ({
-  films: [
-    col('Staff', 'commonMetadata.staff', { sortable: true })
-  ],
-  tv_shows: [
-    col('Episodes', 'commonMetadata.episodes', { sortable: true }),
-    col('Staff', 'commonMetadata.staff', { sortable: true }),
-  ],
-  games: [
-    col('Platforms', 'commonMetadata.platforms', { sortable: true }),
-    col('Studios', 'commonMetadata.studios', { sortable: true }),
-    col('Publishers', 'commonMetadata.publishers', { sortable: true }),
-  ],
-  books: [
-    col('Authors', 'commonMetadata.authors', { sortable: true }),
-  ],
-}[entryType])
 
 const getUrlTypeAndUser = () => {
   const urlParams = new URLSearchParams(window.location.search)

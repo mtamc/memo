@@ -9,6 +9,7 @@ const WithRemoteData = (resultAsyncOrPromise, component) => initComponent({
   initializer: ({ id }) => {
     const showComponent = (data) => setContent(`#${id}`, component(data))
     const showError = (err) => setContent(`#${id}`, `${err}`)
+    console.log(component)
 
     if (resultAsyncOrPromise instanceof NT.ResultAsync) {
       resultAsyncOrPromise.map(showComponent).mapErr(showError)
