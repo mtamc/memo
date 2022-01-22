@@ -1,33 +1,31 @@
 const { html } = Utils
-const { isLoggedIn } = Netlify
-const { HomeListsPage } = Components.Home
-const { initComponent, Menu, NetlifyIdentityLink } = Components
+const { isLoggedIn, getUserName } = Netlify
+const { SummaryLists } = Components.Summary
+const { initComponent, Base, WithRemoteData, Redirect } = Components
 
 const HomePage = () => initComponent({
-  content: ({ include }) => html`
-    <div class="container">
-      <div class="row" style="padding:20px">
-        ${include(Menu())}
-        <div class="col-xs-12 col-sm-9 col-md-9">
-          <div class="row"> <h1>Homepage</h1> </div>
-          <hr>
-          <div id="home">
-            ${include(
-              isLoggedIn()
-                ? HomeListsPage()
-                : UnauthenticatedWelcome()
-            )}
-          </div>
-          <hr>
-        </div>
-      </div>
-    </div>
-  `
+  content: ({ include }) => include(
+    Base("Homepage", isLoggedIn()
+      ? WithRemoteData(getUserName(), SummaryListsOrUsernameSetter)
+      : UnauthenticatedWelcome()
+    )
+  )
 })
 
 Components.Home.HomePage = HomePage
 
 ///////////////////////////////////////////////////////////////////////////////
+
+const SummaryListsOrUsernameSetter = ({ error, username }) => initComponent({
+  content: ({ include }) => html`
+    <div>
+      ${error === 'NoUsernameSet'   ? include(UsernameSetter())
+        : typeof error === 'string' ? `${error}`
+                 /* if no error */  : include(Redirect(`/profile?user=${username}`))
+      }
+    </div>
+  `
+})
 
 const UnauthenticatedWelcome = () => initComponent({
   content: () => html`
