@@ -24,43 +24,68 @@ Components.WithRemoteData = WithRemoteData
 
 const Loader = () => initComponent({
   content: () => html`
-    <div class="lds-facebook"><div></div><div></div><div></div></div>
+    <div class="loader-wrapper">
+      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
   `,
   style: () => css`
-    .lds-facebook {
+    .loader-wrapper {
+      width: 100%;
+      text-align: center;
+    }
+    .lds-ellipsis {
       display: inline-block;
       position: relative;
       width: 80px;
       height: 80px;
     }
-    .lds-facebook div {
-      display: inline-block;
+    .lds-ellipsis div {
       position: absolute;
-      left: 8px;
-      width: 16px;
+      top: 33px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
       background: #ddd;
-      animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
     }
-    .lds-facebook div:nth-child(1) {
+    .lds-ellipsis div:nth-child(1) {
       left: 8px;
-      animation-delay: -0.24s;
+      animation: lds-ellipsis1 0.6s infinite;
     }
-    .lds-facebook div:nth-child(2) {
+    .lds-ellipsis div:nth-child(2) {
+      left: 8px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(3) {
       left: 32px;
-      animation-delay: -0.12s;
+      animation: lds-ellipsis2 0.6s infinite;
     }
-    .lds-facebook div:nth-child(3) {
+    .lds-ellipsis div:nth-child(4) {
       left: 56px;
-      animation-delay: 0;
+      animation: lds-ellipsis3 0.6s infinite;
     }
-    @keyframes lds-facebook {
+    @keyframes lds-ellipsis1 {
       0% {
-        top: 8px;
-        height: 64px;
+        transform: scale(0);
       }
-      50%, 100% {
-        top: 24px;
-        height: 32px;
+      100% {
+        transform: scale(1);
+      }
+    }
+    @keyframes lds-ellipsis3 {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+    @keyframes lds-ellipsis2 {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(24px, 0);
       }
     }
   `

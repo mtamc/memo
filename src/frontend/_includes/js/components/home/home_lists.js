@@ -1,5 +1,5 @@
-const { getUserName, entryTypes, getEntries } = Netlify
-const { col, initTable, wikipediaLinkFormatter } = Tables
+const { getUserName, entryTypes, getEntries, toData } = Netlify
+const { col, initTable, linkFormatter, typeToTitle, basicColumns } = Tables
 const { html } = Utils
 const { UsernameSetter } = Components.Home
 const { initComponent, WithRemoteData } = Components
@@ -28,51 +28,41 @@ const ListsOrUsernameSetter = ({ error, username }) => initComponent({
 const HomeLists = (username) => initComponent({
   content: ({ include }) => html`
     <div class="row">
-      ${include(HomeList(username, 'books', 'Literature'))}
-      ${include(HomeList(username, 'films', 'Films'))}
-      ${include(HomeList(username, 'games', 'Video Games'))}
-      ${include(HomeList(username, 'tv_shows', 'TV'))}
+      ${entryTypes
+        .map(type => include(HomeList(username, type)))
+        .join('')
+      }
     </div>
   `
 })
 
-const HomeList = (username, type, typeText) => initComponent({
+const HomeList = (username, type) => initComponent({
+  content: ({ include }) => html`
+    <div class="col-md-6">
+      <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
+      ${include(WithRemoteData(
+        getEntries(type, username),
+        (resp) => HomeTable(type, toData(resp))
+      ))}
+    </div>
+  `
+})
+
+const HomeTable = (type, data) => initComponent({
   content: () => html`
-      <div class="col-md-6">
-        <h3><a href="/list?type=${type}&user=${username}">${typeText}</a></h3>
-        <table id="home-${type}"></table>
-      </div>
+    <table id="home-${type}"></table>
   `,
   initializer: () => {
-    fetchDataThenInitTable(username, type)
+    initHomeTable(typeToCssId(type), data)
   }
 })
 
-const initHomeTable = (id, data) => initTable(id, data, {
+const initHomeTable = (selector, data) => initTable(selector, data, {
   iconsPrefix: 'fa',
   pagination: true,
   pageSize: 5,
   onlyInfoPagination: true,
-  columns: [
-    col('Title', 'commonMetadata.englishTranslatedTitle', {
-      formatter: wikipediaLinkFormatter,
-    }),
-    col('Score', 'score', { align: 'center' }),
-    col('Date', 'completedDate', { align: 'center' }),
-  ],
+  columns: basicColumns,
 })
 
-const toData = (resp) => resp.data.map((doc) => doc.data)
-
 const typeToCssId = (type) => `#home-${type}`
-
-const warnFailedToRetrieveTable = (type) => (statusCode) =>
-  setContent(typeToCssId(type), FailedToRetrieve(statusCode))
-
-const initTableFromResp = (type) => (resp) =>
-  initHomeTable(typeToCssId(type), toData(resp))
-
-const fetchDataThenInitTable = (username, type) =>
-  getEntries(type, username)
-    .map(initTableFromResp(type))
-    .mapErr(warnFailedToRetrieveTable(type))

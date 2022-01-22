@@ -14,7 +14,7 @@ const html = noOpTagFunction
 
 const css = noOpTagFunction
 
-const log = (x) => (console.trace(), x)
+const log = (x) => (console.log(), x)
 
 const noOp = () => undefined
 

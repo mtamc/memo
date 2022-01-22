@@ -120,3 +120,13 @@ This will automatically:
 - Show an error if the promise was rejected
 - Replace the loading animation with `Menu('Tam')` once the promise is
     fulfilled.
+
+For a more imperative approach, you can use the `setContent` helper.
+
+
+```js
+const { setContent } = Components
+
+setContent(selector, Component())
+```
+

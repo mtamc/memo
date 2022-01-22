@@ -11,11 +11,13 @@ const UsernameSetter = () => initComponent({
   initializer: ({ id }) => {
     $(`#${id}-submit`).click(() => {
       $(`#${id}-submit`).hide()
-      Netlify.setName($(`${id}-input`).val())
+      const newName = $(`#${id}-input`).val()
+      Netlify.setName(newName)
         .map((resp) => {
           if (resp.error) {
-            $(`${id}-error`).html(`${resp.error}: ${resp.context ?? ''}`)
-            $(`${id}-submit`).show()
+            console.log(resp.error)
+            $(`#${id}-error`).html(`${resp.error}: ${resp.context ?? ''}`)
+            $(`#${id}-submit`).show()
           } else {
             setTimeout(() => location.reload(), 100)
           }
