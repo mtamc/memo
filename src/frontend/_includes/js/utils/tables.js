@@ -36,24 +36,26 @@ const allColumns = () => [
 
 const entryTypeToExtraColumns = (entryType) => ({
   films: [
-    col('Staff', 'commonMetadata.staff', {
-      sortable: true,
-      formatter: listOfLinksFormatter('staff')
-    })
+    col('Staff', 'commonMetadata.staff', sortableAndLinked('staff'))
   ],
   tv_shows: [
     col('Episodes', 'commonMetadata.episodes', { sortable: true }),
-    col('Staff', 'commonMetadata.staff', { sortable: true }),
+    col('Staff', 'commonMetadata.staff', sortableAndLinked('staff')),
   ],
   games: [
-    col('Platforms', 'commonMetadata.platforms', { sortable: true }),
-    col('Studios', 'commonMetadata.studios', { sortable: true }),
-    col('Publishers', 'commonMetadata.publishers', { sortable: true }),
+    col('Platforms', 'commonMetadata.platforms', sortableAndLinked('Platforms')),
+    col('Studios', 'commonMetadata.studios', sortableAndLinked('Studios')),
+    col('Publishers', 'commonMetadata.publishers', sortableAndLinked('Publishers')),
   ],
   books: [
-    col('Authors', 'commonMetadata.authors', { sortable: true }),
+    col('Authors', 'commonMetadata.authors', sortableAndLinked('authors')),
   ],
 }[entryType])
+
+const sortableAndLinked = (prop, toLink) => ({
+  sortable: true,
+  formatter: listOfLinksFormatter(prop, toLink)
+})
 
 const statusToTitle = (entryType, status) => ({
   InProgress: {
