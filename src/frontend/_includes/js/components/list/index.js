@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { initComponent, Error404, WithRemoteData } = Components
-const { col, initTable, linkFormatter, typeToTitle, detailFormatter, basicColumns, byStatus } = Tables
+const { col, initTable, linkFormatter, typeToTitle, detailFormatter, basicColumns, byStatus, statuses } = Tables
 const { getUserIdFromName, getEntries, toData } = Netlify
 
 const ListPage = () => initComponent({
@@ -46,36 +46,52 @@ const ListPageHeader = (title) => initComponent({
 
 const SubLists = (entryType, data) => initComponent({
   content: ({ include }) => html`
-    ${include(SubList('In progress', byStatus('InProgress', data)))}
-    ${include(SubList('Completed', byStatus('Completed', data)))}
-    ${include(SubList('Dropped', byStatus('Dropped', data)))}
-    ${include(SubList('Planned', byStatus('Planned', data)))}
+    ${statuses
+      .map((status) => include(SubList(status, entryType, data)))
+      .join('')
+    }
   `
 })
 
-const SubList = (category, data) => initComponent({
+const SubList = (status, entryType, data) => initComponent({
   content: ({ id }) => html`
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <h2 id="${id}-title" class="collapsible">${category}</h2>
+      <div class="col-md-10 col-md-offset-1" style="margin-top: 50px">
+        <h2 id="${id}-title" class="collapsible" style="margin-bottom: -30px">
+          ${statusToTitle(entryType, status)}
+        </h2>
         <table id="${id}-list"></table>
       </div>
     </div>
   `,
   initializer: ({ id }) => {
-    initFullTable(`#${id}-list`, data)
+    initFullTable(`#${id}-list`, byStatus(status, data), entryType)
     $(`#${id}-title`).click(() => {
       $(`#${id}-title`).next().toggleClass('d-none')
       $(`#${id}-title`).toggleClass('is-collapsed')
     })
       
-  },
-  style: () => css`
-
-  `
+  }
 })
 
-const initFullTable = (selector, data) => initTable(selector, data, {
+const statusToTitle = (entryType, status) => ({
+  InProgress: {
+    films: 'Watching',
+    tv_shows: 'Watching',
+    games: 'Playing',
+    e: 'Reading'
+  }[entryType],
+  Completed: 'Completed',
+  Dropped: 'Dropped',
+  Planned: {
+    films: 'To watch',
+    tv_shows: 'To watch',
+    games: 'To play',
+    books: 'To read'
+  }[entryType]
+}[status])
+
+const initFullTable = (selector, data, entryType) => initTable(selector, data, {
   detailView: true,
   detailView: true,
   detailFormatter,
@@ -87,9 +103,28 @@ const initFullTable = (selector, data) => initTable(selector, data, {
   sortOrder: 'desc',
   columns: [
     ...basicColumns,
-    col('Staff', 'commonMetadata.staff', { sortable: true })
+    col('Genres', 'commonMetadata.genres', { sortable: true }),
+    ...entryTypeToExtraColumns(entryType)
   ]
 })
+
+const entryTypeToExtraColumns = (entryType) => ({
+  films: [
+    col('Staff', 'commonMetadata.staff', { sortable: true })
+  ],
+  tv_shows: [
+    col('Episodes', 'commonMetadata.episodes', { sortable: true }),
+    col('Staff', 'commonMetadata.staff', { sortable: true }),
+  ],
+  games: [
+    col('Platforms', 'commonMetadata.platforms', { sortable: true }),
+    col('Studios', 'commonMetadata.studios', { sortable: true }),
+    col('Publishers', 'commonMetadata.publishers', { sortable: true }),
+  ],
+  books: [
+    col('Authors', 'commonMetadata.authors', { sortable: true }),
+  ],
+}[entryType])
 
 const getUrlTypeAndUser = () => {
   const urlParams = new URLSearchParams(window.location.search)

@@ -29,7 +29,11 @@ span:lang(cn) {
   font-family: FontAwesome;
   padding-right: 5px;
 }
+.is-collapsed {
+  color: #ccc;
+}
 .is-collapsed:before {
+  color: #ccc;
   content: "\f107"; /* angle-down */
   font-family: FontAwesome;
   padding-right: 5px;
