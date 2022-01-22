@@ -37,6 +37,7 @@ Components = {}
 Components.initComponent = initComponent
 Components.setContent = setContent
 Components.Home = {}
+Components.Summary = {}
 Components.List = {}
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -19,10 +19,23 @@ const post = (url, data) =>
 /** Returns the Netlify token or undefined if not logged in */
 const getToken = () => netlifyIdentity?.currentUser()?.token?.access_token
 
+const getNameFromUrl = () => {
+  const urlParams = new URLSearchParams(window.location.search)
+  return urlParams.get('user')
+}
+
+const getEntryTypeFromUrl = () => {
+  const urlParams = new URLSearchParams(window.location.search)
+  return urlParams.get('type')
+}
+
+
 Http = {
   get,
   post,
-  getToken
+  getToken,
+  getNameFromUrl,
+  getEntryTypeFromUrl,
 }
 
 ///////////////////////////////////////////////////////////////////////////////

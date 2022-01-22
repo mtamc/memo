@@ -2,13 +2,14 @@ const { html, css } = Utils
 const { initComponent, Error404, WithRemoteData } = Components
 const { col, initTable, typeToTitle, detailFormatter, allColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle } = Tables
 const { getUserIdFromName, getEntries, toData } = Netlify
+const { getNameFromUrl, getEntryTypeFromUrl } = Http
 
 const ListPage = () => initComponent({
   content: ({ include }) => include(
-    typeToTitle[getEntryType()]
-      ? WithRemoteData(getUserIdFromName(getName()),
+    typeToTitle[getEntryTypeFromUrl()]
+      ? WithRemoteData(getUserIdFromName(getNameFromUrl()),
         ({ data }) => data
-          ? List(getName())
+          ? List(getNameFromUrl())
           : Error404()
       )
       : Error404()
@@ -24,12 +25,12 @@ const List = (username) => initComponent({
     <div class="container">
       <div class="row" style="padding:20px">
         <div class="col-xs-12 col-sm-12 col-md-12">
-          ${include(ListPageHeader(typeToTitle[getEntryType()]))}
+          ${include(ListPageHeader(typeToTitle[getEntryTypeFromUrl()]))}
           <hr>
         </div>
           ${include(WithRemoteData(
-            getEntries(getEntryType(), username),
-            (resp) => SubLists(getEntryType(), toData(resp))
+            getEntries(getEntryTypeFromUrl(), username),
+            (resp) => SubLists(getEntryTypeFromUrl(), toData(resp))
           ))}
       </div>
     </div>
@@ -88,12 +89,3 @@ const initFullTable = (selector, data, entryType) => initTable(selector, data, {
     ...entryTypeToExtraColumns(entryType)
   ]
 })
-
-const getUrlTypeAndUser = () => {
-  const urlParams = new URLSearchParams(window.location.search)
-  return [urlParams.get('type'), urlParams.get('user')]
-}
-
-const getEntryType = () => getUrlTypeAndUser()[0]
-
-const getName = () => getUrlTypeAndUser()[1]
