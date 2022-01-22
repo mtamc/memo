@@ -38,16 +38,19 @@
     {% set scripts %}
       {{ js("js/old_main.js") }}
       {{ js("js/packages/neverthrow.js") }}
-      {{ js("js/utils/Utils.js") }}
-      {{ js("js/utils/Nullable.js") }}
-      {{ js("js/utils/Http.js") }}
-      {{ js("js/utils/Netlify.js") }}
-      {{ js("js/utils/Tables.js") }}
+      {{ js("js/utils/general.js") }}
+      {{ js("js/utils/nullable.js") }}
+      {{ js("js/utils/http.js") }}
+      {{ js("js/utils/netlify.js") }}
+      {{ js("js/utils/tables.js") }}
       {{ js("js/components/index.js") }}
+      {{ js("js/components/common.js") }}
       {{ js("js/components/with_remote_data.js") }}
+      {{ js("js/components/menu.js") }}
       {{ js("js/components/home/username_setter.js") }}
       {{ js("js/components/home/home_lists.js") }}
       {{ js("js/components/home/index.js") }}
+      {{ js("js/components/list/index.js") }}
     {% endset %}
     <script>
       {{ scripts | safe }}
@@ -64,11 +67,6 @@
         {{ content | safe }}
 
         Components.setContent('#site', TdMemoPage())
-
-        // Init the netlify login widget
-        netlifyIdentity.init({ container: '#netlify-identity' })
-        netlifyIdentity.on('login', () => location.reload())
-        netlifyIdentity.on('logout', () => location.reload())
       }, 0)
     </script>
   </body>

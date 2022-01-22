@@ -3,10 +3,10 @@
 /** @typedef {import('../utils/responses').Response} Response */
 /** @typedef {import('../utils/errors').Error} Error */
 const { combine, ResultAsync } = require('neverthrow')
-const { findOneByField_, updateByRef, create } = require('../utils/db')
+const { findOneByField_, findOneByField, updateByRef, create } = require('../utils/db')
 const { pair, toPromise } = require('../utils/general')
 const responses = require('../utils/responses')
-const { getUserId, getReqBody } = require('./utils')
+const { getUserId, getReqBody, getSegment } = require('./utils')
 const feErrors = require('../utils/frontend_errors')
 
 /** @type {(context: Context) => Promise<Response>} */
@@ -19,6 +19,10 @@ const findOwnName = (context) => toPromise(
     )
     .mapErr(responses.fromError)
 )
+
+/** @type {(event: Event) => Promise<Response>} */
+const getUserIdFromName = (event) =>
+  findOneByField('users', 'username', getSegment(0, event))
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
 const setOwnName = (event, context) => toPromise(
@@ -33,6 +37,7 @@ const setOwnName = (event, context) => toPromise(
 module.exports = {
   findOwnName,
   setOwnName,
+  getUserIdFromName,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
