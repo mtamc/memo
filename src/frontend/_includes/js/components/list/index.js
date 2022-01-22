@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { initComponent, Error404, WithRemoteData } = Components
-const { col, initTable, linkFormatter, typeToTitle, detailFormatter, basicColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle } = Tables
+const { col, initTable, typeToTitle, detailFormatter, basicColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle } = Tables
 const { getUserIdFromName, getEntries, toData } = Netlify
 
 const ListPage = () => initComponent({
@@ -76,7 +76,6 @@ const SubList = (status, entryType, data) => initComponent({
 
 const initFullTable = (selector, data, entryType) => initTable(selector, data, {
   detailView: true,
-  detailView: true,
   detailFormatter,
   icons: 'icons',
   iconsPrefix: 'fa',
@@ -85,7 +84,7 @@ const initFullTable = (selector, data, entryType) => initTable(selector, data, {
   sortName: 'Score',
   sortOrder: 'desc',
   columns: [
-    ...basicColumns,
+    ...basicColumns(),
     col('Genres', 'commonMetadata.genres', { sortable: true }),
     ...entryTypeToExtraColumns(entryType)
   ]
