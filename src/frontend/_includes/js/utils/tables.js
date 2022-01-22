@@ -26,9 +26,20 @@ const basicColumns = () => [
   col('Date', 'completedDate', { align: 'center' }),
 ]
 
+const allColumns = () => [
+  ...basicColumns(),
+  col('Genres', 'commonMetadata.genres', {
+    sortable: true,
+    formatter: listOfLinksFormatter('genres')
+  }),
+]
+
 const entryTypeToExtraColumns = (entryType) => ({
   films: [
-    col('Staff', 'commonMetadata.staff', { sortable: true })
+    col('Staff', 'commonMetadata.staff', {
+      sortable: true,
+      formatter: listOfLinksFormatter('staff')
+    })
   ],
   tv_shows: [
     col('Episodes', 'commonMetadata.episodes', { sortable: true }),
@@ -49,7 +60,7 @@ const statusToTitle = (entryType, status) => ({
     films: 'Watching',
     tv_shows: 'Watching',
     games: 'Playing',
-    e: 'Reading'
+    books: 'Reading'
   }[entryType],
   Completed: 'Completed',
   Dropped: 'Dropped',
@@ -68,6 +79,7 @@ Tables = {
   detailFormatter,
   typeToTitle,
   basicColumns,
+  allColumns,
   byStatus,
   statuses,
   entryTypeToExtraColumns,
@@ -81,11 +93,15 @@ const linkFormatter = (_, row) => {
   const label = originalTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
-  return `
-    <a href="http://en.wikipedia.org/wiki/Special:Search?search=${englishTranslatedTitle}&go=Go">${label}</a>
-  `
+  return toWikipediaLink(englishTranslatedTitle, label)
 }
 
-const staffFormatter = (prop) => (_, row) => {
-
+const listOfLinksFormatter = (prop, toLink) => (_, row) => {
+  const list = row.commonMetadata[prop]
+  const transformer = toLink ?? toWikipediaLink
+  return list?.map((el) => transformer(el)).join(', ') ?? ''
 }
+
+const toWikipediaLink = (name, label) =>
+  `<a href="http://en.wikipedia.org/wiki/Special:Search?search=${name}&go=Go">${label ?? name}</a>`
+
