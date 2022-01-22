@@ -1,5 +1,5 @@
 const { getUserName, entryTypes, getEntries, toData } = Netlify
-const { col, initTable, linkFormatter, typeToTitle, basicColumns } = Tables
+const { col, initTable, typeToTitle, basicColumns } = Tables
 const { html } = Utils
 const { UsernameSetter } = Components.Home
 const { initComponent, WithRemoteData } = Components
@@ -62,7 +62,7 @@ const initHomeTable = (selector, data) => initTable(selector, data, {
   pagination: true,
   pageSize: 5,
   onlyInfoPagination: true,
-  columns: basicColumns,
+  columns: basicColumns(),
 })
 
 const typeToCssId = (type) => `#home-${type}`
