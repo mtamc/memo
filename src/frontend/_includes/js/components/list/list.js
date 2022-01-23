@@ -71,6 +71,23 @@ const SubList = (status, entryType, data) => initComponent({
     .sublist-title {
       margin-bottom: -30px
     }
+    @media (max-width: 475px) {
+      .sublist-wrapper {
+        margin-top: 0
+      }
+
+      .sublist-title {
+        margin-bottom: 0
+      }
+    }
+
+    .fixed-table-container {
+      overflow: auto;
+    }
+
+    .fixed-table-header, .fixed-table-body {
+      min-width: 550px;
+    }
   `
 })
 
