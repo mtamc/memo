@@ -27,7 +27,10 @@ span:lang(cn) {
 .collapsible:before {
   content: "\f106"; /* angle-up */
   font-family: FontAwesome;
-  padding-right: 5px;
+  margin-right: 10px;
+  top: 2px;
+  position: relative;
+  display: inline-block;
 }
 .is-collapsed {
   color: #ccc;
@@ -40,6 +43,9 @@ span:lang(cn) {
 }
 .collapsible:hover {
   text-decoration: underline;
+}
+.collapsible:hover::before {
+  text-decoration: none !important;
 }
 
 .d-none {

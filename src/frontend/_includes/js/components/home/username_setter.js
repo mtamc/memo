@@ -1,29 +1,22 @@
 const { html } = Utils
 const { initComponent } = Components
+const { InputWithAction, showNotification } = Components.UI
 
 const UsernameSetter = () => initComponent({
-  content: ({ id }) => html`
-    <label for="${id}-input">Pick a username to start using Memo.</label><br>
-    <input type="text" id="${id}-input"><br>
-    <a id="${id}-submit">Submit</a>
-    <div id="${id}-error"></div>
-  `,
-  initializer: ({ id }) => {
-    $(`#${id}-submit`).click(() => {
-      $(`#${id}-submit`).hide()
-      const newName = $(`#${id}-input`).val()
+  content: ({ include }) => include(InputWithAction({
+    label: "Pick a username to start using Memo.",
+    btnLabel: "Submit",
+    onSubmit: (newName) => {
       Netlify.setName(newName)
         .map((resp) => {
           if (resp.error) {
-            console.log(resp.error)
-            $(`#${id}-error`).html(`${resp.error}: ${resp.context ?? ''}`)
-            $(`#${id}-submit`).show()
+            showNotification('This username is already taken.')
           } else {
             setTimeout(() => location.reload(), 100)
           }
         })
-    })
-  }
+    }
+  }))
 })
 
 Components.Home.UsernameSetter = UsernameSetter

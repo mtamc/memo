@@ -45,16 +45,29 @@ const initComponent = ({ content, initializer, style }) => {
 
 /** Imperative way to replace an element inner HTML with a component */
 const setContent = (selector, component) => {
-  const { content, initializer } = access(component)
+  const { content, initializer, id } = access(component)
   // Set the inner HTML to the component's content
   $(selector).html(content)
   // Run the component's initializer
   initializer?.()
+  return id
 }
+
+/** Imperative way to append a component to element inner HTML*/
+const appendContent = (selector, component) => {
+  const { content, initializer, id } = access(component)
+  // Set the inner HTML to the component's content
+  $(selector).append(content)
+  // Run the component's initializer
+  initializer?.()
+  return id
+}
+
 
 Components = {}
 Components.initComponent = initComponent
 Components.setContent = setContent
+Components.appendContent = appendContent
 Components.UI = {}
 Components.Home = {}
 Components.Profile = {}
@@ -68,4 +81,3 @@ const private = (component) => ({ [componentPropAccessor]: component })
 const access = (component) => component[componentPropAccessor]
 
 const uniqueId = () => '_' + Math.random().toString(36).substring(2, 9)
-

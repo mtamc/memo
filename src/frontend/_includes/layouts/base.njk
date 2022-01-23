@@ -8,11 +8,14 @@
     <!-- CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="/css/main.css">
 
     <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
@@ -47,12 +50,17 @@
       {{ js("js/components/index.js") }}
       {{ js("js/components/common.js") }}
       {{ js("js/components/with_remote_data.js") }}
+      {{ js("js/components/ui/button.js") }}
       {{ js("js/components/ui/menu.js") }}
+      {{ js("js/components/ui/input_with_action.js") }}
+      {{ js("js/components/ui/notification.js") }}
       {{ js("js/components/ui/base.js") }}
+      {{ js("js/components/ui/modal.js") }}
       {{ js("js/components/home/username_setter.js") }}
       {{ js("js/components/profile/profile_lists.js") }}
       {{ js("js/components/profile/index.js") }}
       {{ js("js/components/home/index.js") }}
+      {{ js("js/components/list/add_entry.js") }}
       {{ js("js/components/list/list.js") }}
       {{ js("js/components/list/index.js") }}
     {% endset %}

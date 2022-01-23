@@ -20,7 +20,11 @@ const search = (titleSearch) => ResultAsync.fromPromise(
     .then(({ data }) =>
       data.results.map((result) => ({
         title: result.title,
-        ref: String(result.id)
+        year: result.release_date?.substring(0,4) || undefined,
+        ref: String(result.id),
+        imageUrl: result.poster_path
+          ? 'https://www.themoviedb.org/t/p/w116_and_h174_face' + result.poster_path
+          : undefined
       }))
     ),
   toError

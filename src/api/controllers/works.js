@@ -2,13 +2,14 @@
 /** @typedef {import('../utils/responses').Response} Response */
 /** @typedef {import('../utils/external_api_adapters/types').Adapter} Adapter */
 /** @typedef {import('../utils/errors').Error} Error */
-const { pair, triplet, toPromise } = require('../utils/general')
+const { toPromise } = require('../utils/general')
 const tmdb = require('../utils/external_api_adapters/films/tmdb')
 const { getUrlSegments } = require('./utils')
 const { Result, ok, err } = require('neverthrow')
 const { match } = require('ts-pattern')
 const errors = require('../utils/errors')
 const responses = require('../utils/responses')
+const adapters = require('../utils/external_api_adapters')
 
 /** @type {(event: Event) => Promise<Response>} */
 const searchForWork = (event) =>
@@ -36,6 +37,5 @@ const withAdapter = (action, event) => toPromise(
 
 /** @type {(event: Event) => Result<Adapter, Error>} */
 const getAdapter = (event) => match(getUrlSegments(event)[1])
-  .with('films', () => ok(tmdb))
+  .with('films', (type) => ok(adapters[type]))
   .otherwise(() => err(errors.notFound()))
-

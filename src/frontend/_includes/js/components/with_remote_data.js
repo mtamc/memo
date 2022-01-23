@@ -1,4 +1,4 @@
-const { initComponent, setContent } = Components
+const { initComponent, setContent, Div } = Components
 const { html, css } = Utils
 const { identity } = R
 
@@ -8,7 +8,7 @@ const WithRemoteData = ({ remoteData, component }) => initComponent({
   `,
   initializer: ({ id }) => {
     const showComponent = (data) => setContent(`#${id}`, component(data))
-    const showError = (err) => setContent(`#${id}`, `${err}`)
+    const showError = (err) => setContent(`#${id}`, Div(`Error: ${err}`))
 
     if (remoteData instanceof NT.ResultAsync) {
       remoteData.map(showComponent).mapErr(showError)

@@ -1,8 +1,9 @@
 const { html, css } = Utils
-const { getEntries, toData } = Netlify
+const { getEntries, toData, getUserName } = Netlify
 const { col, initTable, typeToTitle, detailFormatter, allColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle } = Tables
-const { initComponent, WithRemoteData } = Components
-const { getEntryTypeFromUrl } = Http
+const { initComponent, WithRemoteData, Nothing } = Components
+const { AddEntryButton } = Components.List
+const { getEntryTypeFromUrl, getNameFromUrl } = Http
 
 const List = (username) => initComponent({
   content: ({ include }) => html`
@@ -13,6 +14,13 @@ const List = (username) => initComponent({
             ListPageHeader(typeToTitle[getEntryTypeFromUrl()], username)
           )}
         </div>
+          ${include(WithRemoteData({
+            remoteData: getUserName().unwrapOr(null),
+            component: ({ username }) =>
+              username === getNameFromUrl()
+                ? AddEntryButton(getEntryTypeFromUrl())
+                : Nothing()
+          }))}
           ${include(WithRemoteData({
             remoteData: getEntries(getEntryTypeFromUrl(), username),
             component: (resp) => SubLists(getEntryTypeFromUrl(), toData(resp))
@@ -48,9 +56,7 @@ const SubList = (status, entryType, data) => initComponent({
   content: ({ id }) => html`
     <div class="row">
       <div class="col-md-10 col-md-offset-1 sublist-wrapper">
-        <h2 id="${id}-title" class="collapsible sublist-title">
-          ${statusToTitle(entryType, status)}
-        </h2>
+        <h2 id="${id}-title" class="collapsible sublist-title">${statusToTitle(entryType, status)}</h2>
         <table id="${id}-list"></table>
       </div>
     </div>
@@ -58,7 +64,7 @@ const SubList = (status, entryType, data) => initComponent({
   initializer: ({ id }) => {
     initFullTable(`#${id}-list`, byStatus(status, data), entryType)
     $(`#${id}-title`).click(() => {
-      $(`#${id}-title`).next().toggleClass('d-none')
+      $(`#${id}-title`).next().toggle(200)
       $(`#${id}-title`).toggleClass('is-collapsed')
     })
       
