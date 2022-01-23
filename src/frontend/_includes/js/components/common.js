@@ -11,6 +11,12 @@ const Redirect = (url) => initComponent({
   }
 })
 
+const Nothing = () => initComponent({ content: () => '' })
+
+const Div = (content) => initComponent({ content: () => content })
+
 
 Components.Error404 = Error404
 Components.Redirect = Redirect
+Components.Nothing = Nothing
+Components.Div = Div

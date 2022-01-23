@@ -23,7 +23,13 @@ const basicColumns = () => [
     formatter: linkFormatter,
   }),
   col('Score', 'score', { align: 'center' }),
-  col('Date', 'completedDate', { align: 'center' }),
+  col('Year', 'commonMetadata.releaseYear', {
+    align: 'center',
+    // formatter: (_, row) =>
+      // row.completedDate
+        // ? (new Date(row.completedDate)).toISOString().substring(0,10)
+        // : ''
+  }),
 ]
 
 const allColumns = () => [

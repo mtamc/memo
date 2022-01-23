@@ -14,6 +14,8 @@ const { ResultAsync } = require('neverthrow')
  * @typedef {object} SearchResult
  * @property {string} title
  * @property {string} ref
+ * @property {string} [year]
+ * @property {string} [imageUrl]
  */
 
 /** @typedef {(query: string) => ResultAsync<SearchResult[], Error>} SearchFunction */

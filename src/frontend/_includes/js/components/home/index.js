@@ -3,6 +3,7 @@ const { isLoggedIn, getUserName } = Netlify
 const { ProfileLists } = Components.Profile
 const { initComponent, WithRemoteData, Redirect } = Components
 const { Base } = Components.UI
+const { UsernameSetter } = Components.Home
 
 const HomePage = () => initComponent({
   content: ({ include }) => include(
