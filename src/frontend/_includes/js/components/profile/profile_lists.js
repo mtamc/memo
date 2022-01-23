@@ -1,14 +1,14 @@
 const { getUserName, entryTypes, getEntries, toData } = Netlify
 const { col, initTable, typeToTitle, basicColumns } = Tables
 const { html } = Utils
-const { UsernameSetter } = Components.Summary
+const { UsernameSetter } = Components.Profile
 const { initComponent, WithRemoteData } = Components
 
-const SummaryLists = (username) => initComponent({
+const ProfileLists = (username) => initComponent({
   content: ({ include }) => html`
     <div class="row">
       ${entryTypes
-        .map(type => include(SummaryList(username, type)))
+        .map(type => include(ProfileList(username, type)))
         .join('')
       }
     </div>
@@ -16,32 +16,32 @@ const SummaryLists = (username) => initComponent({
 })
 
 
-Components.Summary.SummaryLists = SummaryLists
+Components.Profile.ProfileLists = ProfileLists
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const SummaryList = (username, type) => initComponent({
+const ProfileList = (username, type) => initComponent({
   content: ({ include }) => html`
     <div class="col-md-6">
       <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
       ${include(WithRemoteData({
         remoteData: getEntries(type, username),
-        component: (resp) => SummaryTable(type, toData(resp))
+        component: (resp) => ProfileTable(type, toData(resp))
       }))}
     </div>
   `
 })
 
-const SummaryTable = (type, data) => initComponent({
+const ProfileTable = (type, data) => initComponent({
   content: () => html`
     <table id="summary-${type}"></table>
   `,
   initializer: () => {
-    initSummaryTable(typeToCssId(type), data)
+    initProfileTable(typeToCssId(type), data)
   }
 })
 
-const initSummaryTable = (selector, data) => initTable(selector, data, {
+const initProfileTable = (selector, data) => initTable(selector, data, {
   iconsPrefix: 'fa',
   pagination: true,
   pageSize: 5,
