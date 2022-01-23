@@ -17,7 +17,7 @@ const List = (username) => initComponent({
           ${include(WithRemoteData({
             remoteData: getUserName().unwrapOr(null),
             component: (resp) =>
-              resp.username === getNameFromUrl()
+              resp?.username === getNameFromUrl()
                 ? AddEntryButton(getEntryTypeFromUrl())
                 : Nothing()
           }))}
