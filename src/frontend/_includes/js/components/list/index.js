@@ -25,7 +25,9 @@ const List = (username) => initComponent({
     <div class="container">
       <div class="row" style="padding:20px">
         <div class="col-xs-12 col-sm-12 col-md-12">
-          ${include(ListPageHeader(typeToTitle[getEntryTypeFromUrl()]))}
+          ${include(
+            ListPageHeader(typeToTitle[getEntryTypeFromUrl()], username)
+          )}
           <hr>
         </div>
           ${include(WithRemoteData(
@@ -37,10 +39,10 @@ const List = (username) => initComponent({
   `
 })
 
-const ListPageHeader = (title) => initComponent({
+const ListPageHeader = (title, username) => initComponent({
   content: () => html`
     <div class="row">
-      <h1><a href="/"><i class="fa fa-home"></i></a> ${title}</h1>
+      <h1><a href="/profile/?user=${username}"><i class="fa fa-home"></i></a> ${title}</h1>
     </div>
   `
 })
