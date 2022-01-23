@@ -24,10 +24,10 @@ const SummaryList = (username, type) => initComponent({
   content: ({ include }) => html`
     <div class="col-md-6">
       <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
-      ${include(WithRemoteData(
-        getEntries(type, username),
-        (resp) => SummaryTable(type, toData(resp))
-      ))}
+      ${include(WithRemoteData({
+        remoteData: getEntries(type, username),
+        component: (resp) => SummaryTable(type, toData(resp))
+      }))}
     </div>
   `
 })

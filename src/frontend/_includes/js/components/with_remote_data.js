@@ -2,7 +2,7 @@ const { initComponent, setContent } = Components
 const { html, css } = Utils
 const { identity } = R
 
-const WithRemoteData = (resultAsyncOrPromise, component) => initComponent({
+const WithRemoteData = ({ remoteData, component }) => initComponent({
   content: ({ id, include }) => html`
     <div id="${id}">${include(Loader())}</div>
   `,
@@ -10,10 +10,10 @@ const WithRemoteData = (resultAsyncOrPromise, component) => initComponent({
     const showComponent = (data) => setContent(`#${id}`, component(data))
     const showError = (err) => setContent(`#${id}`, `${err}`)
 
-    if (resultAsyncOrPromise instanceof NT.ResultAsync) {
-      resultAsyncOrPromise.map(showComponent).mapErr(showError)
+    if (remoteData instanceof NT.ResultAsync) {
+      remoteData.map(showComponent).mapErr(showError)
     } else {
-      resultAsyncOrPromise.then(showComponent).catch(showError)
+      remoteData.then(showComponent).catch(showError)
     }
   }
 })

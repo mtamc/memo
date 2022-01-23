@@ -108,8 +108,10 @@ const MyComponent = () => initComponent({
     <div>
       <h1>My Component!</h1>
       ${include(
-        WithRemoteData(getUserName(), (name) => Menu(name))
-      )}
+        WithRemoteData({
+          remoteData: getUserName(),
+          component: (name) => Menu(name))
+        })}
     </div>
   `
 })
