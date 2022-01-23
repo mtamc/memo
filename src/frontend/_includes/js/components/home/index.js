@@ -1,12 +1,16 @@
 const { html } = Utils
 const { isLoggedIn, getUserName } = Netlify
 const { SummaryLists } = Components.Summary
-const { initComponent, Base, WithRemoteData, Redirect } = Components
+const { initComponent, WithRemoteData, Redirect } = Components
+const { Base } = Components.UI
 
 const HomePage = () => initComponent({
   content: ({ include }) => include(
     Base("Homepage", isLoggedIn()
-      ? WithRemoteData(getUserName(), SummaryListsOrUsernameSetter)
+      ? WithRemoteData({
+        remoteData: getUserName(),
+        component: SummaryListsOrUsernameSetter
+      })
       : UnauthenticatedWelcome()
     )
   )

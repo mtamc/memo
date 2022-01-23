@@ -1,5 +1,6 @@
 const { html } = Utils
-const { initComponent, Menu } = Components
+const { initComponent } = Components
+const { Menu } = Components.UI
 
 const Base = (title, content) => initComponent({
   content: ({ include }) => html`
@@ -19,4 +20,4 @@ const Base = (title, content) => initComponent({
   `
 })
 
-Components.Base = Base
+Components.UI.Base = Base
