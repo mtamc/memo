@@ -36,23 +36,23 @@ const retrieve = (ref) => ResultAsync.fromPromise(
     tmdbClient.movie.getDetails({ pathParameters: { movie_id: ref } }),
     tmdbClient.movie.getCredits({ pathParameters: { movie_id: ref } })
   ])
-  .then(([{ data }, { data: credits }]) => ({
-    entryType: 'Film',
-    originalTitle: data.original_title,
-    englishTranslatedTitle: data.title,
-    releaseYear: parseInt(data.release_date.substring(0, 4)),
-    duration: data.runtime || undefined,
-    imageUrl: 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path,
-    genres: data.genres.map(g => g.name),
-    staff: [...credits.cast]
-      // @ts-ignore (library typing is wrong)
-      .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, 5)
-      // @ts-ignore (library typing is wrong)
-      .filter((person) => person.popularity > 6)
-      .map((person) => person.name),
-    apiRefs: [{ name: 'tmdb', ref }],
-  })),
+    .then(([{ data }, { data: credits }]) => ({
+      entryType: 'Film',
+      originalTitle: data.original_title,
+      englishTranslatedTitle: data.title,
+      releaseYear: parseInt(data.release_date.substring(0, 4)),
+      duration: data.runtime || undefined,
+      imageUrl: 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path,
+      genres: data.genres.map(g => g.name),
+      staff: [...credits.cast]
+        // @ts-ignore (library typing is wrong)
+        .sort((a, b) => b.popularity - a.popularity)
+        .slice(0, 10)
+        // @ts-ignore (library typing is wrong)
+        .filter((person) => person.popularity > 6)
+        .map((person) => person.name),
+      apiRefs: [{ name: 'tmdb', ref }],
+    })),
   toError,
 )
 
