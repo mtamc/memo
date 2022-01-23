@@ -18,6 +18,10 @@ const Menu = () => initComponent({
   `
 })
 
+Components.UI.Menu = Menu
+
+///////////////////////////////////////////////////////////////////////////////
+
 const NetlifyIdentityLink = () => initComponent({
   content: ({ id }) => html`
     <div id="netlify-identity-${id}" data-netlify-identity-button></div>
@@ -28,6 +32,3 @@ const NetlifyIdentityLink = () => initComponent({
     netlifyIdentity.on('logout', () => location.reload())
   }
 })
-
-Components.Menu = Menu
-Components.NetlifyIdentityLink = NetlifyIdentityLink

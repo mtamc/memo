@@ -1,6 +1,6 @@
 const { html } = Utils
 const { isLoggedIn, getUserName } = Netlify
-const { SummaryLists } = Components.Summary
+const { ProfileLists } = Components.Profile
 const { initComponent, WithRemoteData, Redirect } = Components
 const { Base } = Components.UI
 
@@ -9,7 +9,7 @@ const HomePage = () => initComponent({
     Base("Homepage", isLoggedIn()
       ? WithRemoteData({
         remoteData: getUserName(),
-        component: SummaryListsOrUsernameSetter
+        component: ProfileListsOrUsernameSetter
       })
       : UnauthenticatedWelcome()
     )
@@ -20,7 +20,7 @@ Components.Home.HomePage = HomePage
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const SummaryListsOrUsernameSetter = ({ error, username }) => initComponent({
+const ProfileListsOrUsernameSetter = ({ error, username }) => initComponent({
   content: ({ include }) => html`
     <div>
       ${error === 'NoUsernameSet'   ? include(UsernameSetter())

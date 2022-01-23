@@ -57,7 +57,7 @@ Components.initComponent = initComponent
 Components.setContent = setContent
 Components.UI = {}
 Components.Home = {}
-Components.Summary = {}
+Components.Profile = {}
 Components.List = {}
 
 ///////////////////////////////////////////////////////////////////////////////
