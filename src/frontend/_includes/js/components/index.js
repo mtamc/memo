@@ -24,7 +24,7 @@ const initComponent = ({ content, initializer, style }) => {
   // Add the component style to the site if it has not already
   const componentStyle = style?.({ id })
   if (!styleTag.html().includes(componentStyle)) {
-    styleTag.append(componentStyle)
+    styleTag.first().append(componentStyle)
   }
 
   return private({
