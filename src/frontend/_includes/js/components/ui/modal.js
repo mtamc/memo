@@ -12,10 +12,6 @@ const Modal = ({ title, content, openButtonHtml }) => initComponent({
   }
 })
 
-Components.UI.Modal = Modal
-
-////////////////////////////////////////////////////////////////////////////////
-
 const Modal_ = ({ title, content }) => initComponent({
   content: ({ id, include }) => html`
     <div id=${id}>
@@ -70,6 +66,11 @@ const Modal_ = ({ title, content }) => initComponent({
     }
   `,
 })
+
+Components.UI.Modal = Modal
+Components.UI.Modal_ = Modal_
+
+////////////////////////////////////////////////////////////////////////////////
 
 const ModalHeader = (title, parentId) => initComponent({
   content: ({ include }) => html`

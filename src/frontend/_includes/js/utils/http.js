@@ -4,17 +4,11 @@
  * neverthrow API: https://github.com/supermacro/neverthrow
  */
 
-const get = (url) =>
-  NT.ResultAsync.fromPromise(
-    getWithTokenIfLoggedIn(url).then((resp) => resp.data),
-    getErrorStatusCode
-  )
+const get = (url) => makeRequest('get', url)
 
-const post = (url, data) =>
-  NT.ResultAsync.fromPromise(
-    postWithTokenIfLoggedIn(url, data).then((resp) => resp.data),
-    getErrorStatusCode
-  )
+const post = (url, data) => makeRequest('post', url, data)
+
+const put = (url, data) => makeRequest('put', url, data)
 
 /** Returns the Netlify token or undefined if not logged in */
 const getToken = () => netlifyIdentity?.currentUser()?.token?.access_token
@@ -33,6 +27,7 @@ const getEntryTypeFromUrl = () => {
 Http = {
   get,
   post,
+  put,
   getToken,
   getNameFromUrl,
   getEntryTypeFromUrl,
@@ -44,13 +39,12 @@ const getErrorStatusCode = (error) => error.response?.status ?? 500
 
 const toAuthHeader = (token) => ({ Authorization: `Bearer ${token}` })
 
-/** Make a GET and include token if user is logged in */
-const getWithTokenIfLoggedIn = (url) =>
-  axios.get(url, tokenIfLoggedIn())
-
-/** Make a POST and include token if user is logged in */
-const postWithTokenIfLoggedIn = (url, data) =>
-  axios.post(url, data, tokenIfLoggedIn())
+const makeRequest = (method, url, data) =>
+  NT.ResultAsync.fromPromise(
+    axios({ method, url, data, ...tokenIfLoggedIn() })
+      .then(({ data }) => data),
+    getErrorStatusCode
+  )
 
 const tokenIfLoggedIn = () => ({
   headers: Nullable.map(getToken(), toAuthHeader) ?? {}

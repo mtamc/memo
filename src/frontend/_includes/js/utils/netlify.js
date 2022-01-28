@@ -25,6 +25,12 @@ const createEntry = (type, entry) => Http.post(
   entry
 )
 
+const updateEntry = (type, ref, entry) => Http.put(
+  ENDPOINTS.updateEntry(type, ref),
+  entry
+)
+
+
 // UTILITY
 
 const entryTypes = ['games', 'films', 'books', 'tv_shows']
@@ -32,8 +38,6 @@ const entryTypes = ['games', 'films', 'books', 'tv_shows']
 const getToken = Http.getToken
 
 const isLoggedIn = () => !R.isNil(getToken())
-
-const toData = (resp) => resp.data.map((doc) => doc.data)
 
 Netlify = {
   getToken,
@@ -45,8 +49,8 @@ Netlify = {
   setName,
   entryTypes,
   isLoggedIn,
-  toData,
   createEntry,
+  updateEntry,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,6 +62,7 @@ const ENDPOINTS = {
   idFromName: (name) => API_URL_BASE + 'name/' + name,
   entries: (type, username) => `${API_URL_BASE}entries/${type}/${username}`,
   searchWorks: (type, query) => `${API_URL_BASE}works/search/${type}/${query}`,
-  retrieveWork: (type, ref) => `${API_URL_BASE}works/retrieve/${type}/${ref}`,
-  createEntry: (type) => `${API_URL_BASE}entries/${type}`
+  retrieveWork: (type, apiRef) => `${API_URL_BASE}works/retrieve/${type}/${apiRef}`,
+  createEntry: (type) => `${API_URL_BASE}entries/${type}`,
+  updateEntry: (type, dbRef) => `${API_URL_BASE}entries/${type}/${dbRef}`,
 }

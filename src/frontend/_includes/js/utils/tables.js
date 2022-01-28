@@ -1,3 +1,5 @@
+const { html } = Utils
+
 const col = (title, field, options) => ({ title, field, ...options })
 
 const initTable = (selector, data, settings) =>
@@ -48,6 +50,16 @@ const allColumns = () => [
   }),
 ]
 
+const editColumn = () =>
+  col('', 'editCol', {
+    formatter: (_, row, i) => {
+      return html`
+        <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" data-entry='${JSON.stringify(row)}'></i>
+      `
+    },
+    cellStyle: () => ({ css: { 'width': '20px' } })
+  })
+
 const entryTypeToExtraColumns = (entryType) => ({
   films: [
     col('Staff', 'commonMetadata.staff', {
@@ -97,6 +109,7 @@ Tables = {
   initTable,
   detailFormatter,
   typeToTitle,
+  editColumn,
   typeToAPIType,
   basicColumns,
   allColumns,

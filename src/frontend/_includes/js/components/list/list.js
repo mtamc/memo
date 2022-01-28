@@ -1,9 +1,11 @@
 const { html, css } = Utils
-const { getEntries, toData, getUserName } = Netlify
-const { col, initTable, typeToTitle, detailFormatter, allColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle } = Tables
-const { initComponent, WithRemoteData, Nothing } = Components
+const { getEntries, getUserName } = Netlify
+const { col, initTable, typeToTitle, detailFormatter, allColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle, editColumn } = Tables
+const { initComponent, WithRemoteData, appendContent, Nothing } = Components
+const { Modal_ } = Components.UI
 const { AddEntryButton } = Components.List
 const { getEntryTypeFromUrl, getNameFromUrl } = Http
+const { EntryForm } = Components.List
 
 const List = (username) => initComponent({
   content: ({ include }) => html`
@@ -23,7 +25,7 @@ const List = (username) => initComponent({
           }))}
           ${include(WithRemoteData({
             remoteData: getEntries(getEntryTypeFromUrl(), username),
-            component: (resp) => SubLists(getEntryTypeFromUrl(), toData(resp))
+            component: (entries) => SubLists(getEntryTypeFromUrl(), entries)
           }))}
       </div>
     </div>
@@ -62,12 +64,16 @@ const SubList = (status, entryType, data) => initComponent({
     </div>
   `,
   initializer: ({ id }) => {
-    initFullTable(`#${id}-list`, byStatus(status, data), entryType)
-    $(`#${id}-title`).click(() => {
-      $(`#${id}-title`).next().toggle(200)
-      $(`#${id}-title`).toggleClass('is-collapsed')
-    })
-      
+    getUserName()
+      .map((resp) => resp?.username === getNameFromUrl())
+      .unwrapOr(false)
+      .then((isOwner) => {
+        initFullTable(`#${id}-list`, byStatus(status, data), entryType, isOwner)
+        $(`#${id}-title`).click(() => {
+          $(`#${id}-title`).next().toggle(200)
+          $(`#${id}-title`).toggleClass('is-collapsed')
+        })
+      })
   },
   style: () => css`
     .sublist-wrapper {
@@ -97,17 +103,31 @@ const SubList = (status, entryType, data) => initComponent({
   `
 })
 
-const initFullTable = (selector, data, entryType) => initTable(selector, data, {
-  detailView: true,
-  detailFormatter,
-  icons: 'icons',
-  iconsPrefix: 'fa',
-  search: true,
-  showColumns: true,
-  sortName: 'Score',
-  sortOrder: 'desc',
-  columns: [
-    ...allColumns(),
-    ...entryTypeToExtraColumns(entryType)
-  ]
-})
+const initFullTable = (selector, data, entryType, isOwner) => {
+  initTable(selector, data, {
+    detailView: true,
+    detailFormatter,
+    icons: 'icons',
+    iconsPrefix: 'fa',
+    search: true,
+    showColumns: true,
+    sortName: 'Score',
+    sortOrder: 'desc',
+    columns: [
+      ...allColumns(),
+      ...entryTypeToExtraColumns(entryType),
+      ...(isOwner ? [editColumn()] : []),
+    ]
+  })
+  if (isOwner) {
+    $('.edit-button').each((_, btn) => {
+      $(btn).get()[0].onclick = () => {
+        appendContent('body', Modal_({
+          title: "Edit an entry",
+          content: EntryForm(entryType, $(btn).data('entry'))
+        }))
+        $(btn).attr('id')
+      }
+    })
+  }
+}
