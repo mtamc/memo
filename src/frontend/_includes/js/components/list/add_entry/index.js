@@ -1,9 +1,9 @@
 const { html, css } = Utils
 const { initComponent, setContent, WithRemoteData } = Components
-const { Modal, InputWithAction, showNotification } = Components.UI
+const { Modal, InputWithAction, showNotification, Button } = Components.UI
 const { searchWorks } = Netlify
 const { typeToTitle } = Tables
-const { SearchResults } = Components.List
+const { SearchResults, NewEntryForm } = Components.List
 
 const AddEntryButton = (type) => initComponent({
   content: ({ include }) => include(Modal({
@@ -44,17 +44,25 @@ Components.List.AddEntryButton = AddEntryButton
 
 const AddEntryModal = (type) => initComponent({
   content: ({ include }) => html`
-    ${include(InputWithAction({
-      label: `Search ${typeToTitle[type]}`,
-      btnLabel: "Search",
-      onSubmit: (query) => {
-        searchWorks('films', query)
-          .map((results) =>
-            setContent('#search-results', SearchResults(type, results))
-          )
-          .mapErr(showNotification)
-      }
-    }))}
+    <div id="add-entry-search-input">
+      ${include(InputWithAction({
+        label: `Search ${typeToTitle[type]}`,
+        btnLabel: "Search",
+        onSubmit: (query) => {
+          searchWorks('films', query)
+            .map((results) =>
+              setContent('#search-results', SearchResults(type, results))
+            )
+            .mapErr(showNotification)
+        }
+      }))}
+      ${include(Button({
+        label: "Create from scratch",
+        onClick: () => {
+          setContent('#search-results', NewEntryForm(type))
+        }
+      }))}
+    </div>
     <hr>
     <div id="search-results"></div>
   `
