@@ -5,11 +5,15 @@ const initComponent = ({ content, initializer, style }) => {
   // Include the component HTML inside another, but also remember to
   // include that component's JS/initializer inside the parent's
   // This function is provided as a parameter to `content`
-  const include = (component) => {
-    const unwrapped = access(component)
-    includeList = [...includeList, unwrapped]
-    return unwrapped.content
-  }
+  const include = (componentOrComponents) =>
+    [componentOrComponents]
+      .flat()
+      .map((component) => {
+        const unwrapped = access(component)
+        includeList = [...includeList, unwrapped]
+        return unwrapped.content
+      })
+      .join('')
 
   // Generate a identifier unique to that component's instance
   // This is passed to `content`, `initializer` and `style`
