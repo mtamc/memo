@@ -1,7 +1,7 @@
 const { html, css } = Utils
 const { initComponent, setContent, WithRemoteData } = Components
 const { retrieveWork } = Netlify
-const { NewEntryForm } = Components.List
+const { EntryForm } = Components.List
 
 const SearchResults = (type, results) => initComponent({
   content: ({ include }) => html`
@@ -55,7 +55,7 @@ const Result = (type, { title, year, imageUrl, ref }) => initComponent({
     $(`#${id}`).click(() => {
       setContent('#search-results', WithRemoteData({
         remoteData: retrieveWork(type, ref),
-        component: (data) => NewEntryForm(type, data)
+        component: (data) => EntryForm(type, { commonMetadata: data })
       }))
     })
   }

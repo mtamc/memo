@@ -3,7 +3,7 @@ const { initComponent, setContent, WithRemoteData } = Components
 const { Modal, InputWithAction, showNotification, Button } = Components.UI
 const { searchWorks } = Netlify
 const { typeToTitle } = Tables
-const { SearchResults, NewEntryForm } = Components.List
+const { SearchResults, EntryForm } = Components.List
 
 const AddEntryButton = (type) => initComponent({
   content: ({ include }) => include(Modal({
@@ -59,7 +59,7 @@ const AddEntryModal = (type) => initComponent({
       ${include(Button({
         label: "Create from scratch",
         onClick: () => {
-          setContent('#search-results', NewEntryForm(type))
+          setContent('#search-results', EntryForm(type))
         }
       }))}
     </div>
