@@ -4,15 +4,15 @@ const { Modal, InputWithAction, showNotification, TextInput, Button } = Componen
 const { createEntry } = Netlify
 const { statusToTitle, typeToAPIType } = Tables
 
-const NewEntryForm = (type, data) => initComponent({
+const EntryForm = (type, data) => initComponent({
   content: ({ include }) => html`
     <div id="submit-button-add-entry-wrapper">
       ${include(AddEntryButton(type, data))}
     </div>
     <div id="add-entry-fields">
       ${include([
-        ExternalFields(data, type),
-        PersonalFields(type),
+        ExternalFields(data ?? {}, type),
+        PersonalFields(data ?? {}, type),
         ThirdColumn(data)
       ])}
     </div>
@@ -32,7 +32,7 @@ const NewEntryForm = (type, data) => initComponent({
   `
 })
 
-Components.List.NewEntryForm = NewEntryForm
+Components.List.EntryForm = EntryForm
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -54,29 +54,28 @@ const AddEntryButton = (type, data) => Button({
     }
   `,
   onClick: () => {
-    const log = x => (console.log(JSON.stringify(x)), x)
     createEntry(type, log({
-      commonMetadata: data ?? {
+      commonMetadata: data?.commonMetadata ?? {
         entryType: typeToAPIType[type],
         englishTranslatedTitle: $('#title').val(),
         originalTitle: $('#original-title').val(),
         apiRefs: [],
-        releaseYear: parseInt($('#release-year').val()) || undefined,
-        duration: parseInt($('#duration').val()) || undefined,
+        releaseYear: getInt('release-year'),
+        duration: getInt('duration'),
         imageUrl: $('#image-url').val(),
-        genres: $('#genres').val().split(',').map(x => x.trim()),
+        genres: getCommaSeparated('genres'),
         ...(
           type === 'films' ? {
-            staff: $('#staff').val().split(',').map(x => x.trim()),
+            staff: getCommaSeparated('staff'),
           } : type === 'books' ? {
-            authors: $('#authors').val().split(',').map(x => x.trim()),
+            authors: getCommaSeparated('authors'),
           } : type === 'games' ? {
-            platforms: $('#platforms').val().split(',').map(x => x.trim()),
-            studios: $('#studios').val().split(',').map(x => x.trim()),
-            publishers: $('#publishers').val().split(',').map(x => x.trim()),
+            platforms: getCommaSeparated('platforms'),
+            studios: getCommaSeparated('studios'),
+            publishers: getCommaSeparated('publishers'),
           } : /* type === 'tv_shows' */ {
-            staff: $('#staff').val().split(',').map(x => x.trim()),
-            episodes: parseInt($('#episodes').val()) || undefined,
+            staff: getCommaSeparated('staff'),
+            episodes: getInt('episodes'),
           }
         ),
       },
@@ -95,30 +94,35 @@ const AddEntryButton = (type, data) => Button({
   },
 })
 
-const ExternalFields = (data, type) => initComponent({
+const log = x => (console.log(JSON.stringify(x)), x)
+const ExternalFields = ({ commonMetadata }, type) => {
+  console.log(type)
+  return initComponent({
   content: ({ include }) => html`
     <div id="external-fields" style="width: 200px">
-      ${include(data ? [
-        ExternalField('Title', data.englishTranslatedTitle),
+      ${include(commonMetadata ? [
+        ExternalField('Title', commonMetadata.englishTranslatedTitle),
         ExternalField(
           'Original title',
-          data.originalTitle == data.englishTranslatedTitle ? '' : data.originalTitle
+          commonMetadata.originalTitle == commonMetadata.englishTranslatedTitle
+            ? ''
+            : commonMetadata.originalTitle
         ),
-        ExternalField('Release year', data.releaseYear),
-        ExternalField('Duration (minutes)', data.duration),
-        ExternalField('Genres', data.genres.join(', ')),
+        ExternalField('Release year', commonMetadata.releaseYear),
+        ExternalField('Duration (minutes)', commonMetadata.duration),
+        ExternalField('Genres', commonMetadata.genres.join(', ')),
         ...(
           type === 'films' ? [
-            ExternalField('Staff', data.staff.join(', ')),
+            ExternalField('Staff', commonMetadata.staff.join(', ')),
           ] : type === 'books' ? [
-            ExternalField('Author(s)', data.authors.join(', ')),
+            ExternalField('Author(s)', commonMetadata.authors.join(', ')),
           ] : type === 'games' ? [
-            ExternalField('Platforms', data.platforms.join(', ')),
-            ExternalField('Studios', data.studios.join(', ')),
-            ExternalField('Publishers', data.publishers.join(', ')),
+            ExternalField('Platforms', commonMetadata.platforms.join(', ')),
+            ExternalField('Studios', commonMetadata.studios.join(', ')),
+            ExternalField('Publishers', commonMetadata.publishers.join(', ')),
           ] : /* type === 'tv_shows' */ [
-            ExternalField('Staff', data.staff.join(', ')),
-            ExternalField('Episodes', data.episodes),
+            ExternalField('Staff', commonMetadata.staff.join(', ')),
+            ExternalField('Episodes', commonMetadata.episodes),
           ]
         ),
       ] : [
@@ -146,6 +150,7 @@ const ExternalFields = (data, type) => initComponent({
     </div>
   `
 })
+}
 
 const ExternalField = (label, content) => initComponent({
   content: () => html`
@@ -156,12 +161,12 @@ const ExternalField = (label, content) => initComponent({
   `
 })
 
-const PersonalFields = (type) => initComponent({
+const PersonalFields = (data, type) => initComponent({
   content: () => html`
     <div id="personal-fields">
       <div style="margin: 15px 0">
         <label for="status">Status</label><br>
-        <select name="status" id="status">
+        <select name="status" id="status" value=${data.status ?? "InProgress"}>
           <option value="InProgress">${statusToTitle(type, 'InProgress')}</option>
           <option value="Completed">${statusToTitle(type, 'Completed')}</option>
           <option value="Dropped">${statusToTitle(type, 'Dropped')}</option>
@@ -170,7 +175,7 @@ const PersonalFields = (type) => initComponent({
       </div>
       <div style="margin: 15px 0">
         <label for="score">Score</label><br>
-        <select name="score" id="score" value="10">
+        <select name="score" id="score" value=${data.score ?? "10"}>
           <option value="10">10</option>
           <option value="9">9</option>
           <option value="8">8</option>
@@ -187,15 +192,31 @@ const PersonalFields = (type) => initComponent({
       ${type !== 'films'
         ? html`
           <div style="margin: 15px 0">
-            <label for="completed-date">Started Date</label><br>
-            <input data-toggle="datepicker" id="started-date">
+            <label for="started-date">Started Date</label><br>
+            <input
+              data-toggle="datepicker"
+              id="started-date"
+              value=${
+                data.startedDate
+                  ? (new Date(data.startedDate)).toISOString().substring(0, 10)
+                  : ''
+              }
+            >
           </div>
         `
         : ''
       }
       <div style="margin: 15px 0">
         <label for="completed-date">Completed Date</label><br>
-        <input data-toggle="datepicker" id="completed-date">
+        <input
+          data-toggle="datepicker"
+          id="completed-date"
+          value=${
+            data.completedDate
+              ? (new Date(data.completedDate)).toISOString().substring(0, 10)
+              : ''
+          }
+        >
       </div>
       <div style="margin: 15px 0">
         <label for="review">Review</label><br>
@@ -204,7 +225,9 @@ const PersonalFields = (type) => initComponent({
     </div>
   `,
   initializer: () => {
-    new Litepicker({ element: document.getElementById('started-date') })
+    if (document.getElementById('started-date')) {
+      new Litepicker({ element: document.getElementById('started-date') })
+    }
     new Litepicker({ element: document.getElementById('completed-date') })
   }
 })
@@ -241,3 +264,7 @@ const Input = (label, id) => initComponent({
     </div>
   `
 })
+
+const getCommaSeparated = (id) => $(`#${id}`).val().split(',').map(x => x.trim())
+
+const getInt = (id) => parseInt($(`#${id}`).val()) || undefined
