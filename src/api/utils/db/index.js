@@ -31,6 +31,9 @@ const { toResponse, toResult } = require('./into_safe_values')
 /** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */
 const findOneByRef = compose(toResponse, _findOneByRef)
 
+/** @type {(collection: ValidCollection, ref: ExprArg) => ResultAsync<any, Error>} */
+const findOneByRef_ = compose(toResult, _findOneByRef)
+
 /** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<Response>} */
 const findOneByField = compose(toResponse, _findOneByField)
 
@@ -39,6 +42,9 @@ const findOneByField_ = compose(toResult, _findOneByField)
 
 /** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<Response>} */
 const findAllByField = compose(toResponse, _findAllByField)
+
+/** @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>} */
+const findAllByField_ = compose(toResult, _findAllByField)
 
 /** @type {(collection: ValidCollection) => Promise<Response>} */
 const findAll = compose(toResponse, _findAllInCollection)
@@ -51,8 +57,10 @@ const create = compose(toResponse, _create)
 
 module.exports = {
   findOneByRef,
+  findOneByRef_,
   findAll,
   findAllByField,
+  findAllByField_,
   findOneByField,
   findOneByField_,
   updateByRef,

@@ -10,6 +10,8 @@ const { getUserId, getSegment, getReqBody, findIdOfName } = require('./utils')
 const { pair, triplet, toPromise } = require('../utils/general')
 const db = require('../utils/db/')
 const { match } = require('ts-pattern')
+const {toResponse} = require('../utils/db/into_safe_values')
+const {identity} = require('ramda')
 
 /** @type {(event: Event) => Promise<Response>} */
 const getAllEntriesForUser = (event) => toPromise(
@@ -32,9 +34,32 @@ const createNewUserListEntry = (event, context) => toPromise(
   .mapErr(responses.fromError)
 )
 
+/** @type {(event: Event, context: Context) => Promise<Response>} */
+const updateEntry = (event, context) => toPromise(
+  combine(triplet([
+    getUserId(context),
+    getReqBody(event),
+    toEntryCollection(getSegment(0, event)),
+  ]))
+  .asyncAndThen(([uid, body, col]) =>
+    combine(triplet([
+      okAsync(uid),
+      okAsync(body),
+      db.findOneByRef_(col, getSegment(1, event))
+    ]))
+  )
+  .map(([uid, body, entry]) =>
+    entry.data.userId === uid
+      ? updateEntry_([entry.ref.id, body])
+      : responses.unauthorized()
+)
+  .mapErr(responses.fromError)
+)
+
 module.exports = {
   getAllEntriesForUser,
-  createNewUserListEntry
+  createNewUserListEntry,
+  updateEntry
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -52,9 +77,18 @@ const toEntryCollection = (segment) =>
 const okEntry = (collection) => ok(collection)
 
 /** @type {([uid, col]: [string, ValidCollection]) => Promise<any>} */
-const getUserEntries = ([uid, col]) =>
-  db.findAllByField(col, 'userId', uid)
+const getUserEntries = ([uid, col]) => toResponse(toPromise(
+  db.findAllByField_(col, 'userId', uid)
+    .map(({ data }) => data.map((doc) => ({
+      ...doc.data,
+      dbRef: doc.ref.id
+    })))
+))
 
-/** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<any>} */
+/** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<Response>} */
 const createEntry = ([userId, body, collection]) =>
   db.create(collection, { ...body, userId })
+
+/** @type {([refId, body]: [any, any]) => Promise<Response>} */
+const updateEntry_ = ([refId, body]) =>
+  db.updateByRef(refId, body)

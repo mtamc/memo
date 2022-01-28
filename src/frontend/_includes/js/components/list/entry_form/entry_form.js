@@ -1,43 +1,46 @@
 const { html, css } = Utils
 const { initComponent, setContent, WithRemoteData } = Components
 const { Modal, InputWithAction, showNotification, TextInput, Button } = Components.UI
-const { createEntry } = Netlify
+const { updateEntry, createEntry } = Netlify
 const { statusToTitle, typeToAPIType } = Tables
 
-const EntryForm = (type, data) => initComponent({
-  content: ({ include }) => html`
-    <div id="submit-button-add-entry-wrapper">
-      ${include(AddEntryButton(type, data))}
-    </div>
-    <div id="add-entry-fields">
-      ${include([
-        ExternalFields(data ?? {}, type),
-        PersonalFields(data ?? {}, type),
-        ThirdColumn(data)
-      ])}
-    </div>
-  `,
-  style: () => css`
-    #add-entry-fields {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    #add-entry-fields > * {
-      margin-bottom: 30px;
-    }
-    #submit-button-add-entry-wrapper {
-      text-align: center;
-    }
-  `
-})
+const EntryForm = (type, data) => {
+  const isEdit = data.status
+  return initComponent({
+    content: ({ include }) => html`
+      <div id="submit-button-add-entry-wrapper">
+        ${include(SubmitButton(type, data, isEdit))}
+      </div>
+      <div id="add-entry-fields">
+        ${include([
+          ExternalFields(data ?? {}, type),
+          PersonalFields(data ?? {}, type),
+          ThirdColumn(data)
+        ])}
+      </div>
+    `,
+    style: () => css`
+      #add-entry-fields {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      #add-entry-fields > * {
+        margin-bottom: 30px;
+      }
+      #submit-button-add-entry-wrapper {
+        text-align: center;
+      }
+    `
+  })
+}
 
 Components.List.EntryForm = EntryForm
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const AddEntryButton = (type, data) => Button({
-  label: "Add entry",
+const SubmitButton = (type, data, isEdit) => Button({
+  label: isEdit ? 'Edit entry' : "Add entry",
   style: ({ id }) => css`
     #${id} {
       margin: auto;
@@ -54,7 +57,7 @@ const AddEntryButton = (type, data) => Button({
     }
   `,
   onClick: () => {
-    createEntry(type, log({
+    const entry = {
       commonMetadata: data?.commonMetadata ?? {
         entryType: typeToAPIType[type],
         englishTranslatedTitle: $('#title').val(),
@@ -88,16 +91,19 @@ const AddEntryButton = (type, data) => Button({
           ? {}
           : { startedDate: Date.parse($('#started-date').val()) || undefined }
       )
-    }))
+    }
+
+    ;(isEdit ? updateEntry(type, data.dbRef, entry) : createEntry(type, entry))
       .map(() => location.reload())
-      .mapErr((err) => showNotification(`Error adding this entry: ${err}`))
+      .mapErr((err) =>
+        showNotification(
+          `Error ${isEdit ? 'editing' : 'adding'} this entry: ${err}`
+        )
+      )
   },
 })
 
-const log = x => (console.log(JSON.stringify(x)), x)
-const ExternalFields = ({ commonMetadata }, type) => {
-  console.log(type)
-  return initComponent({
+const ExternalFields = ({ commonMetadata }, type) => initComponent({
   content: ({ include }) => html`
     <div id="external-fields" style="width: 200px">
       ${include(commonMetadata ? [
@@ -110,18 +116,18 @@ const ExternalFields = ({ commonMetadata }, type) => {
         ),
         ExternalField('Release year', commonMetadata.releaseYear),
         ExternalField('Duration (minutes)', commonMetadata.duration),
-        ExternalField('Genres', commonMetadata.genres.join(', ')),
+        ExternalField('Genres', commonMetadata.genres?.join(', ')),
         ...(
           type === 'films' ? [
-            ExternalField('Staff', commonMetadata.staff.join(', ')),
+            ExternalField('Staff', commonMetadata.staff?.join(', ')),
           ] : type === 'books' ? [
-            ExternalField('Author(s)', commonMetadata.authors.join(', ')),
+            ExternalField('Author(s)', commonMetadata.authors?.join(', ')),
           ] : type === 'games' ? [
-            ExternalField('Platforms', commonMetadata.platforms.join(', ')),
-            ExternalField('Studios', commonMetadata.studios.join(', ')),
-            ExternalField('Publishers', commonMetadata.publishers.join(', ')),
+            ExternalField('Platforms', commonMetadata.platforms?.join(', ')),
+            ExternalField('Studios', commonMetadata.studios?.join(', ')),
+            ExternalField('Publishers', commonMetadata.publishers?.join(', ')),
           ] : /* type === 'tv_shows' */ [
-            ExternalField('Staff', commonMetadata.staff.join(', ')),
+            ExternalField('Staff', commonMetadata.staff?.join(', ')),
             ExternalField('Episodes', commonMetadata.episodes),
           ]
         ),
@@ -150,7 +156,6 @@ const ExternalFields = ({ commonMetadata }, type) => {
     </div>
   `
 })
-}
 
 const ExternalField = (label, content) => initComponent({
   content: () => html`
@@ -268,3 +273,5 @@ const Input = (label, id) => initComponent({
 const getCommaSeparated = (id) => $(`#${id}`).val().split(',').map(x => x.trim())
 
 const getInt = (id) => parseInt($(`#${id}`).val()) || undefined
+
+const log = x => (console.log(JSON.stringify(x)), x)

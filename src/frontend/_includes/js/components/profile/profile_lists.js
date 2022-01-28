@@ -1,4 +1,4 @@
-const { getUserName, entryTypes, getEntries, toData } = Netlify
+const { getUserName, entryTypes, getEntries } = Netlify
 const { col, initTable, typeToTitle, basicColumns } = Tables
 const { html } = Utils
 const { UsernameSetter } = Components.Profile
@@ -26,7 +26,7 @@ const ProfileList = (username, type) => initComponent({
       <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
       ${include(WithRemoteData({
         remoteData: getEntries(type, username),
-        component: (resp) => ProfileTable(type, toData(resp))
+        component: (entries) => ProfileTable(type, entries)
       }))}
     </div>
   `

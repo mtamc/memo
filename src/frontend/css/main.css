@@ -51,3 +51,8 @@ span:lang(cn) {
 .d-none {
   display: none;
 }
+
+.edit-button {
+  color: #0e9ce0;
+  cursor: pointer;
+}
