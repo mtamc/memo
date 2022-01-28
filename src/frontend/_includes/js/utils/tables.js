@@ -15,12 +15,20 @@ const typeToTitle = {
   tv_shows: 'TV',
 }
 
+const typeToAPIType = {
+  films: 'Film',
+  books: 'Book',
+  games: 'Game',
+  tv_shows: 'TVShow',
+}
+
 const byStatus = (status, entries) =>
   entries.filter((e) => e.status === status)
 
 const basicColumns = () => [
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: linkFormatter,
+    cellStyle: () => ({ css: { 'min-width': '200px' } })
   }),
   col('Score', 'score', { align: 'center' }),
   col('Year', 'commonMetadata.releaseYear', {
@@ -42,7 +50,10 @@ const allColumns = () => [
 
 const entryTypeToExtraColumns = (entryType) => ({
   films: [
-    col('Staff', 'commonMetadata.staff', sortableAndLinked('staff'))
+    col('Staff', 'commonMetadata.staff', {
+      ...sortableAndLinked('staff'),
+      visible: false,
+    })
   ],
   tv_shows: [
     col('Episodes', 'commonMetadata.episodes', { sortable: true }),
@@ -86,6 +97,7 @@ Tables = {
   initTable,
   detailFormatter,
   typeToTitle,
+  typeToAPIType,
   basicColumns,
   allColumns,
   byStatus,
