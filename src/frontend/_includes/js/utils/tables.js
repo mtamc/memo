@@ -98,7 +98,7 @@ Tables = {
 
 const linkFormatter = (_, row) => {
   const { originalTitle, englishTranslatedTitle } = row.commonMetadata
-  const label = originalTitle
+  const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
   return toWikipediaLink(englishTranslatedTitle, label)
