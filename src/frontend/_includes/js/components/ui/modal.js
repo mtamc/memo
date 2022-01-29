@@ -40,7 +40,7 @@ const Modal_ = ({ title, content }) => initComponent({
       background: #fff;
       border-radius: 5px;
       width: min(90%, 850px);
-      height:min(90%, 850px);
+      height:min(90%, 900px);
     }
     .td-modal-content-wrapper {
       margin-top: 30px;
