@@ -26,16 +26,28 @@ const typeToAPIType = {
 
 const basicColumns = (isPlanned) => [
   col('Title', 'commonMetadata.englishTranslatedTitle', {
-    formatter: linkFormatter,
+    formatter: titleFormatter,
     cellStyle: () => ({ css: { 'min-width': '200px' } })
   }),
-  col(isPlanned ? 'Preference' : 'Score', 'score', { align: 'center' }),
-  col('Year', 'commonMetadata.releaseYear', {
+  col(isPlanned ? 'Preference' : 'Score', 'score', {
+    sortable: true,
     align: 'center',
-    // formatter: (_, row) =>
-      // row.completedDate
-        // ? (new Date(row.completedDate)).toISOString().substring(0,10)
-        // : ''
+  }),
+  col('Duration', 'commonMetadata.duration', {
+    sortable: true,
+    align: 'center',
+    visible: false,
+    formatter: (durationInMin) => {
+      const hours = Math.floor(durationInMin/60)
+      const mins = durationInMin % 60
+      return durationInMin
+        ? `${hours}${mins ? ':' + mins : ''}`
+        : '-'
+    }
+  }),
+  col('Year', 'commonMetadata.releaseYear', {
+    sortable: true,
+    align: 'center',
   }),
 ]
 
@@ -48,7 +60,7 @@ const allColumns = (isPlanned) => [
 ]
 
 const editColumn = () =>
-  col('', 'editCol', {
+  col('<i class="fas fa-edit"></i>', 'editCol', {
     formatter: (_, row, i) => {
       return html`
         <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" data-entry='${JSON.stringify(row)}'></i>
@@ -117,7 +129,7 @@ Tables = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const linkFormatter = (_, row) => {
+const titleFormatter = (_, row) => {
   const { originalTitle, englishTranslatedTitle } = row.commonMetadata
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
