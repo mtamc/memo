@@ -46,7 +46,7 @@ const updateEntry = (event, context) => toPromise(
     )
     .map(([uid, body, col, entry]) =>
       entry.data.userId === uid
-        ? db.updateByRef(col, entry.ref.id, body)
+        ? db.updateByRef(col, entry.ref.id, { ...body, updatedDate: Date.now() })
         : responses.unauthorized()
     )
     .mapErr(responses.fromError)
@@ -103,4 +103,4 @@ const getUserEntries = ([uid, col]) => toResponse(toPromise(
 
 /** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<Response>} */
 const createEntry = ([userId, body, collection]) =>
-  db.create(collection, { ...body, userId })
+  db.create(collection, { ...body, userId, updatedDate: Date.now() })

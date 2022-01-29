@@ -25,6 +25,7 @@ const entryParser = (specificWorkParser) => z.object({
   completedDate: z.number().or(z.undefined()),
   review: z.string().or(z.undefined()),
   progress: z.number().or(z.undefined()),
+  updatedDate: z.number().or(z.undefined()),
 })
 
 module.exports = {

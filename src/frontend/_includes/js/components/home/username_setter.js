@@ -12,7 +12,7 @@ const UsernameSetter = () => initComponent({
           if (resp.error) {
             showNotification('This username is already taken.')
           } else {
-            setTimeout(() => location.reload(), 100)
+            setTimeout(() => location.reload(), 2000)
           }
         })
     }
