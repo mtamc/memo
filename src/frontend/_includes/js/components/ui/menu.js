@@ -4,7 +4,7 @@ const { html } = Utils
 const Menu = () => initComponent({
   content: ({ include }) => html`
     <div
-      class="hidden-xs col-sm-3 col-md-2"
+      class="col-sm-3 col-md-2"
       id="sidebar"
       role="navigation"
       style="margin-top:180px"
