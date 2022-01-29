@@ -9,6 +9,7 @@ const Button = ({ style, label, relatedInputIdOrIds, onClick }) => initComponent
   `,
   style: style ?? (() => ''),
   initializer: ({ id }) => {
+    $(`#${id}`).off('click', '**')
     $(`#${id}`).click(() => {
       // Disable button for a second to prevent accidental multiclicks
       $(`#${id}`).prop('disabled',true)

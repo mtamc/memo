@@ -30,7 +30,7 @@ module.exports = {
 const withAdapter = (action, event) => toPromise(
   getAdapter(event)
     // TODO: make typechecker happy
-    .asyncAndThen((adapter) => adapter[action](getUrlSegments(event)[2]))
+    .asyncAndThen((adapter) => adapter[action](decodeURI(getUrlSegments(event)[2])))
     .map(responses.ok)
     .mapErr(responses.fromError)
 )
@@ -39,4 +39,5 @@ const withAdapter = (action, event) => toPromise(
 const getAdapter = (event) => match(getUrlSegments(event)[1])
   .with('films', (type) => ok(adapters[type]))
   .with('tv_shows', (type) => ok(adapters[type]))
+  .with('games', (type) => ok(adapters[type]))
   .otherwise(() => err(errors.notFound()))
