@@ -37,11 +37,13 @@ const ProfileTable = (type, data) => initComponent({
     <table id="summary-${type}"></table>
   `,
   initializer: () => {
-    initProfileTable(typeToCssId(type), [...data].sort((a, b) => a.updatedDate - b.updatedDate))
+    initProfileTable(typeToCssId(type), [...data].sort((a, b) => (b.updatedDate ?? 0) - (a.updatedDate ?? 0)))
   }
 })
 
-const initProfileTable = (selector, data) => initTable(selector, data, {
+const log = x => (console.log(x), x)
+
+const initProfileTable = (selector, data) => initTable(selector, log(data), {
   iconsPrefix: 'fa',
   pagination: true,
   pageSize: 5,
