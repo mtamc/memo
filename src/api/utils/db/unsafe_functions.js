@@ -24,6 +24,7 @@ const {
   Documents,
   Lambda,
   Update,
+  Delete,
 } = q
 
 /** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<object>} */
@@ -42,9 +43,13 @@ const _findAllInCollection = (collection) =>
 const _findAllByField = (collection, field, value) =>
   findAllUnpaginated(Match(at(collection, field), value))
 
-/** @type {(ref: ExprArg, updat: ExprArg) => Promise<object>} */
-const _updateOneByRef = (ref, update) =>
-  updateOne(Ref(ref), update)
+/** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => Promise<object>} */
+const _updateOneByRef = (collection, ref, update) =>
+  updateOne(getDocRef(collection, ref), { data: update })
+
+/** @type {(collection: ValidCollection, ref: ExprArg) => Promise<object>} */
+const _deleteOneByRef = (collection, ref) =>
+  db.query(Delete(getDocRef(collection, ref)))
 
 /** @type {(collection: ValidCollection, data: ExprArg) => Promise<object>} */
 const _create = (collection, data) =>
@@ -60,6 +65,7 @@ module.exports = {
   _findAllByField,
   _updateOneByRef,
   _create,
+  _deleteOneByRef,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,4 +101,3 @@ const getCollectionDocs = compose(Documents, Collection)
 /** @type {(collection: ValidCollection, ref: ExprArg) => Expr } */
 const getDocRef = (collection, ref) =>
   Ref(Collection(collection), ref)
-

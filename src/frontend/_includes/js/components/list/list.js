@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { getEntries, getUserName } = Netlify
-const { col, initTable, typeToTitle, detailFormatter, allColumns, byStatus, statuses, entryTypeToExtraColumns, statusToTitle, editColumn } = Tables
+const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToExtraColumns, statusToTitle, editColumn } = Tables
 const { initComponent, WithRemoteData, appendContent, Nothing } = Components
 const { Modal_ } = Components.UI
 const { AddEntryButton } = Components.List
@@ -64,11 +64,13 @@ const SubList = (status, entryType, data) => initComponent({
     </div>
   `,
   initializer: ({ id }) => {
+    const relevantEntries = data.filter((e) => e.status === status)
+
     getUserName()
       .map((resp) => resp?.username === getNameFromUrl())
       .unwrapOr(false)
       .then((isOwner) => {
-        initFullTable(`#${id}-list`, byStatus(status, data), entryType, isOwner)
+        initFullTable(`#${id}-list`, relevantEntries, entryType, isOwner)
         $(`#${id}-title`).click(() => {
           $(`#${id}-title`).next().toggle(200)
           $(`#${id}-title`).toggleClass('is-collapsed')

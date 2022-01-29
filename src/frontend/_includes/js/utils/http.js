@@ -8,7 +8,9 @@ const get = (url) => makeRequest('get', url)
 
 const post = (url, data) => makeRequest('post', url, data)
 
-const put = (url, data) => makeRequest('put', url, data)
+const patch = (url, data) => makeRequest('patch', url, data)
+
+const del = (url) => makeRequest('delete', url)
 
 /** Returns the Netlify token or undefined if not logged in */
 const getToken = () => netlifyIdentity?.currentUser()?.token?.access_token
@@ -27,7 +29,8 @@ const getEntryTypeFromUrl = () => {
 Http = {
   get,
   post,
-  put,
+  patch,
+  del,
   getToken,
   getNameFromUrl,
   getEntryTypeFromUrl,
