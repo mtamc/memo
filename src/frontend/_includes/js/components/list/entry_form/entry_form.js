@@ -250,6 +250,7 @@ const PersonalFields = (data, type) => initComponent({
         <input
           data-toggle="datepicker"
           id="completed-date"
+          autocomplete="off"
           value=${
             data.completedDate
               ? (new Date(data.completedDate)).toISOString().substring(0, 10)
