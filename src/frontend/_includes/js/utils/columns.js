@@ -159,13 +159,12 @@ const titleFormatter = (_, row) => {
   return toWikipediaLink(englishTranslatedTitle, label)
 }
 
-const englishTitleAndLastUpdatedFormatter = (_, row) => {
-  const { englishTranslatedTitle } = row.commonMetadata
-  const label = 
-    row.lastUpdated
-      ? `${englishTranslatedTitle}<br><i></i>`
-      : englishTranslatedTitle
-  return toWikipediaLink(englishTranslatedTitle, label)
+const englishTitleAndLastUpdatedFormatter = (_, { commonMetadata, updatedDate }) => {
+  const { englishTranslatedTitle } = commonMetadata
+  const link = toWikipediaLink(englishTranslatedTitle, englishTranslatedTitle)
+  return updatedDate
+    ? `${link}<i style="font-size:.9em; float: right;">${relativeTime(updatedDate)}</i>`
+    : link
 }
 
 const listOfLinksFormatter = (prop, toLink) => (_, row) => {
@@ -201,40 +200,22 @@ const playtimeFormatter = (durationInMin, row) => {
     : '-'
 }
 
-// const relativeTime (ts) => {
-  // const msPerMinute = 60 * 1000
-  // const msPerHour = msPerMinute * 60
-  // const msPerDay = msPerHour * 24
-  // const msPerMonth = msPerDay * 30
-  // const msPerYear = msPerDay * 365
+const relativeTime = (ts) => {
+  const msPerMinute = 60 * 1000
+  const msPerHour = msPerMinute * 60
+  const msPerDay = msPerHour * 24
+  const msPerMonth = msPerDay * 30
+  const msPerYear = msPerDay * 365
 
-  // const elapsed = Date.now() - ts
+  const elapsed = Date.now() - ts
 
-  // elapsed < msPerMinute ? round(elapsed/1000) + ' seconds ago' :
-  // elapsed < msPerHour   ? round(elapsed/msPerMinute) + ' minutes ago' :
+  const [number, unit] =
+    elapsed < msPerMinute ? [round(elapsed/1000), 'second'] :
+    elapsed < msPerHour   ? [round(elapsed/msPerMinute), 'minute'] :
+    elapsed < msPerDay    ? [round(elapsed/msPerHour), 'hour'] :
+    elapsed < msPerMonth  ? [round(elapsed/msPerDay),  'day'] :
+    elapsed < msPerYear   ? [round(elapsed/msPerMonth), 'month'] :
+    [round(elapsed/msPerYear), 'year']
 
-
-  // if (elapsed < msPerMinute) {
-       // return Math.;
-  // }
-
-  // else if ( {
-       // return Math.;   
-  // }
-
-  // else if (elapsed < msPerDay ) {
-       // return Math.round(elapsed/msPerHour ) + ' hours ago';   
-  // }
-
-  // else if (elapsed < msPerMonth) {
-      // return 'approximately ' + Math.round(elapsed/msPerDay) + ' days ago';   
-  // }
-
-  // else if (elapsed < msPerYear) {
-      // return 'approximately ' + Math.round(elapsed/msPerMonth) + ' months ago';   
-  // }
-
-  // else {
-      // return 'approximately ' + Math.round(elapsed/msPerYear ) + ' years ago';   
-  // }
-// }
+  return `${number} ${unit}${number > 1 ? 's' : ''} ago`
+}

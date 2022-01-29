@@ -2,7 +2,7 @@ const initTable = (selector, data, settings) =>
   $(selector).bootstrapTable({ ...settings, data })
 
 const profileColumns = (status) => [
-  Columns.title(),
+  Columns.englishTitleAndLastUpdated(),
   Columns.score(status),
   Columns.date('Year', 'commonMetadata.releaseYear')
 ]
