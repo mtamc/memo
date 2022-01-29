@@ -50,16 +50,17 @@ const basicColumns = (status) => [
     sortable: true,
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } })
-  }),
-  col('Genres', 'commonMetadata.genres', {
-    sortable: true,
-    formatter: listOfLinksFormatter('genres'),
-    cellStyle: () => ({ css: { 'width': '250px' } })
-  }),
+  })
 ]
 
 const allColumns = (status) => [
   ...basicColumns(status),
+  col('Genres', 'commonMetadata.genres', {
+    sortable: true,
+    formatter: listOfLinksFormatter('genres'),
+    cellStyle: () => ({ css: { 'width': '250px' } }),
+    visible: false,
+  }),
 ]
 
 const editColumn = () =>
@@ -74,7 +75,8 @@ const editColumn = () =>
 
 const entryTypeToExtraColumns = (entryType, status) => ({
   films: [
-    staffColumn(),
+    directorColumn(),
+    actorsColumn(),
   ],
   tv_shows: [
     col('Progress', 'progress', {
@@ -87,7 +89,8 @@ const entryTypeToExtraColumns = (entryType, status) => ({
         return `${seen}/${totalEps}`
       }
     }),
-    staffColumn(),
+    directorColumn(),
+    actorsColumn(),
   ],
   games: [
     col('Platforms', 'commonMetadata.platforms', sortableAndLinked('Platforms')),
@@ -99,11 +102,18 @@ const entryTypeToExtraColumns = (entryType, status) => ({
   ],
 }[entryType])
 
-const staffColumn = () =>
-  col('Staff', 'commonMetadata.staff', {
-    ...sortableAndLinked('staff'),
+const directorColumn = () =>
+  col('Director', 'commonMetadata.director', {
+    ...sortableAndLinked('director'),
+    visible: true,
+    cellStyle: () => ({ css: { 'width': '200px', } }),
+  })
+
+const actorsColumn = () =>
+  col('Actors', 'commonMetadata.actors', {
+    ...sortableAndLinked('actors'),
     visible: false,
-    cellStyle: () => ({ css: { 'width': '250px' } })
+    cellStyle: () => ({ css: { 'width': '250px', } }),
   })
 
 const sortableAndLinked = (prop, toLink) => ({
