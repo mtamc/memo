@@ -14,7 +14,14 @@ const ListPage = () => initComponent({
           : Error404()
       })
       : Error404()
-  )
+  ),
+  initializer: () => {
+    const typeTitle = typeToTitle[getEntryTypeFromUrl()]
+    const user = getNameFromUrl()
+    document.title = typeTitle && user
+      ? `Memo | ${user}'s ${typeTitle}`
+      : `Not found`
+  }
 })
 
 Components.List.ListPage = ListPage

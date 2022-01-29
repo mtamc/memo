@@ -49,7 +49,7 @@ const AddEntryModal = (type) => initComponent({
         label: `Search ${typeToTitle[type]}`,
         btnLabel: "Search",
         onSubmit: (query) => {
-          searchWorks('films', query)
+          searchWorks(type, query)
             .map((results) =>
               setContent('#search-results', SearchResults(type, results))
             )
