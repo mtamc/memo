@@ -23,7 +23,8 @@ const entryParser = (specificWorkParser) => z.object({
   score: scoreParser.or(z.undefined()),
   startedDate: z.number().or(z.undefined()),
   completedDate: z.number().or(z.undefined()),
-  review: z.string().or(z.undefined())
+  review: z.string().or(z.undefined()),
+  progress: z.number().or(z.undefined()),
 })
 
 module.exports = {

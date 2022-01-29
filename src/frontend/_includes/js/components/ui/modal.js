@@ -48,7 +48,9 @@ const Modal_ = ({ title, content }) => initComponent({
       overflow: auto;
     }
     .td-modal-content {
-      width: calc(100% - 7px);
+      width: calc(100% - 30px);
+      position: relative;
+      left: 15px;
     }
     .td-modal-content-wrapper::-webkit-scrollbar-track
     {
