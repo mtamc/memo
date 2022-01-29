@@ -11,10 +11,15 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
           'Original title',
           commonMetadata.originalTitle == commonMetadata.englishTranslatedTitle
             ? ''
-            : commonMetadata.originalTitle
+            : commonMetadata.originalTitle || ''
         ),
         ExternalField('Release year', commonMetadata.releaseYear),
-        ExternalField('Duration (minutes)', commonMetadata.duration),
+        ExternalField(`Duration (${
+          type === 'books'    ? 'pages' :
+          type === 'tv_shows' ? 'minutes per ep' :
+          type === 'games'    ? 'hours' :
+          /* type films */      'minutes'
+        })`, type === 'games' ? commonMetadata.duration/60 : commonMetadata.duration),
         ExternalField('Genres', commonMetadata.genres?.join(', ')),
         ...(
           type === 'films' ? [
@@ -36,7 +41,11 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
         Input('Title', 'title'),
         Input('Original title', 'original-title'),
         Input('Release year', 'release-year'),
-        Input('Duration (minutes)', 'duration'),
+        Input(`Duration (${
+          type === 'books'    ? 'pages' :
+          type === 'tv_shows' ? 'minutes per ep' :
+          /* type films */      'minutes'
+        })`, 'duration'),
         Input('Image URL', 'image-url'),
         Input('Genres (comma-separated)', 'genres'),
         ...(

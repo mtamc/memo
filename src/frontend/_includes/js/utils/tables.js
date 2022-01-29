@@ -1,5 +1,6 @@
 /**
  * This file is kind of messy, sorry.
+ * TODO: refactor this file
  */
 const { html } = Utils
 
@@ -37,25 +38,27 @@ const basicColumns = (status) => [
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } })
   }),
-  col('Duration', 'commonMetadata.duration', {
-    sortable: true,
-    align: 'center',
-    visible: false,
-    cellStyle: () => ({ css: { 'width': '25px' } }),
-    formatter: (durationInMin) => {
-      const hours = Math.floor(durationInMin/60)
-      const mins = durationInMin % 60
-      return durationInMin
-        ? `${hours}${mins ? ':' + mins : ''}`
-        : '-'
-    }
-  }),
   col('Year', 'commonMetadata.releaseYear', {
     sortable: true,
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } })
   })
 ]
+
+const durationCol = (label, visible) =>
+  col(label ?? 'Duration', 'commonMetadata.duration', {
+    sortable: true,
+    align: 'center',
+    visible: visible ?? false,
+    cellStyle: () => ({ css: { 'width': '25px' } }),
+    formatter: (durationInMin) => {
+      const hours = Math.floor(durationInMin/60)
+      const mins = durationInMin % 60
+      return durationInMin
+        ? `${hours}h${mins ? mins+'m' : ''}`
+        : '-'
+    }
+  })
 
 const allColumns = (status) => [
   ...basicColumns(status),
@@ -70,6 +73,9 @@ const allColumns = (status) => [
 const editColumn = () =>
   col('<i class="fas fa-edit"></i>', 'editCol', {
     formatter: (_, row, i) => {
+      // We use `onclick` and a global (window.xx) function instead of binding
+      // an event, because bootstrap-table destroys the node and rebuilds it
+      // when changing displayed columns
       return html`
         <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" onclick='window.editEntry(${JSON.stringify(row)})'></i>
       `
@@ -79,6 +85,7 @@ const editColumn = () =>
 
 const entryTypeToExtraColumns = (entryType, status) => ({
   films: [
+    durationCol(),
     directorColumn(),
     actorsColumn(),
     dateColumn('Completed Date', 'completedDate'),
@@ -95,15 +102,23 @@ const entryTypeToExtraColumns = (entryType, status) => ({
         return `${seen}/${totalEps}`
       }
     }),
+    durationCol(),
     directorColumn(),
     actorsColumn(),
     dateColumn('Started Date', 'startedDate'),
     dateColumn('Completed Date', 'completedDate'),
   ],
   games: [
-    col('Platforms', 'commonMetadata.platforms', sortableAndLinked('Platforms')),
-    col('Studios', 'commonMetadata.studios', sortableAndLinked('Studios')),
-    col('Publishers', 'commonMetadata.publishers', sortableAndLinked('Publishers')),
+    durationCol('Playtime', true),
+    col('Platforms', 'commonMetadata.platforms', sortableAndLinked('platforms')),
+    col('Studios', 'commonMetadata.studios', {
+      ...sortableAndLinked('studios'),
+      visible: false,
+    }),
+    col('Publishers', 'commonMetadata.publishers', {
+      ...sortableAndLinked('publishers'),
+      visible: false,
+    }),
   ],
   books: [
     col('Authors', 'commonMetadata.authors', sortableAndLinked('authors')),

@@ -20,7 +20,7 @@ const tmdbClient = new tmdb(TMDB_API_KEY ?? throwIt('TMDB_API_KEY is not set.'))
 
 /** @type SearchFunction */
 const search = (titleSearch) => ResultAsync.fromPromise(
-   tmdbClient.search.TVShows({ query: { query: decodeURI(titleSearch) } })
+   tmdbClient.search.TVShows({ query: { query: titleSearch } })
     .then(({ data }) =>
       data.results.map((result) => ({
         title: result.name,

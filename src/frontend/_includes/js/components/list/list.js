@@ -121,12 +121,10 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
       ...(isOwner ? [editColumn()] : []),
     ]
   })
-  if (isOwner) {
-    window.editEntry = (data) => {
-      appendContent('body', Modal_({
-        title: "Edit an entry",
-        content: EntryForm(entryType, data)
-      }))
-    }
+  window.editEntry = (data) => {
+    appendContent('body', Modal_({
+      title: "Edit an entry",
+      content: EntryForm(entryType, data)
+    }))
   }
 }
