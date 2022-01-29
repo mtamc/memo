@@ -11,7 +11,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
   films: [
     Columns.title(),
     Columns.score(status),
-    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.year(),
     Columns.duration(),
     Columns.directors(),
     Columns.actors(),
@@ -20,7 +20,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
   tv_shows: [
     Columns.title(),
     Columns.score(status),
-    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.year(),
     Columns.progress(),
     Columns.duration(),
     Columns.directors(),
@@ -31,7 +31,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
   games: [
     Columns.title(),
     Columns.score(status),
-    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.year(),
     Columns.playtime(),
     Columns.platforms(),
     Columns.studios(),
@@ -40,7 +40,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
   books: [
     Columns.title(),
     Columns.score(status),
-    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.year(),
     Columns.duration('Pages', true),
     Columns.authors(),
   ],
