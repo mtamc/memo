@@ -26,9 +26,6 @@ const EntryForm = (type, data) => {
         flex-wrap: wrap;
         justify-content: space-between;
       }
-      #add-entry-fields > * {
-        margin-bottom: 30px;
-      }
       #submit-button-add-entry-wrapper {
         text-align: center;
       }
@@ -115,7 +112,12 @@ const SubmitButton = (type, data, isEdit) => Button({
         type === 'films'
           ? {}
           : { startedDate: Date.parse($('#started-date').val()) || undefined }
-      )
+      ),
+      ...(
+        type === 'tv_shows'
+          ? { progress: getInt('progress') }
+          : {}
+      ),
     }
 
     ;(isEdit ? updateEntry(type, data.dbRef, entry) : createEntry(type, entry))
@@ -153,7 +155,7 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
             ExternalField('Publishers', commonMetadata.publishers?.join(', ')),
           ] : /* type === 'tv_shows' */ [
             ExternalField('Staff', commonMetadata.staff?.join(', ')),
-            ExternalField('Episodes', commonMetadata.episodes),
+            ExternalField('Episodes', commonMetadata.episodes, 'episodes'),
           ]
         ),
       ] : [
@@ -182,11 +184,11 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
   `
 })
 
-const ExternalField = (label, content) => initComponent({
+const ExternalField = (label, content, id) => initComponent({
   content: () => html`
     <div style="margin: 15px 0">
       <div style="font-weight: bold">${label}</div>
-      <div>${content}</div>
+      <div id="${id ?? ''}">${content}</div>
     </div>
   `
 })
@@ -222,6 +224,22 @@ const PersonalFields = (data, type) => initComponent({
           }
         </select>
       </div>
+      ${type === 'tv_shows'
+        ? html`
+          <div
+            id="progress-container"
+            style="margin: 15px 0; display: ${data.status !== 'Completed' ? 'block' : 'none'};}"
+          >
+            <label for="progress">Episodes watched</label><br>
+            <input
+              id="progress"
+              type="number"
+              value="${data.progress ?? ''}"
+            >
+          </div>
+        `
+        : ''
+      }
       ${type !== 'films'
         ? html`
           <div
@@ -273,28 +291,32 @@ const PersonalFields = (data, type) => initComponent({
     }
 
     $('#status').on('change', () => {
-      console.log('status changeld')
-      console.log($('#status').val())
       if ($('#status').val() === 'Planned') {
+        $('#progress-container').show()
         $('label[for="score"]').html('Preference')
-        $('started-date').val('')
-        $('#started-date-container').hide()
-        $('completed-date').val('')
-        $('#completed-date-container').hide()
+        ;['started-date', 'completed-date'].forEach((field) => {
+          $(`#${field}`).val('')
+          $(`#${field}-container`).hide()
+        })
+        $('#progress-container').show()
       } else if ($('#status').val() === 'Dropped') {
         $('label[for="score"]').html('Score')
+        $('#progress-container').show()
         $('#started-date-container').show()
-        $('completed-date').val('')
+        $('#completed-date').val('')
         $('#completed-date-container').hide()
       } else if ($('#status').val() === 'Completed') {
         $('label[for="score"]').html('Score')
         $('#started-date-container').show()
         $('#completed-date-container').show()
+        $('#progress-container').hide()
+        $('#progress-container').val($('#episodes').html())
       } else if ($('#status').val() === 'InProgress') {
         $('label[for="score"]').html('Score')
         $('#started-date-container').show()
         $('completed-date').val('')
         $('#completed-date-container').hide()
+        $('#progress-container').show()
       }
         
     })

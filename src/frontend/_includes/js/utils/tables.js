@@ -14,7 +14,7 @@ const typeToTitle = {
   films: 'Films',
   books: 'Literature',
   games: 'Video Games',
-  tv_shows: 'TV',
+  tv_shows: 'TV Shows',
 }
 
 const typeToAPIType = {
@@ -69,16 +69,22 @@ const editColumn = () =>
     cellStyle: () => ({ css: { 'width': '20px' } })
   })
 
-const entryTypeToExtraColumns = (entryType) => ({
+const entryTypeToExtraColumns = (entryType, status) => ({
   films: [
-    col('Staff', 'commonMetadata.staff', {
-      ...sortableAndLinked('staff'),
-      visible: false,
-    })
+    staffColumn(),
   ],
   tv_shows: [
-    col('Episodes', 'commonMetadata.episodes', { sortable: true }),
-    col('Staff', 'commonMetadata.staff', sortableAndLinked('staff')),
+    col('Progress', 'progress', {
+      sortable: true,
+      formatter: (progress, row) => {
+        const totalEps = row.commonMetadata.episodes ?? '-'
+        const seen = row.status === 'Completed'
+          ? totalEps
+          : progress ?? '-'
+        return `${seen}/${totalEps}`
+      }
+    }),
+    staffColumn(),
   ],
   games: [
     col('Platforms', 'commonMetadata.platforms', sortableAndLinked('Platforms')),
@@ -89,6 +95,12 @@ const entryTypeToExtraColumns = (entryType) => ({
     col('Authors', 'commonMetadata.authors', sortableAndLinked('authors')),
   ],
 }[entryType])
+
+const staffColumn = () =>
+  col('Staff', 'commonMetadata.staff', {
+    ...sortableAndLinked('staff'),
+    visible: false,
+  })
 
 const sortableAndLinked = (prop, toLink) => ({
   sortable: true,
