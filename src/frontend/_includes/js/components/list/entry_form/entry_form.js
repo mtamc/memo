@@ -224,7 +224,10 @@ const PersonalFields = (data, type) => initComponent({
       </div>
       ${type !== 'films'
         ? html`
-          <div style="margin: 15px 0">
+          <div
+            id="started-date-container"
+            style="margin: 15px 0; display: ${data.status !== 'Planned' ? 'block' : 'none'};}"
+          >
             <label for="started-date">Started Date</label><br>
             <input
               data-toggle="datepicker"
@@ -239,7 +242,10 @@ const PersonalFields = (data, type) => initComponent({
         `
         : ''
       }
-      <div style="margin: 15px 0">
+      <div
+        id="completed-date-container"
+        style="margin: 15px 0; display: ${data.status === 'Completed' ? 'block' : 'none'};}"
+      >
         <label for="completed-date">Completed Date</label><br>
         <input
           data-toggle="datepicker"
@@ -252,7 +258,7 @@ const PersonalFields = (data, type) => initComponent({
         >
       </div>
       <div style="margin: 15px 0">
-        <label for="review">Review</label><br>
+        <label for="review">Comments</label><br>
         <textarea id="review" name="review" rows="4" cols="21">${data.review ?? ''}</textarea>
       </div>
     </div>
@@ -261,13 +267,33 @@ const PersonalFields = (data, type) => initComponent({
     if (document.getElementById('started-date')) {
       new Litepicker({ element: document.getElementById('started-date') })
     }
-    new Litepicker({ element: document.getElementById('completed-date') })
+    if (document.getElementById('completed-date')) {
+      new Litepicker({ element: document.getElementById('completed-date') })
+    }
 
     $('#status').on('change', () => {
+      console.log('status changeld')
+      console.log($('#status').val())
       if ($('#status').val() === 'Planned') {
         $('label[for="score"]').html('Preference')
-      } else {
+        $('started-date').val('')
+        $('#started-date-container').hide()
+        $('completed-date').val('')
+        $('#completed-date-container').hide()
+      } else if ($('#status').val() === 'Dropped') {
         $('label[for="score"]').html('Score')
+        $('#started-date-container').show()
+        $('completed-date').val('')
+        $('#completed-date-container').hide()
+      } else if ($('#status').val() === 'Completed') {
+        $('label[for="score"]').html('Score')
+        $('#started-date-container').show()
+        $('#completed-date-container').show()
+      } else if ($('#status').val() === 'InProgress') {
+        $('label[for="score"]').html('Score')
+        $('#started-date-container').show()
+        $('completed-date').val('')
+        $('#completed-date-container').hide()
       }
         
     })
