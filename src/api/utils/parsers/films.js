@@ -10,7 +10,7 @@ const { entryParser } = require('./entries')
 
 const filmParser = workParser.extend({
   entryType: z.literal('Film'),
-  director: z.array(z.string()).or(z.undefined()),
+  directors: z.array(z.string()).or(z.undefined()),
   actors: z.array(z.string()).or(z.undefined()),
 })
 

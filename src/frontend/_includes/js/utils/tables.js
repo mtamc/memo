@@ -103,7 +103,7 @@ const entryTypeToExtraColumns = (entryType, status) => ({
 }[entryType])
 
 const directorColumn = () =>
-  col('Director', 'commonMetadata.director', {
+  col('Director', 'commonMetadata.directors', {
     ...sortableAndLinked('director'),
     visible: true,
     cellStyle: () => ({ css: { 'width': '200px', } }),

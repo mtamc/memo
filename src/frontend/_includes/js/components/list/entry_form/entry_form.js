@@ -146,7 +146,8 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
         ExternalField('Genres', commonMetadata.genres?.join(', ')),
         ...(
           type === 'films' ? [
-            ExternalField('Staff', commonMetadata.staff?.join(', ')),
+            ExternalField('Director(s)', commonMetadata.directors?.join(', ')),
+            ExternalField('Actors', commonMetadata.actors?.join(', ')),
           ] : type === 'books' ? [
             ExternalField('Author(s)', commonMetadata.authors?.join(', ')),
           ] : type === 'games' ? [
@@ -167,7 +168,8 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
         Input('Genres (comma-separated)', 'genres'),
         ...(
           type === 'films' ? [
-            Input('Staff (comma-separated)', 'staff'),
+            Input('Director(s) (comma-separated)', 'directors'),
+            Input('Actors (comma-separated)', 'actors'),
           ] : type === 'books' ? [
             Input('Author(s) (comma-separated)', 'authors'),
           ] : type === 'games' ? [
@@ -175,7 +177,8 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
             Input('Studios (comma-separated)', 'studios'),
             Input('Publishers (comma-separated)', 'publishers'),
           ] : /* type === 'tv_shows' */ [
-            Input('Staff (comma-separated)', 'staff'),
+            Input('Director(s) (comma-separated)', 'directors'),
+            Input('Actors (comma-separated)', 'actors'),
             Input('Episodes', 'episodes'),
           ]
         ),
