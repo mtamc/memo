@@ -37,6 +37,14 @@ const playtime = () =>
     formatter: playtimeFormatter,
   })
 
+const pages = () =>
+  col('Pages', 'commonMetadata.duration', {
+    sortable: true,
+    align: 'center',
+    visible: true,
+    cellStyle: () => ({ css: { 'width': '25px' } }),
+  })
+
 const genre = () =>
   col('Genres', 'commonMetadata.genres', {
     sortable: true,
@@ -129,6 +137,7 @@ Columns = {
   studios,
   publishers,
   authors,
+  pages,
 }
 
 ///////////////////////////////////////////////////////////////////////////////

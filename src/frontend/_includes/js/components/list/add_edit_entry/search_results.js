@@ -3,10 +3,12 @@ const { initComponent, setContent, WithRemoteData } = Components
 const { retrieveWork } = Netlify
 const { EntryForm } = Components.List
 
+const log = x => (console.log(x), x)
+
 const SearchResults = (type, results) => initComponent({
   content: ({ include }) => html`
     <div id="search-results">
-      ${results.length > 0
+      ${log(results).length > 0
         ? results.map((r) => include(Result(type, r))).join('')
         : '<i>No results found for this query...</i>'
       }

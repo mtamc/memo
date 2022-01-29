@@ -41,7 +41,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.title(),
     Columns.score(status),
     Columns.year(),
-    Columns.duration('Pages', true),
+    Columns.pages(),
     Columns.authors(),
   ],
 }[entryType])

@@ -37,7 +37,5 @@ const withAdapter = (action, event) => toPromise(
 
 /** @type {(event: Event) => Result<Adapter, Error>} */
 const getAdapter = (event) => match(getUrlSegments(event)[1])
-  .with('films', (type) => ok(adapters[type]))
-  .with('tv_shows', (type) => ok(adapters[type]))
-  .with('games', (type) => ok(adapters[type]))
+  .with('films', 'tv_shows', 'games', 'books', (type) => ok(adapters[type]))
   .otherwise(() => err(errors.notFound()))
