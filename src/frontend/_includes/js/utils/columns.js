@@ -1,8 +1,14 @@
 const { html } = Utils
+const { round } = Math
 
 const title = () =>
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: titleFormatter,
+  })
+
+const englishTitleAndLastUpdated = () =>
+  col('Title', 'commonMetadata.englishTranslatedTitle', {
+    formatter: englishTitleAndLastUpdatedFormatter,
   })
 
 const score = (status) =>
@@ -123,6 +129,7 @@ const authors = () =>
 
 Columns = {
   title,
+  englishTitleAndLastUpdated,
   score,
   year,
   duration,
@@ -149,6 +156,15 @@ const titleFormatter = (_, row) => {
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
+  return toWikipediaLink(englishTranslatedTitle, label)
+}
+
+const englishTitleAndLastUpdatedFormatter = (_, row) => {
+  const { englishTranslatedTitle } = row.commonMetadata
+  const label = 
+    row.lastUpdated
+      ? `${englishTranslatedTitle}<br><i></i>`
+      : englishTranslatedTitle
   return toWikipediaLink(englishTranslatedTitle, label)
 }
 
@@ -183,4 +199,42 @@ const playtimeFormatter = (durationInMin, row) => {
     : durationInMin
     ? `${hours}h${mins ? mins+'m' : ''}`
     : '-'
+}
+
+const relativeTime (ts) => {
+  const msPerMinute = 60 * 1000
+  const msPerHour = msPerMinute * 60
+  const msPerDay = msPerHour * 24
+  const msPerMonth = msPerDay * 30
+  const msPerYear = msPerDay * 365
+
+  const elapsed = Date.now() - ts
+
+  elapsed < msPerMinute ? round(elapsed/1000) + ' seconds ago' :
+  elapsed < msPerHour   ? round(elapsed/msPerMinute) + ' minutes ago' :
+
+
+  if (elapsed < msPerMinute) {
+       return Math.;
+  }
+
+  else if ( {
+       return Math.;   
+  }
+
+  else if (elapsed < msPerDay ) {
+       return Math.round(elapsed/msPerHour ) + ' hours ago';   
+  }
+
+  else if (elapsed < msPerMonth) {
+      return 'approximately ' + Math.round(elapsed/msPerDay) + ' days ago';   
+  }
+
+  else if (elapsed < msPerYear) {
+      return 'approximately ' + Math.round(elapsed/msPerMonth) + ' months ago';   
+  }
+
+  else {
+      return 'approximately ' + Math.round(elapsed/msPerYear ) + ' years ago';   
+  }
 }
