@@ -19,7 +19,7 @@ const ExternalFields = ({ commonMetadata }, type) => initComponent({
           type === 'tv_shows' ? 'minutes per ep' :
           type === 'games'    ? 'hours' :
           /* type films */      'minutes'
-        })`, type === 'games' ? commonMetadata.duration/60 : commonMetadata.duration),
+        })`, type === 'games' ? commonMetadata.duration/60: commonMetadata.duration),
         ExternalField('Genres', commonMetadata.genres?.join(', ')),
         ...(
           type === 'films' ? [
@@ -77,7 +77,7 @@ const ExternalField = (label, content, id) => initComponent({
   content: () => html`
     <div style="margin: 15px 0">
       <div style="font-weight: bold">${label}</div>
-      <div id="${id ?? ''}">${content}</div>
+      <div id="${id ?? ''}">${content || ''}</div>
     </div>
   `
 })

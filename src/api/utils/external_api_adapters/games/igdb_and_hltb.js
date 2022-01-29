@@ -42,7 +42,7 @@ const search = (titleSearch) => ResultAsync.fromPromise(
       const results = req.data.map(({ name, id, release_dates, cover, platforms }) => {
         const earliest_date = release_dates?.sort((a,b) => a.date - b.date)[0]?.date * 1000
         return {
-          title: name + ` [${platforms.map((p) => p.abbreviation).join(', ')}]`,
+          title: name + ` [${platforms?.map((p) => p.abbreviation)?.join(', ') ?? '?'}]`,
           ref: id,
           year: earliest_date ? (new Date(earliest_date)).toISOString().substring(0, 4) : undefined,
           imageUrl: cover?.url ? 'https:' + cover.url : undefined,
@@ -73,26 +73,34 @@ const retrieve = (ref) => ResultAsync.fromPromise(
       const hltbEntry = await hltb.search(mainData.name)
         .then((results) => results[0])
 
-      const duration = hltbEntry.gameplayMain * 60
+      const duration = hltbEntry ? hltbEntry.gameplayMain * 60 : undefined
 
       const publisherIds =
         mainData
           .involved_companies
-          .filter((c) => c.publisher)
-          .map((c) => c.company)
+          ?.filter((c) => c.publisher)
+          ?.map((c) => c.company)
+          ?? []
 
       const studioIds =
         mainData
           .involved_companies
-          .filter((c) => c.developer)
-          .map((c) => c.company)
+          ?.filter((c) => c.developer)
+          ?.map((c) => c.company)
+          ?? []
 
-      const companies = await client
-        .fields(['name'])
-        .where(`id = (${[...studioIds, ...publisherIds].join(', ')})`)
-        .limit(50)
-        .request('/companies')
-        .then((resp) => resp.data)
+      const companies = await (
+        [studioIds, publisherIds].some((arr) => arr.length > 0)
+          ? client
+              .fields(['name'])
+              .where(
+                `id = (${[...studioIds, ...publisherIds].join(', ')})`
+              )
+              .limit(50)
+              .request('/companies')
+              .then((resp) => resp.data)
+          : []
+      )
 
       const publisherNames =
         publisherIds
@@ -102,17 +110,23 @@ const retrieve = (ref) => ResultAsync.fromPromise(
         studioIds
           .map((id) => companies.find((c) => c.id === id)?.name)
 
-      console.log(mainData)
+      const releaseYearTs =
+        mainData.release_dates?.sort((a, b) => a.date - b.date)[0].date
+
+      const releaseYear = releaseYearTs
+        ? parseInt(
+          (new Date(releaseYearTs * 1000)).toISOString() .substring(0, 4)
+        )
+          || undefined
+        : undefined
 
       return {
         entryType: 'Game',
         englishTranslatedTitle: mainData.name,
         originalTitle: mainData.alternative_names
-          ?.find((n) => n.comment.includes('riginal'))
+          ?.find((n) => n.comment?.includes('riginal'))
           ?.name,
-        releaseYear: mainData.release_dates ? parseInt((new Date(
-          mainData.release_dates.sort((a, b) => a.date - b.date)[0].date * 1000
-        )).toISOString().substring(0, 4)) || undefined : undefined,
+        releaseYear,
         duration,
         imageUrl: 'https:' + mainData.cover.url,
         genres: mainData.genres.map((g) => g.name),
@@ -121,7 +135,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
         publishers: publisherNames,
         apiRefs: [
           { name: 'igdb', ref: String(mainData.id) },
-          { name: 'hltb', ref: String(hltbEntry.id) }
+          ...(hltbEntry ? [{ name: 'hltb', ref: String(hltbEntry.id) }] : []),
         ],
       }
     } catch (e) {

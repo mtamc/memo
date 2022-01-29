@@ -1,13 +1,50 @@
-/**
- * This file is kind of messy, sorry.
- * TODO: refactor this file
- */
-const { html } = Utils
-
-const col = (title, field, options) => ({ title, field, ...options })
-
 const initTable = (selector, data, settings) =>
   $(selector).bootstrapTable({ ...settings, data })
+
+const profileColumns = (status) => [
+  Columns.title(),
+  Columns.score(status),
+  Columns.date('Year', 'commonMetadata.releaseYear')
+]
+
+const entryTypeToFullColumns = (entryType, status) => ({
+  films: [
+    Columns.title(),
+    Columns.score(status),
+    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.duration(),
+    Columns.directors(),
+    Columns.actors(),
+    Columns.date('Completed Date', 'completedDate'),
+  ],
+  tv_shows: [
+    Columns.title(),
+    Columns.score(status),
+    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.progress(),
+    Columns.duration(),
+    Columns.directors(),
+    Columns.actors(),
+    Columns.date('Started Date', 'startedDate'),
+    Columns.date('Completed Date', 'completedDate'),
+  ],
+  games: [
+    Columns.title(),
+    Columns.score(status),
+    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.playtime(),
+    Columns.platforms(),
+    Columns.studios(),
+    Columns.publishers(),
+  ],
+  books: [
+    Columns.title(),
+    Columns.score(status),
+    Columns.date('Year', 'commonMetadata.releaseYear'),
+    Columns.duration('Pages', true),
+    Columns.authors(),
+  ],
+}[entryType])
 
 const detailFormatter = (_, row) =>
   `<p><b> Comments:</b> ${marked.parse(row.review ?? '*None yet*')}</p>`
@@ -28,132 +65,6 @@ const typeToAPIType = {
   tv_shows: 'TVShow',
 }
 
-const basicColumns = (status) => [
-  col('Title', 'commonMetadata.englishTranslatedTitle', {
-    formatter: titleFormatter,
-    // cellStyle: () => ({ css: { 'width': '250px' } })
-  }),
-  col(status === 'Planned' ? 'Preference' : 'Score', 'score', {
-    sortable: true,
-    align: 'center',
-    cellStyle: () => ({ css: { 'width': '25px' } })
-  }),
-  col('Year', 'commonMetadata.releaseYear', {
-    sortable: true,
-    align: 'center',
-    cellStyle: () => ({ css: { 'width': '25px' } })
-  })
-]
-
-const durationCol = (label, visible) =>
-  col(label ?? 'Duration', 'commonMetadata.duration', {
-    sortable: true,
-    align: 'center',
-    visible: visible ?? false,
-    cellStyle: () => ({ css: { 'width': '25px' } }),
-    formatter: (durationInMin) => {
-      const hours = Math.floor(durationInMin/60)
-      const mins = durationInMin % 60
-      return durationInMin
-        ? `${hours}h${mins ? mins+'m' : ''}`
-        : '-'
-    }
-  })
-
-const allColumns = (status) => [
-  ...basicColumns(status),
-  col('Genres', 'commonMetadata.genres', {
-    sortable: true,
-    formatter: listOfLinksFormatter('genres'),
-    cellStyle: () => ({ css: { 'width': '250px' } }),
-    visible: false,
-  }),
-]
-
-const editColumn = () =>
-  col('<i class="fas fa-edit"></i>', 'editCol', {
-    formatter: (_, row, i) => {
-      // We use `onclick` and a global (window.xx) function instead of binding
-      // an event, because bootstrap-table destroys the node and rebuilds it
-      // when changing displayed columns
-      return html`
-        <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" onclick='window.editEntry(${JSON.stringify(row)})'></i>
-      `
-    },
-    cellStyle: () => ({ css: { 'width': '20px' } }),
-  })
-
-const entryTypeToExtraColumns = (entryType, status) => ({
-  films: [
-    durationCol(),
-    directorColumn(),
-    actorsColumn(),
-    dateColumn('Completed Date', 'completedDate'),
-  ],
-  tv_shows: [
-    col('Progress', 'progress', {
-      sortable: true,
-      cellStyle: () => ({ css: { 'width': '20px' } }),
-      formatter: (progress, row) => {
-        const totalEps = row.commonMetadata.episodes ?? '-'
-        const seen = row.status === 'Completed'
-          ? totalEps
-          : progress ?? '-'
-        return `${seen}/${totalEps}`
-      }
-    }),
-    durationCol(),
-    directorColumn(),
-    actorsColumn(),
-    dateColumn('Started Date', 'startedDate'),
-    dateColumn('Completed Date', 'completedDate'),
-  ],
-  games: [
-    durationCol('Playtime', true),
-    col('Platforms', 'commonMetadata.platforms', sortableAndLinked('platforms')),
-    col('Studios', 'commonMetadata.studios', {
-      ...sortableAndLinked('studios'),
-      visible: false,
-    }),
-    col('Publishers', 'commonMetadata.publishers', {
-      ...sortableAndLinked('publishers'),
-      visible: false,
-    }),
-  ],
-  books: [
-    col('Authors', 'commonMetadata.authors', sortableAndLinked('authors')),
-  ],
-}[entryType])
-
-const directorColumn = () =>
-  col('Director', 'commonMetadata.directors', {
-    ...sortableAndLinked('directors'),
-    visible: true,
-    cellStyle: () => ({ css: { 'width': '200px', } }),
-  })
-
-const actorsColumn = () =>
-  col('Actors', 'commonMetadata.actors', {
-    ...sortableAndLinked('actors'),
-    visible: false,
-    cellStyle: () => ({ css: { 'width': '250px', } }),
-  })
-
-const dateColumn = (label, field) =>
-  col(label, field, {
-    sortable: true,
-    visible: false,
-    align: 'center',
-    cellStyle: () => ({ css: { 'width': '80px', } }),
-    formatter: (date) =>
-      date ? (new Date(date)).toISOString().substring(0, 10) : '-'
-  })
-
-const sortableAndLinked = (prop, toLink) => ({
-  sortable: true,
-  formatter: listOfLinksFormatter(prop, toLink)
-})
-
 const statusToTitle = (entryType, status) => ({
   InProgress: {
     films: 'Watching',
@@ -172,35 +83,12 @@ const statusToTitle = (entryType, status) => ({
 }[status])
 
 Tables = {
-  col,
   initTable,
   detailFormatter,
   typeToTitle,
-  editColumn,
   typeToAPIType,
-  basicColumns,
-  allColumns,
+  profileColumns,
   statuses,
-  entryTypeToExtraColumns,
+  entryTypeToFullColumns,
   statusToTitle,
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-const titleFormatter = (_, row) => {
-  const { originalTitle, englishTranslatedTitle } = row.commonMetadata
-  const label = originalTitle && originalTitle !== englishTranslatedTitle
-    ? `${originalTitle} (${englishTranslatedTitle})`
-    : englishTranslatedTitle
-  return toWikipediaLink(englishTranslatedTitle, label)
-}
-
-const listOfLinksFormatter = (prop, toLink) => (_, row) => {
-  const list = row.commonMetadata[prop]
-  const transformer = toLink ?? toWikipediaLink
-  return list?.map((el) => transformer(el)).join(', ') ?? ''
-}
-
-const toWikipediaLink = (name, label) =>
-  `<a href="http://en.wikipedia.org/wiki/Special:Search?search=${name}&go=Go">${label ?? name}</a>`
-
