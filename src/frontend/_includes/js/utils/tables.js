@@ -27,7 +27,7 @@ const typeToAPIType = {
 const basicColumns = (status) => [
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: titleFormatter,
-    cellStyle: () => ({ css: { 'width': '400px' } })
+    // cellStyle: () => ({ css: { 'width': '250px' } })
   }),
   col(status === 'Planned' ? 'Preference' : 'Score', 'score', {
     sortable: true,
@@ -51,14 +51,15 @@ const basicColumns = (status) => [
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } })
   }),
+  col('Genres', 'commonMetadata.genres', {
+    sortable: true,
+    formatter: listOfLinksFormatter('genres'),
+    cellStyle: () => ({ css: { 'width': '250px' } })
+  }),
 ]
 
 const allColumns = (status) => [
   ...basicColumns(status),
-  col('Genres', 'commonMetadata.genres', {
-    sortable: true,
-    formatter: listOfLinksFormatter('genres')
-  }),
 ]
 
 const editColumn = () =>
