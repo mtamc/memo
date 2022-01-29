@@ -70,7 +70,7 @@ const SubList = (status, entryType, data) => initComponent({
       .map((resp) => resp?.username === getNameFromUrl())
       .unwrapOr(false)
       .then((isOwner) => {
-        initFullTable(`#${id}-list`, relevantEntries, entryType, isOwner)
+        initFullTable(`#${id}-list`, relevantEntries, entryType, isOwner, status === 'Planned')
         $(`#${id}-title`).click(() => {
           $(`#${id}-title`).next().toggle(200)
           $(`#${id}-title`).toggleClass('is-collapsed')
@@ -105,7 +105,7 @@ const SubList = (status, entryType, data) => initComponent({
   `
 })
 
-const initFullTable = (selector, data, entryType, isOwner) => {
+const initFullTable = (selector, data, entryType, isOwner, isPlanned) => {
   initTable(selector, data, {
     detailView: true,
     detailFormatter,
@@ -113,10 +113,10 @@ const initFullTable = (selector, data, entryType, isOwner) => {
     iconsPrefix: 'fa',
     search: true,
     showColumns: true,
-    sortName: 'Score',
+    sortName: isPlanned ? 'Preference' : 'Score',
     sortOrder: 'desc',
     columns: [
-      ...allColumns(),
+      ...allColumns(isPlanned),
       ...entryTypeToExtraColumns(entryType),
       ...(isOwner ? [editColumn()] : []),
     ]

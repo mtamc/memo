@@ -24,15 +24,12 @@ const typeToAPIType = {
   tv_shows: 'TVShow',
 }
 
-const byStatus = (status, entries) =>
-  entries.filter((e) => e.status === status)
-
-const basicColumns = () => [
+const basicColumns = (isPlanned) => [
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: linkFormatter,
     cellStyle: () => ({ css: { 'min-width': '200px' } })
   }),
-  col('Score', 'score', { align: 'center' }),
+  col(isPlanned ? 'Preference' : 'Score', 'score', { align: 'center' }),
   col('Year', 'commonMetadata.releaseYear', {
     align: 'center',
     // formatter: (_, row) =>
@@ -42,8 +39,8 @@ const basicColumns = () => [
   }),
 ]
 
-const allColumns = () => [
-  ...basicColumns(),
+const allColumns = (isPlanned) => [
+  ...basicColumns(isPlanned),
   col('Genres', 'commonMetadata.genres', {
     sortable: true,
     formatter: listOfLinksFormatter('genres')
@@ -113,7 +110,6 @@ Tables = {
   typeToAPIType,
   basicColumns,
   allColumns,
-  byStatus,
   statuses,
   entryTypeToExtraColumns,
   statusToTitle,

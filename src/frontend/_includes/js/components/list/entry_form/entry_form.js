@@ -209,7 +209,7 @@ const PersonalFields = (data, type) => initComponent({
         </select>
       </div>
       <div style="margin: 15px 0">
-        <label for="score">Score</label><br>
+        <label for="score">${data.status === 'Planned' ? 'Preference' : 'Score'}</label><br>
         <select name="score" id="score">
           ${
             ['10','9','8','7','6','5','4','3','2','1']
@@ -262,6 +262,15 @@ const PersonalFields = (data, type) => initComponent({
       new Litepicker({ element: document.getElementById('started-date') })
     }
     new Litepicker({ element: document.getElementById('completed-date') })
+
+    $('#status').on('change', () => {
+      if ($('#status').val() === 'Planned') {
+        $('label[for="score"]').html('Preference')
+      } else {
+        $('label[for="score"]').html('Score')
+      }
+        
+    })
   }
 })
 
