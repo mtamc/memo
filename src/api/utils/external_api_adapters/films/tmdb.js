@@ -44,7 +44,8 @@ const retrieve = (ref) => ResultAsync.fromPromise(
       duration: data.runtime || undefined,
       imageUrl: 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path,
       genres: data.genres.map(g => g.name),
-      staff: [...credits.cast]
+      director: credits.crew.filter((person) => person.job === 'Director').map(p => p.name),
+      actors: [...credits.cast]
         // @ts-ignore (library typing is wrong)
         .sort((a, b) => b.popularity - a.popularity)
         .slice(0, 10)

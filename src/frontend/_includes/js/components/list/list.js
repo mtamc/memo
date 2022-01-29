@@ -11,7 +11,7 @@ const List = (username) => initComponent({
   content: ({ include }) => html`
     <div class="container">
       <div class="row" style="padding:20px">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div id="list-header">
           ${include(
             ListPageHeader(typeToTitle[getEntryTypeFromUrl()], username)
           )}
