@@ -25,9 +25,13 @@ const createEntry = (type, entry) => Http.post(
   entry
 )
 
-const updateEntry = (type, ref, entry) => Http.put(
+const updateEntry = (type, ref, entry) => Http.patch(
   ENDPOINTS.updateEntry(type, ref),
   entry
+)
+
+const deleteEntry = (type, ref) => Http.del(
+  ENDPOINTS.deleteEntry(type, ref)
 )
 
 
@@ -51,6 +55,7 @@ Netlify = {
   isLoggedIn,
   createEntry,
   updateEntry,
+  deleteEntry,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,4 +70,5 @@ const ENDPOINTS = {
   retrieveWork: (type, apiRef) => `${API_URL_BASE}works/retrieve/${type}/${apiRef}`,
   createEntry: (type) => `${API_URL_BASE}entries/${type}`,
   updateEntry: (type, dbRef) => `${API_URL_BASE}entries/${type}/${dbRef}`,
+  deleteEntry: (type, dbRef) => `${API_URL_BASE}entries/${type}/${dbRef}`,
 }

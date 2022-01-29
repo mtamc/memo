@@ -1,21 +1,22 @@
 const { html, css } = Utils
 const { initComponent, setContent, WithRemoteData } = Components
 const { Modal, InputWithAction, showNotification, TextInput, Button } = Components.UI
-const { updateEntry, createEntry } = Netlify
+const { updateEntry, createEntry, deleteEntry } = Netlify
 const { statusToTitle, typeToAPIType } = Tables
 
 const EntryForm = (type, data) => {
-  const isEdit = data.status
+  const isEdit = data?.status ?? false
   return initComponent({
     content: ({ include }) => html`
       <div id="submit-button-add-entry-wrapper">
         ${include(SubmitButton(type, data, isEdit))}
+        ${isEdit ? include(DeleteButton(type, data)) : ''}
       </div>
       <div id="add-entry-fields">
         ${include([
           ExternalFields(data ?? {}, type),
           PersonalFields(data ?? {}, type),
-          ThirdColumn(data)
+          ThirdColumn(data),
         ])}
       </div>
     `,
@@ -39,21 +40,45 @@ Components.List.EntryForm = EntryForm
 
 ///////////////////////////////////////////////////////////////////////////////
 
+const buttonStyle = (color) => `
+  margin: auto;
+  cursor: pointer;
+  padding: 10px 30px;
+  background: ${color};
+  border-radius: 7px;
+  color: white;
+  border: 0;
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 10px;
+  display: inline-block;
+`
+
+const DeleteButton = (type, data) => Button({
+  label: 'Delete',
+  style: ({ id }) => css`
+    #${id} {
+      ${buttonStyle('#e0480e')}
+      margin-left: 5px;
+    }
+  `,
+  onClick: () => {
+    deleteEntry(type, data.dbRef)
+      .map(() => location.reload())
+      .mapErr((err) =>
+        showNotification(
+          `Error deleting this entry: ${err}`
+        )
+      )
+  }
+})
+
 const SubmitButton = (type, data, isEdit) => Button({
   label: isEdit ? 'Edit entry' : "Add entry",
   style: ({ id }) => css`
     #${id} {
-      margin: auto;
-      cursor: pointer;
-      padding: 10px 30px;
-      background: #0E9CE0;
-      border: 3px solid white;
-      border-radius: 7px;
-      color: white;
-      font-weight: bold;
-      font-size: 17px;
-      margin-bottom: 10px;
-      display: inline-block;
+      ${buttonStyle('#0E9CE0')}
+      margin-right: 5px;
     }
   `,
   onClick: () => {
@@ -171,27 +196,30 @@ const PersonalFields = (data, type) => initComponent({
     <div id="personal-fields">
       <div style="margin: 15px 0">
         <label for="status">Status</label><br>
-        <select name="status" id="status" value=${data.status ?? "InProgress"}>
-          <option value="InProgress">${statusToTitle(type, 'InProgress')}</option>
-          <option value="Completed">${statusToTitle(type, 'Completed')}</option>
-          <option value="Dropped">${statusToTitle(type, 'Dropped')}</option>
-          <option value="Planned">${statusToTitle(type, 'Planned')}</option>
+        <select name="status" id="status">
+          ${
+            ['InProgress', 'Completed', 'Dropped', 'Planned']
+              .map((status) => html`
+                <option value="${status}" ${status == data.status ? 'selected' : ''}>
+                  ${statusToTitle(type, status)}
+                </option>
+              `)
+              .join('')
+          }
         </select>
       </div>
       <div style="margin: 15px 0">
         <label for="score">Score</label><br>
-        <select name="score" id="score" value=${data.score ?? "10"}>
-          <option value="10">10</option>
-          <option value="9">9</option>
-          <option value="8">8</option>
-          <option value="7">7</option>
-          <option value="6">6</option>
-          <option value="6">6</option>
-          <option value="5">5</option>
-          <option value="4">4</option>
-          <option value="3">3</option>
-          <option value="2">2</option>
-          <option value="1">1</option>
+        <select name="score" id="score">
+          ${
+            ['10','9','8','7','6','5','4','3','2','1']
+              .map((num) => html`
+                <option value="${num}" ${num == data.score ? 'selected' : ''}>
+                  ${num}
+                </option>
+              `)
+              .join('')
+          }
         </select>
       </div>
       ${type !== 'films'
@@ -225,7 +253,7 @@ const PersonalFields = (data, type) => initComponent({
       </div>
       <div style="margin: 15px 0">
         <label for="review">Review</label><br>
-        <textarea id="review" name="review" rows="4" cols="21"></textarea>"
+        <textarea id="review" name="review" rows="4" cols="21">${data.review ?? ''}</textarea>
       </div>
     </div>
   `,
@@ -242,8 +270,8 @@ const ThirdColumn = (data) => initComponent({
     <div id="third-column-add-entry">
       <img
         id="external-img"
-        src="${data?.imageUrl ?? '/img/mawaru.png'}"
-        alt="${data?.englishTranslatedTitle ?? ''} cover"
+        src="${data?.commonMetadata.imageUrl ?? '/img/mawaru.png'}"
+        alt="${data?.commonMetadata.englishTranslatedTitle ?? ''} cover"
       />
     </div>
   `,

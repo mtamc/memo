@@ -7,17 +7,16 @@ const responses = require('../utils/responses')
 const { Result, combine, err, ok, okAsync } = require('neverthrow')
 const errors = require('../utils/errors')
 const { getUserId, getSegment, getReqBody, findIdOfName } = require('./utils')
-const { pair, triplet, toPromise } = require('../utils/general')
+const { pair, triplet, quad, toPromise, toAsync } = require('../utils/general')
 const db = require('../utils/db/')
 const { match } = require('ts-pattern')
-const {toResponse} = require('../utils/db/into_safe_values')
-const {identity} = require('ramda')
+const { toResponse } = require('../utils/db/into_safe_values')
 
 /** @type {(event: Event) => Promise<Response>} */
 const getAllEntriesForUser = (event) => toPromise(
   combine(pair([
     findIdOfName(getSegment(1, event)),
-    toEntryCollection(getSegment(0, event)).asyncAndThen(okAsync),
+    toAsync(toEntryCollection(getSegment(0, event))),
   ]))
     .map(getUserEntries)
     .mapErr(responses.fromError)
@@ -30,36 +29,53 @@ const createNewUserListEntry = (event, context) => toPromise(
     getReqBody(event),
     toEntryCollection(getSegment(0, event)),
   ]))
-  .asyncMap(createEntry)
-  .mapErr(responses.fromError)
+    .asyncMap(createEntry)
+    .mapErr(responses.fromError)
 )
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
 const updateEntry = (event, context) => toPromise(
-  combine(triplet([
-    getUserId(context),
-    getReqBody(event),
-    toEntryCollection(getSegment(0, event)),
-  ]))
-  .asyncAndThen(([uid, body, col]) =>
-    combine(triplet([
-      okAsync(uid),
-      okAsync(body),
-      db.findOneByRef_(col, getSegment(1, event))
-    ]))
-  )
-  .map(([uid, body, entry]) =>
-    entry.data.userId === uid
-      ? updateEntry_([entry.ref.id, body])
-      : responses.unauthorized()
+  toEntryCollection(getSegment(0, event))
+    .asyncAndThen((col) =>
+      combine(quad([
+        toAsync(getUserId(context)),
+        toAsync(getReqBody(event)),
+        okAsync(col),
+        db.findOneByRef_(col, getSegment(1, event)),
+      ]))
+    )
+    .map(([uid, body, col, entry]) =>
+      entry.data.userId === uid
+        ? db.updateByRef(col, entry.ref.id, body)
+        : responses.unauthorized()
+    )
+    .mapErr(responses.fromError)
 )
-  .mapErr(responses.fromError)
+
+/** @type {(event: Event, context: Context) => Promise<Response>} */
+const deleteEntry = (event, context) => toPromise(
+  toEntryCollection(getSegment(0, event))
+    .asyncAndThen((col) =>
+      combine(triplet([
+        toAsync(getUserId(context)),
+        okAsync(col),
+        db.findOneByRef_(col, getSegment(1, event)),
+      ]))
+    )
+    .map(([uid, col, entry]) =>
+      entry.data?.userId === uid
+        ? db.deleteByRef(col, entry.ref.id)
+        : responses.unauthorized()
+    )
+    .mapErr(responses.fromError)
 )
+
 
 module.exports = {
   getAllEntriesForUser,
   createNewUserListEntry,
-  updateEntry
+  updateEntry,
+  deleteEntry,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +104,3 @@ const getUserEntries = ([uid, col]) => toResponse(toPromise(
 /** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<Response>} */
 const createEntry = ([userId, body, collection]) =>
   db.create(collection, { ...body, userId })
-
-/** @type {([refId, body]: [any, any]) => Promise<Response>} */
-const updateEntry_ = ([refId, body]) =>
-  db.updateByRef(refId, body)

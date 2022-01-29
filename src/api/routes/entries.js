@@ -4,7 +4,8 @@ const responses = require('../utils/responses')
 const {
   getAllEntriesForUser,
   createNewUserListEntry,
-  updateEntry
+  updateEntry,
+  deleteEntry,
 } = require('../controllers/entries')
 const { matchVerbAndNumberOfUrlSegments } = require('../router')
 
@@ -18,7 +19,11 @@ exports.handler = async (event, context) =>
     // POST /api/entries/:type
     .with(['POST', 1], () => createNewUserListEntry(event, context))
 
-    // PUT /api/entries/:type/:dbRef
-    .with(['PUT', 2], () => updateEntry(event, context))
+    // PATCH /api/entries/:type/:dbRef
+    .with(['PATCH', 2], () => updateEntry(event, context))
+
+
+    // DELETE /api/entries/:type/:dbRef
+    .with(['DELETE', 2], () => deleteEntry(event, context))
 
     .otherwise(() => responses.notFound())

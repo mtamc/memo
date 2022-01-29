@@ -3,7 +3,7 @@
  * no specific domain. They fill general holes
  * in JavaScript stdlib.
  */
-const { Result, ResultAsync, err, ok } = require('neverthrow')
+const { Result, ResultAsync, err, ok, okAsync } = require('neverthrow')
 const { identity, isNil } = require('ramda')
 
 /** @type {<T>(x: T) => T} */
@@ -21,6 +21,9 @@ const pair = (x) => x
 /** @type {<T,U,V>(x: [T, U, V]) => x} */
 const triplet = (x) => x
 
+/** @type {<T,U,V,W>(x: [T, U, V,W]) => x} */
+const quad = (x) => x
+
 /** @type {(err: any) => never} */
 const throwIt = (err) => { throw err }
 
@@ -32,12 +35,18 @@ const toPromise = (ra) =>
 const validateExists = (x) =>
   isNil(x) ? err(undefined) : ok(x)
 
+/** @type {<T,E>(r: Result<T,E>) => ResultAsync<T,E>} */
+const toAsync = (result) =>
+  result.asyncAndThen(okAsync)
+
 module.exports = {
+  toAsync,
   log,
   warn,
   safeJSONStringify,
   pair,
   triplet,
+  quad,
   throwIt,
   toPromise,
   validateExists
