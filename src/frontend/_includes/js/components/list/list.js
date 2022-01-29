@@ -116,7 +116,7 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
     sortName: status === 'Planned' ? 'Preference' : 'Score',
     sortOrder: 'desc',
     columns: [
-      ...allColumns(status === 'Planned'),
+      ...allColumns(status),
       ...entryTypeToExtraColumns(entryType, status),
       ...(isOwner ? [editColumn()] : []),
     ]
