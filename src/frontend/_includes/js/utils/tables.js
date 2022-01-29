@@ -24,14 +24,15 @@ const typeToAPIType = {
   tv_shows: 'TVShow',
 }
 
-const basicColumns = (isPlanned) => [
+const basicColumns = (status) => [
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: titleFormatter,
-    cellStyle: () => ({ css: { 'min-width': '200px' } })
+    cellStyle: () => ({ css: { 'width': '400px' } })
   }),
-  col(isPlanned ? 'Preference' : 'Score', 'score', {
+  col(status === 'Planned' ? 'Preference' : 'Score', 'score', {
     sortable: true,
     align: 'center',
+    cellStyle: () => ({ css: { 'width': '25px' } })
   }),
   col('Duration', 'commonMetadata.duration', {
     sortable: true,
@@ -48,11 +49,12 @@ const basicColumns = (isPlanned) => [
   col('Year', 'commonMetadata.releaseYear', {
     sortable: true,
     align: 'center',
+    cellStyle: () => ({ css: { 'width': '25px' } })
   }),
 ]
 
-const allColumns = (isPlanned) => [
-  ...basicColumns(isPlanned),
+const allColumns = (status) => [
+  ...basicColumns(status),
   col('Genres', 'commonMetadata.genres', {
     sortable: true,
     formatter: listOfLinksFormatter('genres')
