@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { getEntries, getUserName } = Netlify
-const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToExtraColumns, statusToTitle, editColumn } = Tables
+const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToFullColumns, statusToTitle, editColumn } = Tables
 const { initComponent, WithRemoteData, appendContent, Nothing } = Components
 const { Modal_ } = Components.UI
 const { AddEntryButton } = Components.List
@@ -116,9 +116,8 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
     sortName: status === 'Planned' ? 'Preference' : 'Score',
     sortOrder: 'desc',
     columns: [
-      ...allColumns(status),
-      ...entryTypeToExtraColumns(entryType, status),
-      ...(isOwner ? [editColumn()] : []),
+      ...entryTypeToFullColumns(entryType, status),
+      ...(isOwner ? [Columns.edit()] : []),
     ]
   })
   window.editEntry = (data) => {

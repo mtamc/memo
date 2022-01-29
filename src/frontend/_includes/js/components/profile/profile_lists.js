@@ -1,5 +1,5 @@
 const { getUserName, entryTypes, getEntries } = Netlify
-const { col, initTable, typeToTitle, basicColumns } = Tables
+const { col, initTable, typeToTitle, profileColumns } = Tables
 const { html } = Utils
 const { UsernameSetter } = Components.Profile
 const { initComponent, WithRemoteData } = Components
@@ -46,7 +46,7 @@ const initProfileTable = (selector, data) => initTable(selector, data, {
   pagination: true,
   pageSize: 5,
   onlyInfoPagination: true,
-  columns: basicColumns(),
+  columns: profileColumns(),
 })
 
 const typeToCssId = (type) => `#summary-${type}`
