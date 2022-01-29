@@ -122,14 +122,11 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
     ]
   })
   if (isOwner) {
-    $('.edit-button').each((_, btn) => {
-      $(btn).get()[0].onclick = () => {
-        appendContent('body', Modal_({
-          title: "Edit an entry",
-          content: EntryForm(entryType, $(btn).data('entry'))
-        }))
-        $(btn).attr('id')
-      }
-    })
+    window.editEntry = (data) => {
+      appendContent('body', Modal_({
+        title: "Edit an entry",
+        content: EntryForm(entryType, data)
+      }))
+    }
   }
 }

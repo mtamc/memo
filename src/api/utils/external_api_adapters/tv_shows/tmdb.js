@@ -48,7 +48,9 @@ const retrieve = (ref) => ResultAsync.fromPromise(
       duration: data.episode_run_time?.[0] || undefined,
       imageUrl: 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path,
       genres: data.genres.map(g => g.name),
-      directors: credits.crew.filter((person) => person.job === 'Director').map(p => p.name),
+      directors: credits.crew
+        .filter((person) => ['Director', 'Series Director'].includes(person.job))
+        .map(p => p.name),
       actors: [...credits.cast]
         // @ts-ignore (library typing is wrong)
         .sort((a, b) => b.popularity - a.popularity)

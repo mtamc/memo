@@ -1,3 +1,6 @@
+/**
+ * This file is kind of messy, sorry.
+ */
 const { html } = Utils
 
 const col = (title, field, options) => ({ title, field, ...options })
@@ -38,6 +41,7 @@ const basicColumns = (status) => [
     sortable: true,
     align: 'center',
     visible: false,
+    cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: (durationInMin) => {
       const hours = Math.floor(durationInMin/60)
       const mins = durationInMin % 60
@@ -67,20 +71,22 @@ const editColumn = () =>
   col('<i class="fas fa-edit"></i>', 'editCol', {
     formatter: (_, row, i) => {
       return html`
-        <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" data-entry='${JSON.stringify(row)}'></i>
+        <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" onclick='window.editEntry(${JSON.stringify(row)})'></i>
       `
     },
-    cellStyle: () => ({ css: { 'width': '20px' } })
+    cellStyle: () => ({ css: { 'width': '20px' } }),
   })
 
 const entryTypeToExtraColumns = (entryType, status) => ({
   films: [
     directorColumn(),
     actorsColumn(),
+    dateColumn('Completed Date', 'completedDate'),
   ],
   tv_shows: [
     col('Progress', 'progress', {
       sortable: true,
+      cellStyle: () => ({ css: { 'width': '20px' } }),
       formatter: (progress, row) => {
         const totalEps = row.commonMetadata.episodes ?? '-'
         const seen = row.status === 'Completed'
@@ -91,6 +97,8 @@ const entryTypeToExtraColumns = (entryType, status) => ({
     }),
     directorColumn(),
     actorsColumn(),
+    dateColumn('Started Date', 'startedDate'),
+    dateColumn('Completed Date', 'completedDate'),
   ],
   games: [
     col('Platforms', 'commonMetadata.platforms', sortableAndLinked('Platforms')),
@@ -104,7 +112,7 @@ const entryTypeToExtraColumns = (entryType, status) => ({
 
 const directorColumn = () =>
   col('Director', 'commonMetadata.directors', {
-    ...sortableAndLinked('director'),
+    ...sortableAndLinked('directors'),
     visible: true,
     cellStyle: () => ({ css: { 'width': '200px', } }),
   })
@@ -114,6 +122,16 @@ const actorsColumn = () =>
     ...sortableAndLinked('actors'),
     visible: false,
     cellStyle: () => ({ css: { 'width': '250px', } }),
+  })
+
+const dateColumn = (label, field) =>
+  col(label, field, {
+    sortable: true,
+    visible: false,
+    align: 'center',
+    cellStyle: () => ({ css: { 'width': '80px', } }),
+    formatter: (date) =>
+      date ? (new Date(date)).toISOString().substring(0, 10) : '-'
   })
 
 const sortableAndLinked = (prop, toLink) => ({
@@ -137,7 +155,6 @@ const statusToTitle = (entryType, status) => ({
     books: 'To read'
   }[entryType]
 }[status])
-
 
 Tables = {
   col,
