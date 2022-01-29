@@ -163,7 +163,7 @@ const englishTitleAndLastUpdatedFormatter = (_, { commonMetadata, updatedDate })
   const { englishTranslatedTitle } = commonMetadata
   const link = toWikipediaLink(englishTranslatedTitle, englishTranslatedTitle)
   return updatedDate
-    ? `${link}<i style="font-size:.9em; float: right;">${relativeTime(updatedDate)}</i>`
+    ? `${link}<i style="font-size:.85em; float: right; position: relative; top: 3px;">${relativeTime(updatedDate)}</i>`
     : link
 }
 
