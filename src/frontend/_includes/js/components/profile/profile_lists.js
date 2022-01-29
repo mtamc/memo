@@ -37,7 +37,7 @@ const ProfileTable = (type, data) => initComponent({
     <table id="summary-${type}"></table>
   `,
   initializer: () => {
-    initProfileTable(typeToCssId(type), data.filter((entry) => entry.status === 'Completed'))
+    initProfileTable(typeToCssId(type), [...data].sort((a, b) => a.updatedDate - b.updatedDate))
   }
 })
 

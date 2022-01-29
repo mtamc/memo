@@ -12,7 +12,8 @@ const UsernameSetter = () => initComponent({
           if (resp.error) {
             showNotification('This username is already taken.')
           } else {
-            setTimeout(() => location.reload(), 2000)
+            showNotification('Successfully picked new name. You will be redirected in 5 seconds.')
+            setTimeout(() => location.reload(), 5000)
           }
         })
     }
