@@ -29,7 +29,7 @@ const List = (username) => initComponent({
           }))}
       </div>
     </div>
-  `
+  `,
 })
 
 Components.List.List = List

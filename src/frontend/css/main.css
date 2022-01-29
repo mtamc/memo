@@ -56,3 +56,7 @@ span:lang(cn) {
   color: #0e9ce0;
   cursor: pointer;
 }
+
+.bootstrap-table .table:not(.table-condensed) tr > td:first-of-type {
+  text-align: center;
+}
