@@ -103,6 +103,7 @@ const staffColumn = () =>
   col('Staff', 'commonMetadata.staff', {
     ...sortableAndLinked('staff'),
     visible: false,
+    cellStyle: () => ({ css: { 'width': '250px' } })
   })
 
 const sortableAndLinked = (prop, toLink) => ({
