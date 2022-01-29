@@ -6,7 +6,7 @@ const { initComponent, WithRemoteData } = Components
 
 const ProfileLists = (username) => initComponent({
   content: ({ include }) => html`
-    <div class="row">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
       ${entryTypes
         .map(type => include(ProfileList(username, type)))
         .join('')
@@ -22,7 +22,7 @@ Components.Profile.ProfileLists = ProfileLists
 
 const ProfileList = (username, type) => initComponent({
   content: ({ include }) => html`
-    <div class="col-md-6">
+    <div style="width: 48%;">
       <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
       ${include(WithRemoteData({
         remoteData: getEntries(type, username),
