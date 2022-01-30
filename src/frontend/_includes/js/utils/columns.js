@@ -66,7 +66,7 @@ const edit =  () =>
       // an event, because bootstrap-table destroys the node and rebuilds it
       // when changing displayed columns
       return html`
-        <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" onclick='window.editEntry(${JSON.stringify(row)})'></i>
+        <i id="edit-${row.status}-${i}" class="fas fa-edit edit-button" onclick='window.editEntry(${JSON.stringify(row).replace(/'/g, `&#39;`)})'></i>
       `
     },
     cellStyle: () => ({ css: { 'width': '20px' } }),
