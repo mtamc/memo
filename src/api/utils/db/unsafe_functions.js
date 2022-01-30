@@ -94,7 +94,7 @@ const lambdaGet = Lambda((x) => Get(x))
 
 /** @type {(set: ExprArg) => Promise<object>} */
 const findAllUnpaginated = (set) =>
-  db.query(q.Map(Paginate(set), lambdaGet))
+  db.query(q.Map(Paginate(set, { size: 100000 }), lambdaGet))
 
 const getCollectionDocs = compose(Documents, Collection)
 
