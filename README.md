@@ -66,6 +66,7 @@ environment variables. They are also avaiable in production inside
 
 - Google Books API
   - Potentially 1000/day with key, with easy free application for 100k (warning: old information)
+      - Right now we're not using an API key. If you want to try, [then sign up for one](https://cloud.google.com/docs/authentication/api-keys?visit_id=637791358916015831-391700742&rd=1) and add GOOGLE_API_KEY to the Netlify environment variables. The code will automatically pick it up.
 
 - Games
   - IGDB: 4 reqs/sec (currently fetching details takes 2 requests due to getting company names)
