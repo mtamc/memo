@@ -1,4 +1,4 @@
-/** @typedef {import('zod').ZodType} ZodType */
+/** @typedef {import('zod').ZodObject} ZodObject */
 const { z } = require('zod')
 const statusParser = z.enum(['InProgress', 'Completed', 'Dropped', 'Planned'])
 
@@ -15,9 +15,10 @@ const scoreParser = z.union([
   z.literal(10)
 ])
 
-/** @param {ZodType} specificWorkParser */
+/** @param {ZodObject} specificWorkParser */
 const entryParser = (specificWorkParser) => z.object({
   commonMetadata: specificWorkParser,
+  overrides: specificWorkParser.partial().or(z.undefined()),
   userId: z.string(),
   status: statusParser,
   score: scoreParser.or(z.undefined()),

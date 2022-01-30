@@ -42,7 +42,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
       englishTranslatedTitle: data.title,
       releaseYear: parseInt(data.release_date.substring(0, 4)),
       duration: data.runtime || undefined,
-      imageUrl: 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path,
+      imageUrl: data.poster_path ? 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path : undefined,
       genres: data.genres.map(g => g.name),
       directors: credits.crew.filter((person) => person.job === 'Director').map(p => p.name),
       actors: [...credits.cast]

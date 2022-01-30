@@ -6,7 +6,7 @@ const CoverColumn = (data) => initComponent({
     <div id="third-column-add-entry">
       <img
         id="external-img"
-        src="${data?.commonMetadata.imageUrl ?? '/img/mawaru.png'}"
+        src="${data.overrides.imageUrl ?? data.commonMetadata.imageUrl ?? '/img/mawaru.png'}"
         alt="${data?.commonMetadata.englishTranslatedTitle ?? ''} cover"
       />
     </div>
