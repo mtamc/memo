@@ -9,6 +9,7 @@ const profileColumns = (status) => [
 
 const entryTypeToFullColumns = (entryType, status) => ({
   films: [
+    Columns.index(),
     Columns.title(),
     Columns.score(status),
     Columns.year(),
@@ -16,8 +17,10 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.directors(),
     Columns.actors(),
     Columns.date('Completed Date', 'completedDate'),
+    Columns.index(),
   ],
   tv_shows: [
+    Columns.index(),
     Columns.title(),
     Columns.score(status),
     Columns.year(),
@@ -27,8 +30,10 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.actors(),
     Columns.date('Started Date', 'startedDate'),
     Columns.date('Completed Date', 'completedDate'),
+    Columns.index(),
   ],
   games: [
+    Columns.index(),
     Columns.title(),
     Columns.score(status),
     Columns.year(),
@@ -38,6 +43,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.publishers(),
   ],
   books: [
+    Columns.index(),
     Columns.title(),
     Columns.score(status),
     Columns.year(),

@@ -6,6 +6,13 @@ const title = () =>
     formatter: titleFormatter,
   })
 
+const index = () =>
+  col('n', 'n', {
+    formatter: indexFormatter,
+    visible: false,
+    cellStyle: () => ({ css: { 'width': '15px' } })
+  })
+
 const englishTitleAndLastUpdated = () =>
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: englishTitleAndLastUpdatedFormatter,
@@ -132,6 +139,7 @@ const authors = () =>
 
 Columns = {
   title,
+  index,
   englishTitleAndLastUpdated,
   score,
   year,
@@ -223,3 +231,5 @@ const relativeTime = (ts) => {
 
   return `${number} ${unit}${number > 1 ? 's' : ''} ago`
 }
+
+const indexFormatter = (_, __, index) => index + 1
