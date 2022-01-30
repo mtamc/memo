@@ -53,7 +53,7 @@ const playtime = () =>
   })
 
 const pages = () =>
-  col('Pages', 'pages', {
+  col('Pages', 'commonMetadata.duration', {
     sortable: true,
     align: 'center',
     visible: true,
