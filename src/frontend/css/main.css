@@ -124,9 +124,13 @@ span:lang(cn) {
   }
   .memo-menu ul {
     display: flex;
+    justify-content: space-evenly;
   }
   .nav-stacked > li + li {
     margin-top: 0px;
     margin-left: 0;
+  }
+  h1 {
+    text-align: center;
   }
 }
