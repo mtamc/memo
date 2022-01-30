@@ -12,7 +12,13 @@ const ProfilePage = () => initComponent({
         ? Base(`${getNameFromUrl()}'s profile`, ProfileLists(getNameFromUrl()))
         : Error404()
     })
-  )
+  ),
+  initializer: () => {
+    const user = getNameFromUrl()
+    document.title = user
+      ? `${user}'s profile | Memo`
+      : `Not found`
+  }
 })
 
 Components.Profile.ProfilePage = ProfilePage
