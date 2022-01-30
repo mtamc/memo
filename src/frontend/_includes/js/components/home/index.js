@@ -26,10 +26,16 @@ const ProfileListsOrUsernameSetter = ({ error, username }) => initComponent({
     <div>
       ${error === 'NoUsernameSet'   ? include(UsernameSetter())
         : typeof error === 'string' ? `${error}`
-                 /* if no error */  : include(Redirect(`/profile?user=${username}`))
+                 /* if no error */  : include(AuthenticatedHomePage(username))
       }
     </div>
   `
+})
+
+const AuthenticatedHomePage = (username) => initComponent({
+  content: () => html`
+    <div id="authenticated-home-page">Hi ${username}! Not much here yet. Why not visit <a href="/profile?user=${username}">your profile</a>?</div>
+  `,
 })
 
 const UnauthenticatedWelcome = () => initComponent({

@@ -10,11 +10,20 @@ const Menu = () => initComponent({
     >
       <hr>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="/">Home</a></li>
+        <li id="home-menu-item"><a href="/">Home</a></li>
         <li><a>${include(NetlifyIdentityLink())}</a></li>
       </ul>
     </div>
-  `
+  `,
+  initializer: () => {
+    Netlify.getUserName()
+      .map(({ username }) => {
+        if (username) {
+          $('#home-menu-item').after(`<li id="home-menu-item"><a href="/profile?user=${username}">Profile</a></li>`)
+        }
+      })
+      .mapErr(console.log)
+  }
 })
 
 Components.UI.Menu = Menu
