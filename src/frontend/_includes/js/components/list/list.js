@@ -213,7 +213,7 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
     iconsPrefix: 'fa',
     search: true,
     showColumns: true,
-    sortName: status === 'Planned' ? 'Preference' : 'Score',
+    sortName: 'score',
     sortOrder: 'desc',
     columns: [
       ...entryTypeToFullColumns(entryType, status),

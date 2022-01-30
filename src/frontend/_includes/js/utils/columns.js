@@ -4,6 +4,7 @@ const { round } = Math
 const title = () =>
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: titleFormatter,
+    sortable: true,
   })
 
 const index = () =>
@@ -180,7 +181,7 @@ const titleFormatter = (_, row) => {
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
-  const cover = imageUrl ?? '/img/mawaru.png'
+  const cover = imageUrl || '/img/mawaru.png'
   const anchorId = `entry-${row.commonMetadata.apiRefs[0]?.ref}`
   return `<span id="${anchorId}" class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
 }
