@@ -57,7 +57,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
 }[entryType])
 
 const detailFormatter = (_, row) => {
-  const anchorId = `entry-${row.commonMetadata.apiRefs[0]?.ref}`
+  const anchorId = `entry-${row.dbRef}`
   const cover =
     row.commonMetadata.imageUrl
       ? `<img src="${row.commonMetadata.imageUrl}" class="review-cover" style="float:right;">`
