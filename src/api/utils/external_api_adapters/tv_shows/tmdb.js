@@ -46,7 +46,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
       englishTranslatedTitle: data.name,
       releaseYear: parseInt(data.first_air_date.substring(0, 4)),
       duration: data.episode_run_time?.[0] || undefined,
-      imageUrl: 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path,
+      imageUrl: data.poster_path ? 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path : undefined,
       genres: data.genres.map(g => g.name),
       directors: credits.crew
         .filter((person) => ['Director', 'Series Director'].includes(person.job))

@@ -33,6 +33,11 @@ const List = (username) => initComponent({
   initializer: () => {
     // Show helpful image next to the first open-review-icon
     // in the DOM
+    
+    if (Netlify.isLoggedIn()) {
+      return
+    }
+
     const observer = new MutationObserver((mutations, obs) => {
       const el = document.querySelector('a.detail-icon')
       const helperImg = document.querySelector('#click-to-see-comments')
@@ -50,7 +55,7 @@ const List = (username) => initComponent({
             .before(html`
               <div id="click-to-see-comments">Click here to<br>read comments! <i class="fas fa-location-arrow" style="opacity:.7;"></i></div>
             `)
-        }, 500)
+        }, 200)
         return
       }
     })

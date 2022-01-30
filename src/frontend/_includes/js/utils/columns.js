@@ -26,10 +26,11 @@ const score = (status) =>
   })
 
 const year = () =>
-  col('Year', 'commonMetadata.releaseYear', {
+  col('Year', 'releaseYear', {
     sortable: true,
     align: 'center',
-    cellStyle: () => ({ css: { 'width': '25px' } })
+    cellStyle: () => ({ css: { 'width': '25px' } }),
+    formatter: getOverrideOrMetadata('releaseYear')
   })
 
 const duration = (label, visible) =>
@@ -42,7 +43,7 @@ const duration = (label, visible) =>
   })
 
 const playtime = () =>
-  col('Playtime', 'commonMetadata.duration', {
+  col('Playtime', 'playtime', {
     sortable: true,
     align: 'center',
     visible: true,
@@ -51,11 +52,12 @@ const playtime = () =>
   })
 
 const pages = () =>
-  col('Pages', 'commonMetadata.duration', {
+  col('Pages', 'pages', {
     sortable: true,
     align: 'center',
     visible: true,
     cellStyle: () => ({ css: { 'width': '25px' } }),
+    formatter: getOverrideOrMetadata('duration')
   })
 
 const genre = () =>
@@ -66,7 +68,7 @@ const genre = () =>
     visible: false,
   })
 
-const edit =  () =>
+const edit = () =>
   col('<i class="fas fa-edit"></i>', 'editCol', {
     formatter: (_, row, i) => {
       // We use `onclick` and a global (window.xx) function instead of binding
@@ -162,28 +164,40 @@ Columns = {
 
 const col = (title, field, options) => ({ title, field, ...options })
 
-const titleFormatter = (_, row, i) => {
-  const { originalTitle, englishTranslatedTitle } = row.commonMetadata
+/** Gets the values of row's props in metadata, trying overrides first */
+const get = (row, props) =>
+  Object.fromEntries(
+    props.map((prop) =>
+      [prop, row.overrides?.[prop] ?? row.commonMetadata?.[prop]]
+    )
+  )
+  
+
+const titleFormatter = (_, row) => {
+  const { originalTitle, englishTranslatedTitle, imageUrl } = get(row, [
+    'originalTitle', 'englishTranslatedTitle', 'imageUrl'
+  ])
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
-  const cover = row.commonMetadata.imageUrl ?? '/img/mawaru.png'
+  const cover = imageUrl ?? '/img/mawaru.png'
   const anchorId = `entry-${row.commonMetadata.apiRefs[0]?.ref}`
   return `<span id="${anchorId}" class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
 }
 
-const englishTitleAndLastUpdatedFormatter = (_, { commonMetadata, updatedDate }) => {
-  const { englishTranslatedTitle } = commonMetadata
+const englishTitleAndLastUpdatedFormatter = (_, row) => {
+  const { englishTranslatedTitle } = get(row, ['englishTranslatedTitle'])
   const link = toWikipediaLink(englishTranslatedTitle, englishTranslatedTitle)
   return updatedDate
-    ? `${link}<i style="font-size:.85em; float: right; position: relative; top: 3px;">${relativeTime(updatedDate)}</i>`
+    ? `${link}<i style="font-size:.85em; float: right; position: relative; top: 3px;">${relativeTime(row.updatedDate)}</i>`
     : link
 }
 
 const listOfLinksFormatter = (prop, toLink) => (_, row) => {
-  const list = row.commonMetadata[prop]
+  const containerOfVal = get(row, [prop])
+  const val = containerOfVal[prop]
   const transformer = toLink ?? toWikipediaLink
-  return list?.map((el) => transformer(el)).join(', ') ?? ''
+  return val?.map((el) => transformer(el)).join(', ') ?? ''
 }
 
 const toWikipediaLink = (name, label) =>
@@ -194,7 +208,8 @@ const sortableAndLinked = (prop, toLink) => ({
   formatter: listOfLinksFormatter(prop, toLink)
 })
 
-const durationFormatter = (durationInMin) => {
+const durationFormatter = (_, row) => {
+  const { duration: durationInMin } = get(row, ['duration'])
   const hours = Math.floor(durationInMin/60)
   const mins = durationInMin % 60
   return durationInMin
@@ -202,7 +217,8 @@ const durationFormatter = (durationInMin) => {
     : '-'
 }
 
-const playtimeFormatter = (durationInMin, row) => {
+const playtimeFormatter = (_, row) => {
+  const { duration: durationInMin } = get(row, ['duration'])
   const hours = Math.floor(durationInMin/60)
   const mins = durationInMin % 60
   const hltbRef = row.commonMetadata.apiRefs.find(ref => ref.name === 'hltb')?.ref
@@ -242,3 +258,7 @@ const makeSafeForCSS = (name) =>
            c >= 65 && c <= 90 ? '_' + s.toLowerCase() :
            '__' + ('000' + c.toString(16)).slice(-4)
   })
+
+const getOverrideOrMetadata = (prop) => (_, row) =>
+  row.overrides?.[prop] ?? row.commonMetadata?.[prop]
+

@@ -148,3 +148,12 @@ span:lang(cn) {
   margin: 0 10px;
   opacity: 0.7;
 }
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  vertical-align: middle;
+}
