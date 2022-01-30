@@ -17,11 +17,11 @@ const InputWithAction = ({ label, btnLabel, onSubmit, style }) => initComponent(
   `
 })
 
-const TextInput = ({ label, id, defaultValue }) => initComponent({
+const TextInput = ({ label, id, defaultValue, type }) => initComponent({
   content: () => html`
     <div>
       <label for="${id}">${label}</label><br>
-      <input type="text" id="${id}" value="${defaultValue ?? ''}">
+      <input type="${type ?? 'text'}" id="${id}" value="${defaultValue ?? ''}">
     </div>
   `
 })
