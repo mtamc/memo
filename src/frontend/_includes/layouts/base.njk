@@ -86,6 +86,7 @@
         {{ content | safe }}
 
         Components.setContent('#site', TdMemoPage())
+        netlifyIdentity.currentUser?.jwt?.()
       }, 0)
     </script>
   </body>
