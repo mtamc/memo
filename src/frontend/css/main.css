@@ -66,6 +66,9 @@ span:lang(cn) {
   max-width: calc(100vw - 60px);
 }
 
+.bootstrap-table tbody {
+  transform-style: preserve-3d;
+}
 .detail-view img {
   max-width: 50%;
   max-height: 200px;
