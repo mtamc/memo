@@ -17,7 +17,6 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.directors(),
     Columns.actors(),
     Columns.date('Completed Date', 'completedDate'),
-    Columns.index(),
   ],
   tv_shows: [
     Columns.index(),
@@ -30,7 +29,6 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.actors(),
     Columns.date('Started Date', 'startedDate'),
     Columns.date('Completed Date', 'completedDate'),
-    Columns.index(),
   ],
   games: [
     Columns.index(),
@@ -41,6 +39,8 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.platforms(),
     Columns.studios(),
     Columns.publishers(),
+    Columns.date('Started Date', 'startedDate'),
+    Columns.date('Completed Date', 'completedDate'),
   ],
   books: [
     Columns.index(),
@@ -49,6 +49,8 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.year(),
     Columns.pages(),
     Columns.authors(),
+    Columns.date('Started Date', 'startedDate'),
+    Columns.date('Completed Date', 'completedDate'),
   ],
 }[entryType])
 
