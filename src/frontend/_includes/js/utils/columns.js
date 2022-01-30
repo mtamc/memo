@@ -188,7 +188,7 @@ const titleFormatter = (_, row) => {
 const englishTitleAndLastUpdatedFormatter = (_, row) => {
   const { englishTranslatedTitle } = get(row, ['englishTranslatedTitle'])
   const link = toWikipediaLink(englishTranslatedTitle, englishTranslatedTitle)
-  return updatedDate
+  return row.updatedDate
     ? `${link}<i style="font-size:.85em; float: right; position: relative; top: 3px;">${relativeTime(row.updatedDate)}</i>`
     : link
 }
