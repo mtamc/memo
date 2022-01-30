@@ -159,7 +159,8 @@ const titleFormatter = (_, row) => {
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
-  return toWikipediaLink(englishTranslatedTitle, label)
+  const cover = row.commonMetadata.imageUrl ?? '/img/mawaru.png'
+  return `<span class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
 }
 
 const englishTitleAndLastUpdatedFormatter = (_, { commonMetadata, updatedDate }) => {
