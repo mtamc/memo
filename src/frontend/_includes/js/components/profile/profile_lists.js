@@ -52,9 +52,7 @@ const ProfileTable = (type, data) => initComponent({
   }
 })
 
-const log = x => (console.log(x), x)
-
-const initProfileTable = (selector, data) => initTable(selector, log(data), {
+const initProfileTable = (selector, data) => initTable(selector, data, {
   iconsPrefix: 'fa',
   pagination: true,
   pageSize: 5,
