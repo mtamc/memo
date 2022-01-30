@@ -30,6 +30,63 @@ const List = (username) => initComponent({
       </div>
     </div>
   `,
+  initializer: () => {
+    // Show helpful image next to the first open-review-icon
+    // in the DOM
+    const observer = new MutationObserver((mutations, obs) => {
+      const el = document.querySelector('a.detail-icon')
+      const helperImg = document.querySelector('#click-to-see-comments')
+      if (el && !helperImg) {
+        obs.disconnect()
+        setTimeout(() => {
+          $(el)
+            .parent()
+            .parent()
+            .parent()
+            .parent()
+            .parent()
+            .parent()
+            .parent()
+            .before(html`
+              <div id="click-to-see-comments">Click here to<br>read comments! <i class="fas fa-location-arrow" style="opacity:.7;"></i></div>
+            `)
+        }, 500)
+        return
+      }
+    })
+
+    observer.observe(document, {
+      childList: true,
+      subtree: true
+    })
+  },
+  style: () => css`
+    #sublist-wrapper {
+      position: relative;
+    }
+    #click-to-see-comments {
+      font-size: 10px;
+      opacity: .7;
+      position: absolute;
+      top: 126px;
+      left: -62px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    #click-to-see-comments img {
+      height: 80px;
+    }
+    @media (max-width: 992px) {
+      #click-to-see-comments {
+        top: 110px;
+      }
+    }
+    @media (max-width: 860px) {
+      #click-to-see-comments {
+        display: none;
+      }
+    }
+  `
 })
 
 Components.List.List = List
