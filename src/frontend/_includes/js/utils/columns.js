@@ -27,7 +27,7 @@ const score = (status) =>
   })
 
 const year = () =>
-  col('Year', 'releaseYear', {
+  col('Year', 'commonMetadata.releaseYear', {
     sortable: true,
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } }),
@@ -182,7 +182,7 @@ const titleFormatter = (_, row) => {
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
   const cover = imageUrl || '/img/mawaru.png'
-  const anchorId = `entry-${row.commonMetadata.apiRefs[0]?.ref}`
+  const anchorId = `entry-${row.dbRef}`
   return `<span id="${anchorId}" class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
 }
 
