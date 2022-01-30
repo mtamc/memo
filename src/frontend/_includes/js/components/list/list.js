@@ -96,11 +96,23 @@ const SubList = (status, entryType, data) => initComponent({
     }
 
     .fixed-table-container {
-      overflow: auto;
+      overflow-x: auto;
     }
 
     .fixed-table-header, .fixed-table-body {
       min-width: 550px;
+    }
+
+    @media (min-width: 615px) {
+      div.fixed-table-body:hover {
+        overflow-y: visible;
+        overflow-x: visible;
+      }
+
+      div.fixed-table-container:hover {
+        overflow-x: visible;
+        overflow-y: visible;
+      }
     }
   `
 })
