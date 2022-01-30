@@ -53,6 +53,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
         .filter((person) => person.popularity > 6)
         .map((person) => person.name),
       apiRefs: [{ name: 'tmdb', ref }],
+      externalUrls: [{ name: 'tmdb', url: `https://www.themoviedb.org/movie/${ref}` }],
     })),
   toError,
 )

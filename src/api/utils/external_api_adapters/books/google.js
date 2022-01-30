@@ -47,8 +47,11 @@ const retrieve = (ref) => ResultAsync.fromPromise(
     releaseYear: parseInt(volumeInfo.publishedDate?.substring(0, 4)) || undefined,
     duration: volumeInfo.pageCount,
     imageUrl: volumeInfo?.imageLinks?.thumbnail,
-    authors: volumeInfo.authors,
+    authors: volumeInfo?.authors,
     apiRefs: [{ name: 'ISBN', ref }],
+    externalUrls: volumeInfo?.canonicalVolumeLink
+      ? [{ name: 'Google Play', url: volumeInfo?.canonicalVolumeLink }]
+      : [],
   }))[0]).catch((e) => {
     console.log(e)
     throw 'Something terrible happened'
