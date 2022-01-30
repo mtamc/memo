@@ -58,3 +58,15 @@ https://github.com/supermacro/neverthrow
 External API keys are set in [Netlify](https://app.netlify.com/sites/td-memo/settings/deploys#environment)
 environment variables. They are also avaiable in production inside
 `process.env`.
+
+## Current rate limits
+
+- TV/Series
+  - TMDB API: unlimited
+
+- Google Books API
+  - Potentially 1000/day with key, with easy free application for 100k (warning: old information)
+
+- Games
+  - IGDB: 4 reqs/sec (currently fetching details takes 2 requests due to getting company names)
+  - HLTB scraping: unknown but at least near-unlimited
