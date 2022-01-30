@@ -4,10 +4,9 @@ const { html } = Utils
 const Menu = () => initComponent({
   content: ({ include }) => html`
     <div
-      class="col-sm-3 col-md-2"
+      class="col-sm-3 col-md-2 memo-menu"
       id="sidebar"
       role="navigation"
-      style="margin-top:180px"
     >
       <hr>
       <ul class="nav nav-pills nav-stacked">

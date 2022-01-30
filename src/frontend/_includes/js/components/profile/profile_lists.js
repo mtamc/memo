@@ -1,6 +1,6 @@
 const { getUserName, entryTypes, getEntries } = Netlify
 const { col, initTable, typeToTitle, profileColumns } = Tables
-const { html } = Utils
+const { html, css } = Utils
 const { UsernameSetter } = Components.Profile
 const { initComponent, WithRemoteData } = Components
 
@@ -22,13 +22,24 @@ Components.Profile.ProfileLists = ProfileLists
 
 const ProfileList = (username, type) => initComponent({
   content: ({ include }) => html`
-    <div style="width: 48%;">
+    <div class="profile-list">
       <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
       ${include(WithRemoteData({
         remoteData: getEntries(type, username),
         component: (entries) => ProfileTable(type, entries)
       }))}
     </div>
+  `,
+  style: () => css`
+    .profile-list {
+      width: 48%;
+    }
+
+    @media (max-width: 600px) {
+      .profile-list {
+        width: 100%;
+      }
+    }
   `
 })
 

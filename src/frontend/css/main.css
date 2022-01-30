@@ -113,3 +113,20 @@ span:lang(cn) {
     display: block;
   }
 }
+
+.memo-menu {
+  margin-top: 180px;
+}
+
+@media (max-width: 768px) {
+  .memo-menu {
+    margin-top: 20px;
+  }
+  .memo-menu ul {
+    display: flex;
+  }
+  .nav-stacked > li + li {
+    margin-top: 0px;
+    margin-left: 0;
+  }
+}
