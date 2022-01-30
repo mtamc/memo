@@ -27,7 +27,10 @@ const NetlifyIdentityLink = () => initComponent({
   `,
   initializer: ({ id }) => {
     netlifyIdentity.init({ container: `#netlify-identity-${id}` })
-    netlifyIdentity.on('login', () => location.reload())
+    netlifyIdentity.on('login', () => {
+      netlifyIdentity.refresh().then(console.log)
+      location.reload()
+    })
     netlifyIdentity.on('logout', () => location.reload())
   }
 })
