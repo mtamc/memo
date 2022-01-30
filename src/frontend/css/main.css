@@ -134,3 +134,14 @@ span:lang(cn) {
     text-align: center;
   }
 }
+
+.summary-stats {
+  text-align: center;
+  font-size: 11px;
+  margin-top: 11px;
+}
+
+.summary-stats i {
+  margin: 0 10px;
+  opacity: 0.7;
+}
