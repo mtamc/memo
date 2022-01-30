@@ -55,7 +55,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
 }[entryType])
 
 const detailFormatter = (_, row) =>
-  `<div class="review"><p><b>Comments:</b>${row.commonMetadata.imageUrl ? `<img src="${row.commonMetadata.imageUrl}" class="review-cover" style="float:right;">` : ''}${marked.parse(row.review ?? '*None yet*')}</p></div>`
+  `<div class="review"><p><b>Comments:</b>${row.commonMetadata.imageUrl ? `<img src="${row.commonMetadata.imageUrl}" class="review-cover" style="float:right;">` : ''}${marked.parse(row.review || '*None yet*')}</p></div>`
 
 const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
 
