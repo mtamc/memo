@@ -1,3 +1,5 @@
+const { html } = Utils
+
 const initTable = (selector, data, settings) =>
   $(selector).bootstrapTable({ ...settings, data })
 
@@ -54,8 +56,23 @@ const entryTypeToFullColumns = (entryType, status) => ({
   ],
 }[entryType])
 
-const detailFormatter = (_, row) =>
-  `<div class="review"><p><b>Comments:</b>${row.commonMetadata.imageUrl ? `<img src="${row.commonMetadata.imageUrl}" class="review-cover" style="float:right;">` : ''}${marked.parse(row.review || '*None yet...*')}</p></div>`
+const detailFormatter = (_, row) => {
+  const anchorId = `entry-${row.commonMetadata.apiRefs[0]?.ref}`
+  const cover =
+    row.commonMetadata.imageUrl
+      ? `<img src="${row.commonMetadata.imageUrl}" class="review-cover" style="float:right;">`
+      : ''
+
+  return html`
+    <div class="review">
+      <p>
+        <b><a href="#${anchorId}"><i class="fas fa-link"></i></a> Comments:</b>
+          ${cover}
+          ${marked.parse(row.review || '*None yet...*')}
+        </p>
+    </div>
+  `
+}
 
 const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
 

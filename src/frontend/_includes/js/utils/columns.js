@@ -162,13 +162,14 @@ Columns = {
 
 const col = (title, field, options) => ({ title, field, ...options })
 
-const titleFormatter = (_, row) => {
+const titleFormatter = (_, row, i) => {
   const { originalTitle, englishTranslatedTitle } = row.commonMetadata
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
   const cover = row.commonMetadata.imageUrl ?? '/img/mawaru.png'
-  return `<span class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
+  const anchorId = `entry-${row.commonMetadata.apiRefs[0]?.ref}`
+  return `<span id="${anchorId}" class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
 }
 
 const englishTitleAndLastUpdatedFormatter = (_, { commonMetadata, updatedDate }) => {
@@ -233,3 +234,11 @@ const relativeTime = (ts) => {
 }
 
 const indexFormatter = (_, __, index) => index + 1
+
+const makeSafeForCSS = (name) =>
+  name.replace(/[^a-z0-9]/g, (s) => {
+    const c = s.charCodeAt(0)
+    return c == 32            ? '-' :
+           c >= 65 && c <= 90 ? '_' + s.toLowerCase() :
+           '__' + ('000' + c.toString(16)).slice(-4)
+  })

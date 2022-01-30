@@ -21,6 +21,30 @@ const ListPage = () => initComponent({
     document.title = typeTitle && user
       ? `${user}'s ${typeTitle.toLowerCase()} | Memo`
       : `Not found`
+
+    const urlAnchor = window.location.hash.substring(1)
+
+    // Wait for the anchor element to actually be rendered, then unfold
+    // the review and jump to the element
+    if (urlAnchor) {
+      const observer = new MutationObserver((mutations, obs) => {
+        const element = document.getElementById(urlAnchor)
+        if (element) {
+          $(`#${urlAnchor}`).parent().prev().find('i').trigger('click')
+
+          // jump to the element, hacky as fuck
+          location.hash = '#__nothing'
+          location.hash = '#' + urlAnchor
+          obs.disconnect()
+          return
+        }
+      })
+
+      observer.observe(document, {
+        childList: true,
+        subtree: true
+      })
+    }
   }
 })
 
