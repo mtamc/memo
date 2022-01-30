@@ -7,7 +7,7 @@ const title = () =>
   })
 
 const index = () =>
-  col('n', 'n', {
+  col('#', '#', {
     formatter: indexFormatter,
     visible: false,
     cellStyle: () => ({ css: { 'width': '15px' } })
