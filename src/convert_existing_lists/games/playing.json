@@ -1,0 +1,71 @@
+[
+  {
+    "title": "Kentucky Route Zero",
+    "score": "",
+    "date_started": "",
+    "date_finished": "",
+    "comments": "\n\n__Story.__ The story is lackadaisical, meandering quite a bit without necessarily gripping personalities of characters or a plot. It's almost like Murakami.\n\nKentucky Route Zero has perfected atmosphere. It knows how to use silence and soundtrack alongside its magical realism.\n\n__Gameplay.__ It's a point-and-click adventure. The driving itself uses a network of intersecting routes, and you follow a journal keeping notes of where destinations are. Nothing particularly revolutionary. The dialogue choices to affect bits of story itself is what keeps the interactivity engaging.\n\n__Aesthetics & Sound.__ The colors and minimalist art works wonders. I'm particularly in love with the crisp font rendering.\n\n__Details I like:__\n\n+ N/A\n\n__Details I'm ambivalent about:__\n\n+ N/A\n\n__Details I don't like:__\n\n+ N/A\n\n## Resources and Miscellanea\n\n"
+  },
+  {
+    "title": "Brogue",
+    "score": "",
+    "date_started": "1/10/22",
+    "date_finished": "",
+    "comments": "Brogue is a streamlined Nethack made as an easy entrypoint but still with the core essence of emergent gameplay and random level generation.\n\n__Aesthetics & Sound.__ This game was developed in 2009, and I think it inherits roguelike aspects that in my opinion shouldn't be part of the genre: ASCII graphics, text UI, and no sound. The turn-based combat, tile level design, and global camera view are fine. But the art assets can be significantly improved in order to make the game more immersive and intuitive. The following are all elements that I'm glad modern roguelikes have removed (thanks Derek Yu):\n\n1. ASCII is a strictly inferior visual UI. Tiles are graphically more explanatory compared to arbitrary symbols such as all the various letters to denote an enemy instead of a sprite.\n2. The UI could be more intuitive to better know what controls map to what, and the inventory could be follow a standard RPG's GUI inventory window.\n3. The lack of soundtrack and sound effects removes immersion. It also removes the ability to provide sound cues about lurking enemies that appear in your field of vision (and roguelikes could further expand on the game design for a more immersive experience).\n\n__Details I like:__\n\n+ Instead of only doing verb-noun, Brogue also lets you go to your inventory, click on an item, and then perform one of the available verbs (noun-verb). I think this is a good idea for my own game too (highlight an item, then perform a context-sensitive text query to eat, apply, drop it, etc.).\n\n__Details I'm ambivalent about:__\n\n+ N/A\n\n__Details I don't like:__\n\n+The auto-explore feature. On one hand, it's a nice quality-of-life. On the other hand, it shows how much repetitiveness is in the game as you traverse through empty areas looking for items, monsters, traps or other similar effects. \n\n## Resources and Miscellanea\n\n+ [Brogue](https://sites.google.com/site/broguegame)\n+ [Brogue Wiki](https://brogue.fandom.com)\n\nI started Brogue to play as my first \"true\" roguelite in Rogue/Nethack fashion. It's a good starter before playing far more complex games like Nethack and Dwarf Fortress. I played with the Oryx tileset. "
+  },
+  {
+    "title": "Spelunky 2",
+    "score": "",
+    "date_started": "1/4/22",
+    "date_finished": "",
+    "comments": "\n\n__Gameplay.__ Spelunky 2 adds many new gameplay elements to Spelunky's original system. Includes a slightly deeper story, quests, multiple rooms, swimming.\n\nBoy is this game hard. The first zone is perhaps even more difficult than Spelunky 1's mines due to extra and tougher enemies and the punching totem.\n\n__Aesthetics & Sound.__ Spelunky 2 pushes further on Spelunky's theme of an arcade-like dungeon crawler with a cute, quirky, and colorful art style. Animations are also solid.\n\n__Details I like:__\n\n+ N/A\n\n__Details I'm ambivalent about:__\n\n+ N/A\n\n__Details I don't like:__\n\n+ N/A\n\n## Resources and Miscellanea\n\n",
+    "id_howlongtobeat": "75151",
+    "id_wikipedia": "65192939",
+    "_playtime": "28 hours",
+    "_year": "2020",
+    "_platform": "Microsoft Windows; PlayStation 4; Nintendo Switch",
+    "_staff": "Mossmouth; BlitWorks",
+    "staff": "Derek Yu; [roguelike]"
+  },
+  {
+    "title": "Thomas Was Alone",
+    "score": "",
+    "date_started": "12/13/21",
+    "date_finished": "",
+    "comments": "Thomas Was Alone is a cute puzzle-platformer with simple puzzles but a nice progression of cooperation alongside a charming narration of events.\n\n__Gameplay.__\n\n__Aesthetics & Sound.__ I'm impressed how well the simple cube aesthetic with lighting and sound effects works here. It's the closest example of how well an indie game can do with little to assets.\n\n__Details I like:__\n\n+ N/A\n\n__Details I'm ambivalent about:__\n\n+ N/A\n\n__Details I don't like:__\n\n+ N/A\n\n## Resources and Miscellanea\n\n",
+    "id_howlongtobeat": "10306",
+    "id_wikipedia": "37631757",
+    "_playtime": "3½ hours",
+    "_year": "2012",
+    "_platform": "Windows, OS X, PlayStation 3, PlayStation Vita, Linux, iOS, Android, Xbox One, PlayStation 4, Wii U, Switch",
+    "_staff": "Mike Bithell"
+  },
+  {
+    "title": "Blasphemous",
+    "score": "",
+    "date_started": "8/20/21",
+    "date_finished": "",
+    "comments": "\n\n__Story.__\n\n__Gameplay.__\n\nThere are a number of resources to collect, including health and weapon damage upgrades and items.\n\n__Aesthetics & Sound.__ I love Blaphemous' handdrawn art and abstract vision toward a medieval tale of sins. Screenshots from the game look like they're from an auteur's animated film.\n\n__Details I like:__\n\n+ N/A\n\n__Details I'm ambivalent about:__\n\n+ Death penalty is forgiving in that you go back to your previous checkpoint but keep all your earned Tears. If you don't pick up your guilt fragment, then your max mana and Tear gain decreases and you must go to a Guilt Confessor statue. This is more forgiving than Dark Souls 2's permanent max hp decrease until the next boss.\n\n__Details I don't like:__\n\n+ Lantern jump. Bad animated mechanic. They should just do the pogo stick animation from Hollow Knight.\n+ No pressure-sensitive jump like Castlevania games where you can jump higher or lower depending on how long you hold the button.\n+ There is no equivalent of Hollow Knight's late game Collector Map to mark grubs you found on the map. Here, it's easy to miss Children of Moonlight and not know which one you missed.\n\n## Resources and Miscellanea\n\nMotivated by its unique atmosphere of handcrafted visuals, gore, religous gothic symbolism, and deep Castlevania-inherited combat.",
+    "id_howlongtobeat": "62047",
+    "id_wikipedia": "90470",
+    "_playtime": "13 hours",
+    "_year": "2019",
+    "_platform": "Microsoft Windows; Nintendo Switch; PlayStation 4; Xbox One; Linux; macOS",
+    "_staff": "The Game Kitchen",
+    "staff": "[metroidvania]"
+  },
+  {
+    "title": "The Great Ace Attorney: Adventures",
+    "score": "",
+    "date_started": "7/30/21",
+    "date_finished": "",
+    "comments": "\n\n__Story.__ What a wonderful setting to put the Ace Attorney games in with its imperial industrialized Japan where court case technology and policy are just beginning. It's great seeing the spiritual remake of every character like a Jojo title.\n\nEpisode 2 was a drag. Gameplay-wise, I frequently quit during that Episode as I find Investigations the most lackadaisical and uninteresting part of the game. It needs more elements of critical thinking like Sholmes' Great Deduction trains. It's supposed to be building up to the climax with the Court Trial, but there isn't one in this episode. Searching rendered scenes to collect clues and moving from one area to the next is not very exciting: it's the deduction. Story-wise, it's an uninspired copy of Mia Fey's death. I also found the tone strange since the whole premise is that your best friend is dead! And yet they barely think about Kazuma are in a state of depression. It's light-hearted. And Miss Pavlova isn't tried for this? It's manslaughter, in addition to covering up the scene!\n\nFor similar reasons, I found Episode 4 a drag as it continues the investigation phase for too long. Unlike previous Attorney games, Great Ace Attorney doesn't break up the poor pacing of the Investigation phase with Trial phases.\n\nI enjoyed all the characters and setting in Episode 3. Ryunosuke's pursuit of \"truth\" over actually performing his job of defending his client irritates me in the same way a previous Ace Attorney episode did this. In addition, there are a lot of double standards you have to continue to take with a grain of salt, such as all the requirements of substantiated claims from the defense side but Ryunosuke firing back whenever the prosecutor makes claims of tampering. It's strange that it's the defendant who has to attest to these legal rights, and a defendant in particular who's portrayed as the bad guy!\n\n__Gameplay.__ No major changes since the core titles. Similarly, Trials in London feature a jury. On top of enabling an ensemble cast for more quirky characters and a more visible state of the court's opinion of the verdict, this adds a slight mechanic of using their words to contradict them as an added form of cross-examination. The newest mechanic is Pursue where you can press witnesses when multiple take a stand at once. Sherlock Holmes' Great Deduction trains make you correct a line of reasoning instead of contradict it like in a testimony. Unfortunately, it's not so much evidence-based as much as it is searching the scene for more clues.\n\nAs usual, there are options to make a choice but the game shoehorns you into a particular choice regardless. I think this is fine for such a well-crafted linear narrative.\n\n__Aesthetics & Sound.__ The cel-shading and facial detail clearly looks like a 3DS game. It ages pretty well like an art style not unlike Telltale Games'. Soundtrack is excellent as usual.\n\n__Details I like:__\n\n+ It's my first time playing an Ace Attorney port on PC. I love that you can use both keyboard or mouth to control everything. Works well if you just want to play casually with one hand.\n+ Unlike the original Ace Attorney games, there's an option to skip the waiting time for animating the next line of text. This was only possible after completing the game once. in the trilogy's 3ds remake, this was possible from the get-go by holding B to speed up the text. While I like the unique cadence of Phoenix Wright text compared to other visual novels, particularly as it's used for dramatic effect, the universal reading speed can be and on the slow side.\n\n__Details I'm ambivalent about:__\n\n+ N/A\n\n__Details I don't like:__\n\n+ N/A\n\n## Resources and Miscellanea\n\n",
+    "id_howlongtobeat": "40210",
+    "id_wikipedia": "43230345",
+    "_playtime": "30 hours",
+    "_year": "2015",
+    "_platform": "Nintendo 3DS; Android; iOS; Microsoft Windows; Nintendo Switch; PlayStation 4",
+    "_staff": "Capcom",
+    "staff": "[story]"
+  }
+]
