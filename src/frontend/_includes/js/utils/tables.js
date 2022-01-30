@@ -47,7 +47,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
 }[entryType])
 
 const detailFormatter = (_, row) =>
-  `<p><b> Comments:</b> ${marked.parse(row.review ?? '*None yet*')}</p>`
+  `<div class="review"><p><b>Comments:</b> ${marked.parse(row.review ?? '*None yet*')}</p></div>`
 
 const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
 
