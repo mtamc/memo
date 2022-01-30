@@ -19,7 +19,7 @@ const ListPage = () => initComponent({
     const typeTitle = typeToTitle[getEntryTypeFromUrl()]
     const user = getNameFromUrl()
     document.title = typeTitle && user
-      ? `${user}'s ${typeTitle} | Memo`
+      ? `${user}'s ${typeTitle.toLowerCase()} | Memo`
       : `Not found`
   }
 })
