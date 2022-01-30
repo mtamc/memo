@@ -8,11 +8,19 @@ const { ResultAsync } = require('neverthrow')
 const errors = require('../../errors')
 const axios = require('axios').default
 
+const { GOOGLE_API_KEY } = process.env
+
+/* Only use key if it's present in the env vars */
+const urlKey =
+  GOOGLE_API_KEY
+    ? `&key=${GOOGLE_API_KEY}`
+    : ''
+
 /** @type SearchFunction */
 const search = (titleSearch) => ResultAsync.fromPromise(
   axios({
     method: 'get',
-    url: `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(titleSearch)}&maxResults=40`
+    url: `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(titleSearch)}&maxResults=40${urlKey}`
   })
     .then(({ data }) => data.items
       .filter(({ volumeInfo }) =>
@@ -32,7 +40,7 @@ const search = (titleSearch) => ResultAsync.fromPromise(
 const retrieve = (ref) => ResultAsync.fromPromise(
   axios({
     method: 'get',
-    url: `https://www.googleapis.com/books/v1/volumes?q=isbn:${ref}`
+    url: `https://www.googleapis.com/books/v1/volumes?q=isbn:${ref}${urlKey}`
   }).then(({ data }) => data.items.map(({ volumeInfo }) => ({
     entryType: 'Book',
     englishTranslatedTitle: volumeInfo.title,
