@@ -110,7 +110,10 @@ const progress = () =>
   })
 
 const platforms = () =>
-  col('Platforms', 'commonMetadata.platforms', sortableAndLinked('platforms'))
+  col('Platforms', 'commonMetadata.platforms', {
+    ...sortableAndLinked('platforms'),
+    cellStyle: () => ({ css: { 'width': '25px', } }),
+  })
 
 const studios = () =>
   col('Studios', 'commonMetadata.studios', {
