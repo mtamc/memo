@@ -51,6 +51,20 @@ const SubLists = (entryType, data) => initComponent({
       .map((status) => include(SubList(status, entryType, data)))
       .join('')
     }
+    <div id="global-stats">
+      <hr>
+      ${toStats(data, entryType)}
+    </div>
+  `,
+  style: () => `
+    #global-stats {
+      text-align: center;
+      margin-top: 60px;
+    }
+    #global-stats i {
+      margin: 0 10px;
+      opacity: 0.7;
+    }
   `
 })
 
@@ -62,15 +76,16 @@ const SubList = (status, entryType, data) => initComponent({
         <table id="${id}-list"></table>
       </div>
     </div>
+    <div class="summary-stats">
+      ${toStats(data.filter((e) => e.status === status), entryType)}
+    </div>
   `,
   initializer: ({ id }) => {
-    const relevantEntries = data.filter((e) => e.status === status)
-
     getUserName()
       .map((resp) => resp?.username === getNameFromUrl())
       .unwrapOr(false)
       .then((isOwner) => {
-        initFullTable(`#${id}-list`, relevantEntries, entryType, isOwner, status)
+        initFullTable(`#${id}-list`, data.filter((e) => e.status === status), entryType, isOwner, status)
         $(`#${id}-title`).click(() => {
           $(`#${id}-title`).next().toggle(200)
           $(`#${id}-title`).toggleClass('is-collapsed')
@@ -114,6 +129,17 @@ const SubList = (status, entryType, data) => initComponent({
         overflow-y: visible;
       }
     }
+
+    .summary-stats {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 11px;
+    }
+
+    .summary-stats i {
+      margin: 0 10px;
+      opacity: 0.7;
+    }
   `
 })
 
@@ -139,3 +165,31 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
     }))
   }
 }
+
+const toStats = (entries, entryType) => {
+  const icon = ' <i class="fas fa-wave-square"></i> '
+  const totalEpsSeen = entries
+    .map(e => e.progress ?? 0)
+    .reduce((a,b) => a + b, 0)
+  const scores = entries.filter(e => e.score).map(e => e.score)
+  const meanScore = scores.reduce((a,b) => a+b, 0) / (scores.length || 1)
+  const days =
+    entryType === 'tv_shows'
+      ? (entries
+        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0 * e.commonMetadata.episode ?? 0), 0)
+      ) / 60 / 24
+      : entryType === 'films'
+      ? (entries
+        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
+      ) / 60 / 24
+      : entryType === 'books'
+      ? (entries
+        .reduce((hours, e) => hours + (e.commonMetadata.duration ?? 0 / 50), 0)
+      ) / 24
+      : /* games */ (entries
+        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
+      ) / 60 / 24
+
+  return `Total entries: ${entries.length}${entryType === 'tv_shows' ? ` ${icon} Episodes seen: ${totalEpsSeen}` : ''} ${icon} Days spent: ${days.toFixed(2)} ${icon} Mean score: ${meanScore.toFixed(2)}`
+}
+
