@@ -17,14 +17,14 @@ const {
   Delete,
 } = q
 
-const entries = JSON.parse(fs.readFileSync('./tv/good2.json'))
+const entries = JSON.parse(fs.readFileSync('./films/good4.json'))
 
 db.query(
   q.Map(
     entries,
     Lambda(
       "entry",
-      Create(Collection("tvShowEntries"), { data: Var("entry") })
+      Create(Collection("filmEntries"), { data: Var("entry") })
     )
   )
 )

@@ -25,7 +25,7 @@ const List = (username) => initComponent({
           }))}
           ${include(WithRemoteData({
             remoteData: getEntries(getEntryTypeFromUrl(), username),
-            component: (entries) => SubLists(getEntryTypeFromUrl(), entries)
+            component: (entries) => SubLists(getEntryTypeFromUrl(), entries.sort((a,b) => a.commonMetadata.englishTranslatedTitle - b.commonMetadata.englishTranslatedTitle))
           }))}
       </div>
     </div>
