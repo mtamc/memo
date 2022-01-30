@@ -15,7 +15,7 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
               ? ''
               : get('originalTitle') || ''
           ),
-          Input('Release year', 'release-year', get('releaseYear')),
+          Input('Release year', 'release-year', get('releaseYear'), 'number'),
           Input(`Duration (${
             type === 'books'    ? 'pages' :
             type === 'tv_shows' ? 'minutes per ep' :
@@ -49,10 +49,10 @@ Components.List.ExternalFields = ExternalFields
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const Input = (label, id, defaultValue) => initComponent({
+const Input = (label, id, defaultValue, type) => initComponent({
   content: ({ include }) => html`
     <div style="margin: 15px 0">
-      ${include(TextInput({ label, id, defaultValue }))}
+      ${include(TextInput({ label, id, defaultValue, type }))}
     </div>
   `
 })

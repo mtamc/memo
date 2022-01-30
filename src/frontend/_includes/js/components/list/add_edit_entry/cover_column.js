@@ -6,10 +6,10 @@ const CoverColumn = (data) => initComponent({
     <div id="third-column-add-entry">
       <img
         id="external-img"
-        src="${data.overrides?.imageUrl ?? data.commonMetadata?.imageUrl ?? '/img/mawaru.png'}"
+        src="${data?.overrides?.imageUrl ?? data?.commonMetadata?.imageUrl ?? '/img/mawaru.png'}"
         alt="${data?.commonMetadata.englishTranslatedTitle ?? ''} cover"
       />
-      ${(data.commonMetadata?.externalUrls?.length ?? 0) > 0
+      ${(data?.commonMetadata?.externalUrls?.length ?? 0) > 0
         ? html`
           <div id="external-links">
             <b>External links</b><br>
