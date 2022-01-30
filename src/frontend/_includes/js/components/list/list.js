@@ -184,7 +184,7 @@ const toStats = (entries, entryType) => {
       ) / 60 / 24
       : entryType === 'books'
       ? (entries
-        .reduce((hours, e) => hours + (e.commonMetadata.duration ?? 0 / 50), 0)
+        .reduce((hours, e) => hours + ((e.commonMetadata.duration ?? 0) / 50), 0)
       ) / 24
       : /* games */ (entries
         .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
