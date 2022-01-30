@@ -16,7 +16,7 @@ const search = (titleSearch) => ResultAsync.fromPromise(
   })
     .then(({ data }) => data.items
       .filter(({ volumeInfo }) =>
-        volumeInfo?.industryIdentifiers.some((i) => i.type.includes('ISBN'))
+        volumeInfo?.industryIdentifiers?.some((i) => i.type.includes('ISBN'))
       )
       .map(({ volumeInfo }) => ({
         title: `${volumeInfo?.title} [${volumeInfo?.authors?.join(', ')}]`,
