@@ -61,3 +61,11 @@ span:lang(cn) {
   display: block;
   text-align: center;
 }
+
+.review {
+  max-width: calc(100vw - 60px);
+}
+
+.detail-view img {
+  max-width: 100%;
+}
