@@ -107,6 +107,14 @@ const statusToTitle = (entryType, status) => ({
   }[entryType]
 }[status])
 
+const formatApiRefs = (apiRefs) =>
+  apiRefs
+    .map(({ name, ref }) =>
+        name === 'hltb'
+      ? `<a href="https://howlongtobeat.com/game?id=${ref}">HowLongToBeat page</a>`
+      : name === 'igdb'
+    )
+
 Tables = {
   initTable,
   detailFormatter,

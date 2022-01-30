@@ -64,7 +64,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
     try {
       const client = await igdbClient
       const mainData = await client
-        .fields(['name', 'alternative_names.*', 'cover.url', 'release_dates.*', 'genres.name', 'platforms.abbreviation', 'involved_companies.*'])
+        .fields(['name', 'alternative_names.*', 'cover.url', 'release_dates.*', 'genres.name', 'platforms.abbreviation', 'involved_companies.*', 'url'])
         .where(`id = ${ref}`)
         .request('/games')
         .then(({ data }) => data[0])
@@ -136,6 +136,10 @@ const retrieve = (ref) => ResultAsync.fromPromise(
           { name: 'igdb', ref: String(mainData.id) },
           ...(hltbEntry ? [{ name: 'hltb', ref: String(hltbEntry.id) }] : []),
         ],
+        externalUrls: [
+          ...(mainData.url ? [{ name: 'igdb', url: mainData.url }] : []),
+          ...(hltbEntry ? [{ name: 'hltb', url: 'https://howlongtobeat.com/game?id=' + String(hltbEntry.id) }] : []),
+        ]
       }
     } catch (e) {
       console.log(e)
