@@ -48,7 +48,6 @@ const search = (titleSearch) => ResultAsync.fromPromise(
           imageUrl: cover?.url ? 'https:' + cover.url : undefined,
         }
       })
-      console.log(results)
 
       return results
     } catch (e) {
