@@ -84,7 +84,7 @@
         // It should be in the format
         // `TdMemoPage = Component.Path.To.Component`
         {{ content | safe }}
-        await netlifyIdentity.currentUser().jwt?.()
+        await netlifyIdentity.currentUser()?.jwt?.()
         Components.setContent('#site', TdMemoPage())
         netlifyIdentity.currentUser?.jwt?.()
       }, 0)
