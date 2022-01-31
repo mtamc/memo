@@ -19,6 +19,7 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
           Input(`Duration (${
             type === 'books'    ? 'pages' :
             type === 'tv_shows' ? 'minutes per ep' :
+            type === 'games'    ? 'hours' :
             /* type films */      'minutes'
           })`, 'duration', type === 'games' ? (get('duration')??0)/60 : get('duration')),
           Input('Image URL', 'image-url', get('imageUrl')),
