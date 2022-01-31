@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { getEntries, getUserName } = Netlify
-const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToFullColumns, statusToTitle, editColumn } = Tables
+const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToFullColumns, statusToTitle, editColumn, filmStatuses } = Tables
 const { initComponent, WithRemoteData, appendContent, Nothing } = Components
 const { Modal_ } = Components.UI
 const { AddEntryButton } = Components.List
@@ -109,7 +109,7 @@ const ListPageHeader = (title, username) => initComponent({
 
 const SubLists = (entryType, data) => initComponent({
   content: ({ include }) => html`
-    ${statuses
+    ${(entryType === 'films' ? filmStatuses : statuses)
       .map((status) => include(SubList(status, entryType, data)))
       .join('')
     }
@@ -149,8 +149,18 @@ const SubList = (status, entryType, data) => initComponent({
       .then((isOwner) => {
         initFullTable(`#${id}-list`, data.filter((e) => e.status === status), entryType, isOwner, status)
         $(`#${id}-title`).click(() => {
-          $(`#${id}-title`).next().toggle(200)
-          $(`#${id}-title`).toggleClass('is-collapsed')
+          const nextEl = $(`#${id}-title`).next()
+          console.log(nextEl)
+          console.log(nextEl.attr('id'))
+          const elsToHide =
+            nextEl.attr('id') === 'click-to-see-comments'
+              ? [nextEl, nextEl.next(), nextEl.parent().parent().next()]
+              : [nextEl, nextEl.parent().parent().next()]
+
+          elsToHide.forEach(el => {
+            el.toggle(200)
+            el.toggleClass('is-collapsed')
+          })
         })
       })
   },
@@ -238,20 +248,23 @@ const toStats = (entries, entryType) => {
   const days =
     entryType === 'tv_shows'
       ? (entries
-        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0 * e.commonMetadata.episode ?? 0), 0)
+        .reduce((mins, e) => mins + ((get(e, 'duration') ?? 0) * (get(e, 'episodes') ?? 0)), 0)
       ) / 60 / 24
       : entryType === 'films'
       ? (entries
-        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
+        .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
       : entryType === 'books'
       ? (entries
-        .reduce((hours, e) => hours + ((e.commonMetadata.duration ?? 0) / 50), 0)
+        .reduce((hours, e) => hours + ((get(e, 'duration') ?? 0) / 50), 0)
       ) / 24
       : /* games */ (entries
-        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
+        .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
 
   return `Total entries: ${entries.length}${entryType === 'tv_shows' ? ` ${icon} Episodes seen: ${totalEpsSeen}` : ''} ${icon} Days spent: ${days.toFixed(2)} ${icon} Mean score: ${meanScore.toFixed(2)}`
 }
 
+/** get override or api data */
+const get = (entry, prop) =>
+  entry.overrides?.[prop] ?? entry.commonMetadata?.[prop]
