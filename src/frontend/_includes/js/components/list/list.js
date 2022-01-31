@@ -115,7 +115,7 @@ const SubLists = (entryType, data) => initComponent({
     }
     <div id="global-stats">
       <hr>
-      ${toStats(data, entryType)}
+      ${toStats(data.filter((e) => e.status !== 'Planned'), entryType)}
     </div>
   `,
   style: () => `
@@ -150,8 +150,6 @@ const SubList = (status, entryType, data) => initComponent({
         initFullTable(`#${id}-list`, data.filter((e) => e.status === status), entryType, isOwner, status)
         $(`#${id}-title`).click(() => {
           const nextEl = $(`#${id}-title`).next()
-          console.log(nextEl)
-          console.log(nextEl.attr('id'))
           const elsToHide =
             nextEl.attr('id') === 'click-to-see-comments'
               ? [nextEl, nextEl.next(), nextEl.parent().parent().next()]
