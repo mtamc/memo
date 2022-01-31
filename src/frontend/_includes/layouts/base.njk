@@ -79,12 +79,12 @@
     <div id="site"></div>
     <script>
       // The 0 timeout is necessary to detect netlify auth token
-      window.setTimeout(() => {
+      window.setTimeout(async () => {
         // Include the current page's JS
         // It should be in the format
         // `TdMemoPage = Component.Path.To.Component`
         {{ content | safe }}
-
+        await netlifyIdentity.currentUser().jwt?.()
         Components.setContent('#site', TdMemoPage())
         netlifyIdentity.currentUser?.jwt?.()
       }, 0)
