@@ -238,20 +238,23 @@ const toStats = (entries, entryType) => {
   const days =
     entryType === 'tv_shows'
       ? (entries
-        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0 * e.commonMetadata.episode ?? 0), 0)
+        .reduce((mins, e) => mins + ((get(e, 'duration') ?? 0) * (get(e, 'episodes') ?? 0)), 0)
       ) / 60 / 24
       : entryType === 'films'
       ? (entries
-        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
+        .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
       : entryType === 'books'
       ? (entries
-        .reduce((hours, e) => hours + ((e.commonMetadata.duration ?? 0) / 50), 0)
+        .reduce((hours, e) => hours + ((get(e, 'duration') ?? 0) / 50), 0)
       ) / 24
       : /* games */ (entries
-        .reduce((mins, e) => mins + (e.commonMetadata.duration ?? 0), 0)
+        .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
 
   return `Total entries: ${entries.length}${entryType === 'tv_shows' ? ` ${icon} Episodes seen: ${totalEpsSeen}` : ''} ${icon} Days spent: ${days.toFixed(2)} ${icon} Mean score: ${meanScore.toFixed(2)}`
 }
 
+/** get override or api data */
+const get = (entry, prop) =>
+  entry.overrides?.[prop] ?? entry.commonMetadata?.[prop]

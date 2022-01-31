@@ -109,6 +109,7 @@ const date = (label, field) =>
 const progress = () =>
   col('Progress', 'progress', {
     sortable: true,
+    align: 'center',
     cellStyle: () => ({ css: { 'width': '20px' } }),
     formatter: (progress, row) => {
       const totalEps = row.commonMetadata.episodes ?? '-'
