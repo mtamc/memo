@@ -56,7 +56,7 @@ const pages = () =>
   col('Pages', 'commonMetadata.duration', {
     sortable: true,
     align: 'center',
-    visible: true,
+    visible: false,
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: getOverrideOrMetadata('duration')
   })
