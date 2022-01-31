@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { initComponent } = Components
-const { statusToTitle } = Tables
+const { statusToTitle, statuses, filmStatuses } = Tables
 
 const PersonalFields = (data, type) => initComponent({
   content: () => html`
@@ -9,7 +9,7 @@ const PersonalFields = (data, type) => initComponent({
         <label for="status">Status</label><br>
         <select name="status" id="status">
           ${
-            ['InProgress', 'Completed', 'Dropped', 'Planned']
+            (type === 'films' ? filmStatuses : statuses)
               .map((status) => html`
                 <option value="${status}" ${status == data.status ? 'selected' : ''}>
                   ${statusToTitle(type, status)}
@@ -23,7 +23,7 @@ const PersonalFields = (data, type) => initComponent({
         <label for="score">${data.status === 'Planned' ? 'Preference' : 'Score'}</label><br>
         <select name="score" id="score">
           ${
-            ['10','9','8','7','6','5','4','3','2','1']
+            ['Unrated', '10','9','8','7','6','5','4','3','2','1']
               .map((num) => html`
                 <option value="${num}" ${num == data.score ? 'selected' : ''}>
                   ${num}

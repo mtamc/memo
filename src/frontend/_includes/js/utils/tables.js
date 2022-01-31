@@ -76,6 +76,8 @@ const detailFormatter = (_, row) => {
 
 const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
 
+const filmStatuses = ['Completed', 'Planned']
+
 const typeToTitle = {
   films: 'Films',
   books: 'Literature',
@@ -122,6 +124,7 @@ Tables = {
   typeToAPIType,
   profileColumns,
   statuses,
+  filmStatuses,
   entryTypeToFullColumns,
   statusToTitle,
 }

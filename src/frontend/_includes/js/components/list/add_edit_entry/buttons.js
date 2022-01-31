@@ -65,21 +65,28 @@ const getCommaSeparated = (id) => $(`#${id}`).val().split(',').map(x => x.trim()
 
 const getInt = (id) => parseInt($(`#${id}`).val()) || undefined
 
+const getFloat = (id) => parseFloat($(`#${id}`).val()) || undefined
+
 const generateEntry = (data, type) => ({
-  commonMetadata: data?.commonMetadata ?? emptyMetadata(type),
+  commonMetadata: data?.commonMetadata
+  ? {
+      ...data.commonMetadata,
+      duration: data.commonMetadata.duration * (console.log(data), type === 'games' ? 60 : 1)
+    }
+    : emptyMetadata(type),
   overrides: getOverrides(data?.commonMetadata, type),
   status: $('#status').val(),
-  score: parseInt($('#score').val()) || undefined,
-  completedDate: Date.parse($('#completed-date').val()) || undefined,
+  score: parseInt($('#score').val()) || null,
+  completedDate: Date.parse($('#completed-date').val()) || null,
   review: $('#review').val(),
   ...(
     type === 'films'
       ? {}
-      : { startedDate: Date.parse($('#started-date').val()) || undefined }
+      : { startedDate: Date.parse($('#started-date').val()) || null }
   ),
   ...(
     type === 'tv_shows'
-      ? { progress: getInt('progress') }
+      ? { progress: getInt('progress') || null }
       : {}
   ),
 })
@@ -92,11 +99,12 @@ const emptyMetadata = (type) => ({
 
 const getOverrides = (api, type) => {
   const englishTranslatedTitle = getIfDifferent(api?.englishTranslatedTitle, $('#title').val())
+  const duration = getIfDifferent(api?.duration, getFloat('duration'))
   return {
     englishTranslatedTitle,
     originalTitle: getIfDifferent(api?.originalTitle, $('#original-title').val()) ?? englishTranslatedTitle,
     releaseYear: getIfDifferent(api?.releaseYear, getInt('release-year')),
-    duration: getIfDifferent(api?.duration, getInt('duration')),
+    duration: duration ? duration * 60 : null,
     imageUrl: getIfDifferent(api?.imageUrl, $('#image-url').val()),
     genres: getIfDifferent(api?.genres, getCommaSeparated('genres')),
     ...(

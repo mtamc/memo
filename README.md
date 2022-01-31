@@ -4,7 +4,9 @@
 
 - [Node and NPM](https://nodejs.org/)
 
-## Running locally
+## Workflow
+
+__1. Locally.__ Running the website locally is recommended to test changes before pushing commits.
 
 ```bash
 # install the dependencies
@@ -21,6 +23,11 @@ If you use `npx netlify dev` your serverless functions will also be available at
 ```
 GET http://localhost:8888/api/<function_file_name_without_extension>
 ```
+__2. Staging branch.__ Generally you should push commits directly to staging. Pull requests aren't really necessary
+due to the small team size, but if you'd like code review send a PR to merge to staging.
+
+__3. Production branch.__ Merge staging to production whenever you think the changes are ready. Deploys to
+the website from production are automatic.
 
 ## About EleventyOne
 
