@@ -21,11 +21,11 @@ const entryParser = (specificWorkParser) => z.object({
   overrides: specificWorkParser.partial().or(z.undefined()),
   userId: z.string(),
   status: statusParser,
-  score: scoreParser.or(z.undefined()),
-  startedDate: z.number().or(z.undefined()),
-  completedDate: z.number().or(z.undefined()),
+  score: scoreParser.nullable().or(z.undefined()),
+  startedDate: z.number().nullable().or(z.undefined()),
+  completedDate: z.number().nullable().or(z.undefined()),
   review: z.string().or(z.undefined()),
-  progress: z.number().or(z.undefined()),
+  progress: z.number().nullable().or(z.undefined()),
   updatedDate: z.number().or(z.undefined()),
 })
 
