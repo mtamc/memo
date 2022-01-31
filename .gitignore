@@ -17,3 +17,4 @@
 # Local Netlify folder
 .netlify
 convert_existing_lists
+.env
