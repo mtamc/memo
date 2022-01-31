@@ -76,17 +76,17 @@ const generateEntry = (data, type) => ({
     : emptyMetadata(type),
   overrides: getOverrides(data?.commonMetadata, type),
   status: $('#status').val(),
-  score: parseInt($('#score').val()) || undefined,
-  completedDate: Date.parse($('#completed-date').val()) || undefined,
+  score: parseInt($('#score').val()) || null,
+  completedDate: Date.parse($('#completed-date').val()) || null,
   review: $('#review').val(),
   ...(
     type === 'films'
       ? {}
-      : { startedDate: Date.parse($('#started-date').val()) || undefined }
+      : { startedDate: Date.parse($('#started-date').val()) || null }
   ),
   ...(
     type === 'tv_shows'
-      ? { progress: getInt('progress') }
+      ? { progress: getInt('progress') || null }
       : {}
   ),
 })
@@ -104,7 +104,7 @@ const getOverrides = (api, type) => {
     englishTranslatedTitle,
     originalTitle: getIfDifferent(api?.originalTitle, $('#original-title').val()) ?? englishTranslatedTitle,
     releaseYear: getIfDifferent(api?.releaseYear, getInt('release-year')),
-    duration: duration ? duration * 60 : undefined,
+    duration: duration ? duration * 60 : null,
     imageUrl: getIfDifferent(api?.imageUrl, $('#image-url').val()),
     genres: getIfDifferent(api?.genres, getCommaSeparated('genres')),
     ...(
