@@ -1,6 +1,6 @@
 const { html, css } = Utils
 const { getEntries, getUserName } = Netlify
-const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToFullColumns, statusToTitle, editColumn } = Tables
+const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToFullColumns, statusToTitle, editColumn, filmStatuses } = Tables
 const { initComponent, WithRemoteData, appendContent, Nothing } = Components
 const { Modal_ } = Components.UI
 const { AddEntryButton } = Components.List
@@ -109,7 +109,7 @@ const ListPageHeader = (title, username) => initComponent({
 
 const SubLists = (entryType, data) => initComponent({
   content: ({ include }) => html`
-    ${statuses
+    ${(entryType === 'films' ? filmStatuses : statuses)
       .map((status) => include(SubList(status, entryType, data)))
       .join('')
     }
