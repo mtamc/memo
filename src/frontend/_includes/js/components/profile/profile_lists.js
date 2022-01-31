@@ -1,4 +1,4 @@
-const { getUserName, entryTypes, getEntries } = Netlify
+const { entryTypes, getEntries } = Netlify
 const { col, initTable, typeToTitle, profileColumns } = Tables
 const { html, css } = Utils
 const { UsernameSetter } = Components.Profile
