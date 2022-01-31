@@ -34,11 +34,11 @@ const year = () =>
     formatter: getOverrideOrMetadata('releaseYear')
   })
 
-const duration = (label, visible) =>
-  col(label ?? 'Duration', 'commonMetadata.duration', {
+const duration = () =>
+  col('Duration', 'commonMetadata.duration', {
     sortable: true,
     align: 'center',
-    visible: visible ?? false,
+    visible: false,
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: durationFormatter,
   })
@@ -47,7 +47,7 @@ const playtime = () =>
   col('Playtime', 'playtime', {
     sortable: true,
     align: 'center',
-    visible: true,
+    visible: false,
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: playtimeFormatter,
   })
