@@ -8,6 +8,10 @@ function). Style and initializer are optional.
 This is a modern approach that goes against web 2.0
 "separation of concern".
 
+Read more about Component Based Architecture: https://medium.com/@dan.shapiro1210/understanding-component-based-architecture-3ff48ec0c238
+
+Or about React, the king of CBAs: https://reactjs.org/docs/hello-world.html
+
 With this approach, a component is a self-contained unit which
 contains all the code that pertains to itself. You don't
 need to go find its HTML, then its CSS, then its JS.
