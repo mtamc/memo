@@ -23,7 +23,7 @@ const PersonalFields = (data, type) => initComponent({
         <label for="score">${data.status === 'Planned' ? 'Preference' : 'Score'}</label><br>
         <select name="score" id="score">
           ${
-            ['10','9','8','7','6','5','4','3','2','1']
+            ['Unrated', '10','9','8','7','6','5','4','3','2','1']
               .map((num) => html`
                 <option value="${num}" ${num == data.score ? 'selected' : ''}>
                   ${num}
