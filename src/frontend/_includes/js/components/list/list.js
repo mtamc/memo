@@ -149,8 +149,18 @@ const SubList = (status, entryType, data) => initComponent({
       .then((isOwner) => {
         initFullTable(`#${id}-list`, data.filter((e) => e.status === status), entryType, isOwner, status)
         $(`#${id}-title`).click(() => {
-          $(`#${id}-title`).next().toggle(200)
-          $(`#${id}-title`).toggleClass('is-collapsed')
+          const nextEl = $(`#${id}-title`).next()
+          console.log(nextEl)
+          console.log(nextEl.attr('id'))
+          const elsToHide =
+            nextEl.attr('id') === 'click-to-see-comments'
+              ? [nextEl, nextEl.next(), nextEl.parent().parent().next()]
+              : [nextEl, nextEl.parent().parent().next()]
+
+          elsToHide.forEach(el => {
+            el.toggle(200)
+            el.toggleClass('is-collapsed')
+          })
         })
       })
   },
