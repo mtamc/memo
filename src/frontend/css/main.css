@@ -157,3 +157,12 @@ span:lang(cn) {
 .table > tfoot > tr > td {
   vertical-align: middle;
 }
+
+input,
+button,
+select,
+textarea {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
