@@ -11,14 +11,14 @@ const externalUrlParser = z.object({
 
 const workParser = z.object({
   apiRefs: z.array(apiRefParser),
-  externalUrls: z.array(externalUrlParser).or(z.undefined()),
+  externalUrls: z.array(externalUrlParser).nullable().or(z.undefined()),
   entryType: entryTypeParser,
-  englishTranslatedTitle: z.string(),
-  originalTitle: z.string().or(z.undefined()),
-  releaseYear: z.number().or(z.undefined()),
-  duration: z.number().or(z.undefined()),
-  imageUrl: z.string().or(z.undefined()),
-  genres: z.array(z.string()).or(z.undefined()),
+  englishTranslatedTitle: z.string().nullable(),
+  originalTitle: z.string().nullable().or(z.undefined()),
+  releaseYear: z.number().nullable().or(z.undefined()),
+  duration: z.number().nullable().or(z.undefined()),
+  imageUrl: z.string().nullable().or(z.undefined()),
+  genres: z.array(z.string()).nullable().or(z.undefined()),
 })
 
 /** @typedef {z.infer<typeof workParser>} Work */
