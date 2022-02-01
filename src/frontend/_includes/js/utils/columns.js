@@ -129,7 +129,8 @@ const platforms = () =>
 const studios = () =>
   col('Studios', 'commonMetadata.studios', {
     ...sortableAndLinked('studios'),
-    visible: false,
+    cellStyle: () => ({ css: { 'width': '250px' } }),
+    visible: true,
   })
 
 const publishers = () =>
