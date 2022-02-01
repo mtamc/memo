@@ -104,7 +104,7 @@ const findAllUnpaginated = async (set) => {
     continuation = resp.after
     results = [...results, ...resp.data ?? []]
   } while (continuation)
-  console.log('returning results len ' + results.length)
+
   return { data: results }
 }
 
