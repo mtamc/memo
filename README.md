@@ -1,9 +1,5 @@
 # https://td-memo.netlify.app/
 
-## Prerequisites
-
-- [Node and NPM](https://nodejs.org/)
-
 ## Workflow
 
 __1. Locally.__ Running the website locally is recommended to test changes before pushing commits.
@@ -29,45 +25,37 @@ due to the small team size, but if you'd like code review send a PR to merge to 
 __3. Production branch.__ Merge staging to production whenever you think the changes are ready. Deploys to
 the website from production are automatic.
 
-## About EleventyOne
+## Web Development Stack
 
-The project scaffold originally includes:
+We use:
 
-- [Eleventy](https://11ty.io)
-- A tiny inline JS pipeline
-- Serverless (FaaS) development pipeline with [Netlify Dev](https://www.netlify.com/products/dev) and [Netlify Functions](https://www.netlify.com/products/functions)
++ [Netlify](https://www.netlify.com) for web hosting and deployment
++ [Node and NPM](https://nodejs.org) for runtime environment and package management
++ [Eleventy](https://11ty.io) for static site generation
++ A tiny inline JS pipeline with a [component-based architecture](https://medium.com/@dan.shapiro1210/understanding-component-based-architecture-3ff48ec0c238)
++ Serverless (FaaS) development pipeline with [Netlify Dev](https://www.netlify.com/products/dev) and [Netlify Functions](https://www.netlify.com/products/functions)
 
-## Credentials
-
+__Credentials.__
 This project is deployed via netlify with the account `m.tam.carre@gmail.com`
 (ask Tam for password).
-
-You might need to run `npx netlify login` inside the project.
-
-## Netlify plugins
-
-### Identity
-
-Managed at https://app.netlify.com/sites/td-memo/identity
-
-### FaunaDB
-
-Managed at https://dashboard.fauna.com by logging in with netlify account integration.
-
-## Error handling
-
-Error handling is done using `neverthrow`, which is similar to
-Rust Result or FP Either. Learn more about its API at:
-https://github.com/supermacro/neverthrow
-
-## Environment variables
 
 External API keys are set in [Netlify](https://app.netlify.com/sites/td-memo/settings/deploys#environment)
 environment variables. They are also avaiable in production inside
 `process.env`.
 
-## Current rate limits
+You might need to run `npx netlify login` inside the project.
 
+__Netlify plugins.__
+
++ Identity. Managed at https://app.netlify.com/sites/td-memo/identity
++ FaunaDB. Managed at https://dashboard.fauna.com by logging in with netlify account integration.
+
+__Error handling.__
+Error handling is done using `neverthrow`, which is similar to
+Rust Result or FP Either. Learn more about its API at:
+https://github.com/supermacro/neverthrow
+
+__Current rate limits.__
 - TV/Series
   - TMDB API: unlimited
 
