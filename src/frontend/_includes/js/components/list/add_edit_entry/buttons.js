@@ -1,5 +1,5 @@
 const { html, css } = Utils
-const { Button } = Components.UI
+const { Button, showNotification } = Components.UI
 const { updateEntry, createEntry, deleteEntry } = Netlify
 const { typeToAPIType } = Tables
 const { isArray } = Array
