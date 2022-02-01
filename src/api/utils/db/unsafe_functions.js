@@ -93,8 +93,20 @@ const docsInCollectionWithField = (collection, field, value) =>
 const lambdaGet = Lambda((x) => Get(x))
 
 /** @type {(set: ExprArg) => Promise<object>} */
-const findAllUnpaginated = (set) =>
-  db.query(q.Map(Paginate(set, { size: 100000 }), lambdaGet))
+const findAllUnpaginated = async (set) => {
+  let continuation = undefined
+  let results = []
+  do {
+    const after = continuation ? { after: continuation } : {}
+    const resp =
+      await db.query(q.Map(Paginate(set, { size: 500, ...after }), lambdaGet))
+
+    continuation = resp.after
+    results = [...results, ...resp.data ?? []]
+  } while (continuation)
+  console.log('returning results len ' + results.length)
+  return { data: results }
+}
 
 const getCollectionDocs = compose(Documents, Collection)
 
