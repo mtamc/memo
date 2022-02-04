@@ -14,7 +14,7 @@ const UsernameSetter = () => initComponent({
           } else {
             showNotification('Successfully picked new name. You will be redirected in 5 seconds.')
 
-            setTimeout(() => { window.location.href = `/profile?user=${newName}` }, 5000)
+            setTimeout(() => { window.location.href = `/profile/${newName}` }, 5000)
           }
         })
     }

@@ -101,7 +101,7 @@ Components.List.List = List
 const ListPageHeader = (title, username) => initComponent({
   content: () => html`
     <div class="row">
-      <h1><a href="/profile/?user=${username}"><i class="fa fa-home"></i></a> ${title}</h1>
+      <h1><a href="/profile/${username}"><i class="fa fa-home"></i></a> ${title}</h1>
     </div>
     <hr>
   `
