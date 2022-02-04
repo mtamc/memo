@@ -102,8 +102,14 @@ const date = (label, field) =>
     visible: false,
     align: 'center',
     cellStyle: () => ({ css: { 'width': '80px', } }),
-    formatter: (date) =>
-      date ? (new Date(date)).toISOString().substring(0, 10) : '-'
+    formatter: (date) => {
+      try {
+        return date ? (new Date(date)).toISOString().substring(0, 10) : '-'
+      } catch (e) {
+        console.log(`failed to parse ${date}`)
+        return ''
+      }
+    }
   })
 
 const progress = () =>
