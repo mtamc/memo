@@ -243,20 +243,21 @@ const toStats = (entries, entryType) => {
     .reduce((a,b) => a + b, 0)
   const scores = entries.filter(e => e.score).map(e => e.score)
   const meanScore = scores.reduce((a,b) => a+b, 0) / (scores.length || 1)
+  const entriesNoDropped = entries.filter((e) => e.status !== 'Dropped')
   const days =
     entryType === 'tv_shows'
-      ? (entries
+      ? (entriesNoDropped
         .reduce((mins, e) => mins + ((get(e, 'duration') ?? 0) * (get(e, 'episodes') ?? 0)), 0)
       ) / 60 / 24
       : entryType === 'films'
-      ? (entries
+      ? (entriesNoDropped
         .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
       : entryType === 'books'
-      ? (entries
+      ? (entriesNoDropped
         .reduce((hours, e) => hours + ((get(e, 'duration') ?? 0) / 50), 0)
       ) / 24
-      : /* games */ (entries
+      : /* games */ (entriesNoDropped
         .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
 
