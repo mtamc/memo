@@ -80,7 +80,7 @@ const PersonalFields = (data, type) => initComponent({
       </div>
       <div style="margin: 15px 0">
         <label for="review">Comments</label><br>
-        <textarea id="review" name="review" rows="4" cols="21">${data.review ?? ''}</textarea>
+        <textarea id="review" name="review" rows="19" cols="50">${data.review ?? ''}</textarea>
       </div>
     </div>
   `,
