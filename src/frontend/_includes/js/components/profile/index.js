@@ -1,7 +1,7 @@
 const { initComponent, WithRemoteData, Error404 } = Components
 const { Base } = Components.UI
 const { getUserIdFromName } = Netlify
-const { ProfileLists } = Components.Profile
+const { ProfileLists, ProfileStats } = Components.Profile
 const { getNameFromUrl } = Http
 
 const ProfilePage = () => initComponent({
@@ -9,7 +9,10 @@ const ProfilePage = () => initComponent({
     WithRemoteData({
       remoteData: getUserIdFromName(getNameFromUrl()),
       component: ({ data }) => data
-        ? Base(`${getNameFromUrl()}'s profile`, ProfileLists(getNameFromUrl()))
+      ? Base(`${getNameFromUrl()}'s profile`, [
+        ProfileLists(getNameFromUrl()),
+        ProfileStats(getNameFromUrl()),
+      ])
         : Error404()
     })
   ),

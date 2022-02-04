@@ -40,10 +40,10 @@ const findOneByField = compose(toResponse, _findOneByField)
 /** @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>} */
 const findOneByField_ = compose(toResult, _findOneByField)
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, field: string, value: ExprArg, limit?: number) => Promise<Response>} */
 const findAllByField = compose(toResponse, _findAllByField)
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>} */
+/** @type {(collection: ValidCollection, field: string, value: ExprArg, limit?: number) => ResultAsync<any, Error>} */
 const findAllByField_ = compose(toResult, _findAllByField)
 
 /** @type {(collection: ValidCollection) => Promise<Response>} */

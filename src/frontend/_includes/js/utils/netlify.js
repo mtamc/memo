@@ -8,7 +8,7 @@ const getUserName = () => Http.get(ENDPOINTS.name)
 
 const getUserIdFromName = (name) => Http.get(ENDPOINTS.idFromName(name))
 
-const getEntries = (type, username) => Http.get(ENDPOINTS.entries(type, username))
+const getEntries = (type, username, limit) => Http.get(ENDPOINTS.entries(type, username, limit))
 
 const setName = (newName) => Http.post(ENDPOINTS.name, { newName })
 
@@ -65,7 +65,7 @@ const API_URL_BASE = '/.netlify/functions/'
 const ENDPOINTS = {
   name: API_URL_BASE + 'name',
   idFromName: (name) => API_URL_BASE + 'name/' + name,
-  entries: (type, username) => `${API_URL_BASE}entries/${type}/${username}`,
+  entries: (type, username, limit) => `${API_URL_BASE}entries/${type}/${username}${limit ? `/${limit}` : ''}`,
   searchWorks: (type, query) => `${API_URL_BASE}works/search/${type}/${query}`,
   retrieveWork: (type, apiRef) => `${API_URL_BASE}works/retrieve/${type}/${apiRef}`,
   createEntry: (type) => `${API_URL_BASE}entries/${type}`,

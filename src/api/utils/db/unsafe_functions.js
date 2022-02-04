@@ -39,9 +39,9 @@ const _findOneByRef = (collection, ref) =>
 const _findAllInCollection = (collection) =>
   findAllUnpaginated(getCollectionDocs(collection))
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<object>} */
-const _findAllByField = (collection, field, value) =>
-  findAllUnpaginated(Match(at(collection, field), value))
+/** @type {(collection: ValidCollection, field: string, value: ExprArg, limit?: number) => Promise<object>} */
+const _findAllByField = (collection, field, value, limit) =>
+  findAllUnpaginated(Match(at(collection, field), value), limit)
 
 /** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => Promise<object>} */
 const _updateOneByRef = (collection, ref, update) =>
@@ -92,8 +92,8 @@ const docsInCollectionWithField = (collection, field, value) =>
 
 const lambdaGet = Lambda((x) => Get(x))
 
-/** @type {(set: ExprArg) => Promise<object>} */
-const findAllUnpaginated = async (set) => {
+/** @type {(set: ExprArg, limit?: number) => Promise<object>} */
+const findAllUnpaginated = async (set, limit) => {
   let continuation = undefined
   let results = []
   do {
@@ -105,7 +105,19 @@ const findAllUnpaginated = async (set) => {
     results = [...results, ...resp.data ?? []]
   } while (continuation)
 
-  return { data: results }
+  // It'd be better to let the consumer specify if they want this behavior
+  // but let's roll with hardcoding it for simplicity for now
+  const resultsByLastUpdatedIfPossible =
+    [...results].sort((a, b) => {
+      return (b.data?.updatedDate ?? 0) - (a.data?.updatedDate ?? 0)
+    })
+
+  const finalResults =
+    limit
+      ? resultsByLastUpdatedIfPossible.slice(0, limit)
+      : resultsByLastUpdatedIfPossible
+
+  return { data: finalResults }
 }
 
 const getCollectionDocs = compose(Documents, Collection)
