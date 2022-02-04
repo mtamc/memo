@@ -54,6 +54,6 @@ const assignNameIfNotTaken = ([userId, { newName }]) =>
 const assignName = (userId, newName) =>
   findOneByField_('users', 'userId', userId)
     .map(({ ref }) => ref
-      ? updateByRef(ref, { data: { username: newName } })
+      ? updateByRef('users', ref, { data: { username: newName } })
       : create('users', { userId, username: newName })
     )
