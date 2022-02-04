@@ -17,7 +17,7 @@ const findOwnName = (context) => toPromise(
       ? responses.ok({ username: data.username })
       : responses.ok(feErrors.noUsernameSet())
     )
-    .mapErr(responses.fromError)
+    .mapErr(() => responses.ok({}))
 )
 
 /** @type {(event: Event) => Promise<Response>} */
