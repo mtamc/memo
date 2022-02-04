@@ -26,6 +26,15 @@ const score = (status) =>
     cellStyle: () => ({ css: { 'width': '25px' } })
   })
 
+const scoreNoPlanned = () =>
+  col('Score', 'score', {
+    sortable: true,
+    align: 'center',
+    cellStyle: () => ({ css: { 'width': '25px' } }),
+    formatter: (score, row) =>
+      row.status === 'Planned' ? '-' : score
+  })
+
 const year = () =>
   col('Year', 'commonMetadata.releaseYear', {
     sortable: true,
@@ -153,6 +162,7 @@ Columns = {
   index,
   englishTitleAndLastUpdated,
   score,
+  scoreNoPlanned,
   year,
   duration,
   playtime,
