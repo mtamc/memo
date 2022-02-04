@@ -34,12 +34,27 @@ const ProfileListsOrUsernameSetter = ({ error, username }) => initComponent({
 
 const AuthenticatedHomePage = (username) => initComponent({
   content: () => html`
-    <div id="authenticated-home-page">Hi ${username}! Not much here yet. Why not visit <a href="/profile?user=${username}">your profile</a>?</div>
+    <div id="authenticated-home-page" class="row">
+    Hi ${username}! Not much here yet. Why not visit <a href="/profile?user=${username}">your profile</a>?
+    </div>
+
+    <div class="row">
+      <h2>Tips</h2>
+        <ul>
+          <li>
+          If you write comments often, browser extensions like
+          <a href="https://chrome.google.com/webstore/detail/typio-form-recovery/djkbihbnjhkjahbhjaadbepppbpoedaa?hl=en">Typio Form
+    Recovery</a>
+          will back up text in case you accidentally exit the Edit window popup
+          without saving your edits.
+          </li>
+      </ul>
+    </div>
   `,
 })
 
 const UnauthenticatedWelcome = () => initComponent({
   content: () => html`
-    <div>Welcome to memo. Log in to start listing.</div>
+    <div class="row">Welcome to memo. Log in to start listing.</div>
   `
 })
