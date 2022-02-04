@@ -183,15 +183,19 @@ const get = (row, props) =>
   
 
 const titleFormatter = (_, row) => {
-  const { originalTitle, englishTranslatedTitle, imageUrl } = get(row, [
-    'originalTitle', 'englishTranslatedTitle', 'imageUrl'
-  ])
+  const { originalTitle, englishTranslatedTitle, imageUrl, externalUrls } =
+    get(row, [
+      'originalTitle', 'englishTranslatedTitle', 'imageUrl', 'externalUrls'
+    ])
+
   const label = originalTitle && originalTitle !== englishTranslatedTitle
     ? `${originalTitle} (${englishTranslatedTitle})`
     : englishTranslatedTitle
+
+  const url = externalUrls?.[0]?.url || toWikipediaUrl(englishTranslatedTitle)
   const cover = imageUrl || '/img/mawaru.png'
   const anchorId = `entry-${row.dbRef}`
-  return `<span id="${anchorId}" class="title-with-cover"><img class="mini-thumb" src="${cover}">${toWikipediaLink(englishTranslatedTitle, label)}</span>`
+  return `<span id="${anchorId}" class="title-with-cover"><img class="mini-thumb" src="${cover}"><a href="${url}">${label}</span>`
 }
 
 const englishTitleAndLastUpdatedFormatter = (_, row) => {
@@ -210,7 +214,10 @@ const listOfLinksFormatter = (prop, toLink) => (_, row) => {
 }
 
 const toWikipediaLink = (name, label) =>
-  `<a href="http://en.wikipedia.org/wiki/Special:Search?search=${name}&go=Go">${label ?? name}</a>`
+  `<a href="${toWikipediaUrl(name)}">${label ?? name}</a>`
+
+const toWikipediaUrl = (name) => 
+  `http://en.wikipedia.org/wiki/Special:Search?search=${name}&go=Go`
 
 const sortableAndLinked = (prop, toLink) => ({
   sortable: true,
