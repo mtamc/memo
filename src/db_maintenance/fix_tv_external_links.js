@@ -24,8 +24,6 @@ const { updateMany } = require('./utils')
         }
       }
     }))
-    // Only keep those entries that have been changed
-    .filter((e, i) => e !== entries[i])
 
   updateMany(fixed)
 })()

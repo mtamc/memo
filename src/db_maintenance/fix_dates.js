@@ -6,10 +6,28 @@ const fs = require('fs')
 const { _findAllInCollection } = require('../api/utils/db/unsafe_functions')
 const { updateMany } = require('./utils')
 
-const collections = ['tvShowEntries', 'filmEntries', 'gameEntries', 'bookEntries']
+const collections = [
+  'tvShowEntries',
+  'filmEntries',
+  'gameEntries',
+  'bookEntries'
+]
+
+const fixDate = (posix) => {
+  if (!posix) {
+    return undefined
+  }
+  const date = new Date(posix)
+  const year = date.getFullYear()
+  if (year > 4000) {
+    date.setFullYear(year - 2000)
+  } else if (year > 2030) {
+    date.setFullYear(year - 100)
+  }
+  return date.getTime()
+}
 
 ;(async () => {
-
   for (const collection of collections) {
     const entries = (await _findAllInCollection(collection)).data
     fs.writeFileSync(
@@ -23,15 +41,10 @@ const collections = ['tvShowEntries', 'filmEntries', 'gameEntries', 'bookEntries
       data: {
         ...e.data,
         startedDate: fixDate(e.data.startedDate),
-        completedDate: fixDate(e.data.startedDate)
+        completedDate: fixDate(e.data.completedDate),
       }
     }))
-    // Only keep those entries that have been changed
-    .filter((e, i) => e !== entries[i])
+
+    updateMany(fixed)
   }
-
-  const refAndDataTuples = fixed.map(({ ref, data }) => [ref, data])
-
-  // Update every entry by replacing its data with the new data we got
-  updateMany(refAndDataTuples)
 })()
