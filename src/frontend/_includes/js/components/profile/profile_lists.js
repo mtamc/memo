@@ -23,7 +23,7 @@ Components.Profile.ProfileLists = ProfileLists
 const ProfileList = (username, type) => initComponent({
   content: ({ include }) => html`
     <div class="profile-list">
-      <h3><a href="/list?type=${type}&user=${username}">${typeToTitle[type]}</a></h3>
+      <h3><a href="/${type}/${username}">${typeToTitle[type]}</a></h3>
       ${include(WithRemoteData({
         remoteData: getEntries(type, username),
         component: (entries) => ProfileTable(type, entries)

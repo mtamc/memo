@@ -25,6 +25,7 @@ module.exports = (config) => {
   // pass some assets right through
   config.addPassthroughCopy('./src/frontend/img')
   config.addPassthroughCopy('./src/frontend/css')
+  config.addPassthroughCopy('./_redirects')
 
   return {
     dir: {

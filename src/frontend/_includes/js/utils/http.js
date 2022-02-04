@@ -17,12 +17,12 @@ const getToken = () => netlifyIdentity?.currentUser()?.token?.access_token
 
 const getNameFromUrl = () => {
   const urlParams = new URLSearchParams(window.location.search)
-  return urlParams.get('user')
+  return urlParams.get('user') ?? getLastPathnameSegment()
 }
 
 const getEntryTypeFromUrl = () => {
   const urlParams = new URLSearchParams(window.location.search)
-  return urlParams.get('type')
+  return urlParams.get('type') ?? getFirstPathnameSegment()
 }
 
 
@@ -52,3 +52,13 @@ const makeRequest = (method, url, data) =>
 const tokenIfLoggedIn = () => ({
   headers: Nullable.map(getToken(), toAuthHeader) ?? {}
 })
+
+const getLastPathnameSegment = () => {
+  const segments = window.location.pathname?.split?.('/').filter(s => s)
+  return segments?.[segments?.length - 1]
+}
+
+const getFirstPathnameSegment = () => {
+  const segments = window.location.pathname?.split?.('/').filter(s => s)
+  return segments?.[0]
+}

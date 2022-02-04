@@ -85,7 +85,7 @@ const toEntryCollection = (segment) =>
   match(segment)
     .with('films', () => okEntry('filmEntries'))
     .with('books', () => okEntry('bookEntries'))
-    .with('tv_shows', () => okEntry('tvShowEntries'))
+    .with('tv', () => okEntry('tvShowEntries'))
     .with('games', () => okEntry('gameEntries'))
     .otherwise(() => err(errors.notFound()))
 

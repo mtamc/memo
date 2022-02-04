@@ -37,7 +37,7 @@ const deleteEntry = (type, ref) => Http.del(
 
 // UTILITY
 
-const entryTypes = ['games', 'films', 'books', 'tv_shows']
+const entryTypes = ['games', 'films', 'books', 'tv']
 
 const getToken = Http.getToken
 
@@ -60,7 +60,7 @@ Netlify = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const API_URL_BASE = '/api/'
+const API_URL_BASE = '/.netlify/functions/'
 
 const ENDPOINTS = {
   name: API_URL_BASE + 'name',

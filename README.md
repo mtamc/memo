@@ -17,7 +17,7 @@ npx netlify dev
 If you use `npx netlify dev` your serverless functions will also be available at:
 
 ```
-GET http://localhost:8888/api/<function_file_name_without_extension>
+GET http://localhost:8888/.netlify/functions/<function_file_name_without_extension>
 ```
 __2. Staging branch.__ Generally you should push commits directly to staging. Pull requests aren't really necessary
 due to the small team size, but if you'd like code review send a PR to merge to staging.
