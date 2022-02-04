@@ -25,7 +25,7 @@ const ProfileList = (username, type) => initComponent({
     <div class="profile-list">
       <h3><a href="/${type}/${username}">${typeToTitle[type]}</a></h3>
       ${include(WithRemoteData({
-        remoteData: getEntries(type, username),
+        remoteData: getEntries(type, username, 5),
         component: (entries) => ProfileTable(type, entries)
       }))}
     </div>
@@ -54,7 +54,6 @@ const ProfileTable = (type, data) => initComponent({
 
 const initProfileTable = (selector, data) => initTable(selector, data, {
   iconsPrefix: 'fa',
-  pagination: true,
   pageSize: 5,
   onlyInfoPagination: true,
   columns: profileColumns(),

@@ -13,8 +13,9 @@ const { matchVerbAndNumberOfUrlSegments } = require('../router')
 exports.handler = async (event, context) =>
   matchVerbAndNumberOfUrlSegments(event)
 
-    // GET /api/entries/:type/:username
+    // GET /api/entries/:type/:username/:limit?
     .with(['GET', 2], () => getAllEntriesForUser(event))
+    .with(['GET', 3], () => getAllEntriesForUser(event))
 
     // POST /api/entries/:type
     .with(['POST', 1], () => createNewUserListEntry(event, context))

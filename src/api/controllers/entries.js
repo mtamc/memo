@@ -14,9 +14,10 @@ const { toResponse } = require('../utils/db/into_safe_values')
 
 /** @type {(event: Event) => Promise<Response>} */
 const getAllEntriesForUser = (event) => toPromise(
-  combine(pair([
+  combine(triplet([
     findIdOfName(getSegment(1, event)),
     toAsync(toEntryCollection(getSegment(0, event))),
+    okAsync(getSegment(2, event))
   ]))
     .map(getUserEntries)
     .mapErr(responses.fromError)
@@ -92,9 +93,9 @@ const toEntryCollection = (segment) =>
 /** @type {(collection: ValidCollection) => Result<ValidCollection, Error>} */
 const okEntry = (collection) => ok(collection)
 
-/** @type {([uid, col]: [string, ValidCollection]) => Promise<any>} */
-const getUserEntries = ([uid, col]) => toResponse(toPromise(
-  db.findAllByField_(col, 'userId', uid)
+/** @type {([uid, col]: [string, ValidCollection, string | undefined]) => Promise<any>} */
+const getUserEntries = ([uid, col, limit]) => toResponse(toPromise(
+  db.findAllByField_(col, 'userId', uid, parseInt(limit) || undefined)
     .map(({ data }) => data.map((doc) => ({
       ...doc.data,
       dbRef: doc.ref.id
