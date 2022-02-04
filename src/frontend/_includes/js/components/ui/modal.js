@@ -39,7 +39,7 @@ const Modal_ = ({ title, content }) => initComponent({
       overflow: hidden;
       background: #fff;
       border-radius: 5px;
-      width: min(90%, 850px);
+      width: min(90%, 1100px);
       height:min(90%, 900px);
     }
     .td-modal-content-wrapper {

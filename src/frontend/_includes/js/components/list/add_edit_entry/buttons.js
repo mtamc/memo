@@ -31,7 +31,7 @@ const SubmitButton = (type, data, isEdit) => Button({
   onClick: () =>
     (isEdit
       ? updateEntry(type, data.dbRef, generateEntry(data, type))
-      : createEntry(type, log(generateEntry(data, type)))
+      : createEntry(type, generateEntry(data, type))
     )
       .map(() => location.reload())
       .mapErr((err) =>
@@ -41,7 +41,6 @@ const SubmitButton = (type, data, isEdit) => Button({
       ),
 })
 
-const log = x => (console.log(JSON.stringify(x)), x)
 Components.List.SubmitButton = SubmitButton
 Components.List.DeleteButton = DeleteButton
 
