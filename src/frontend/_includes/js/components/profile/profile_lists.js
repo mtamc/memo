@@ -6,6 +6,7 @@ const { initComponent, WithRemoteData } = Components
 
 const ProfileLists = (username) => initComponent({
   content: ({ include }) => html`
+    <h2>Recent updates</h2>
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
       ${entryTypes
         .map(type => include(ProfileList(username, type)))

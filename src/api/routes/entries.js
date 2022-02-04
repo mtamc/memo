@@ -23,7 +23,6 @@ exports.handler = async (event, context) =>
     // PATCH /api/entries/:type/:dbRef
     .with(['PATCH', 2], () => updateEntry(event, context))
 
-
     // DELETE /api/entries/:type/:dbRef
     .with(['DELETE', 2], () => deleteEntry(event, context))
 
