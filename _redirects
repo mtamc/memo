@@ -1,1 +1,2 @@
-/*	/index.html	200
+/img/*	/img/:splat	200!
+/*	/index.html	200!
