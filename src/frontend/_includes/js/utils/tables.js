@@ -20,7 +20,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.actors(),
     Columns.date('Completed Date', 'completedDate'),
   ],
-  tv_shows: [
+  tv: [
     Columns.index(),
     Columns.title(),
     Columns.score(status),
@@ -82,20 +82,20 @@ const typeToTitle = {
   films: 'Films',
   books: 'Literature',
   games: 'Video Games',
-  tv_shows: 'TV Shows',
+  tv: 'TV Shows',
 }
 
 const typeToAPIType = {
   films: 'Film',
   books: 'Book',
   games: 'Game',
-  tv_shows: 'TVShow',
+  tv: 'TVShow',
 }
 
 const statusToTitle = (entryType, status) => ({
   InProgress: {
     films: 'Watching',
-    tv_shows: 'Watching',
+    tv: 'Watching',
     games: 'Playing',
     books: 'Reading'
   }[entryType],
@@ -103,7 +103,7 @@ const statusToTitle = (entryType, status) => ({
   Dropped: 'Dropped',
   Planned: {
     films: 'To watch',
-    tv_shows: 'To watch',
+    tv: 'To watch',
     games: 'To play',
     books: 'To read'
   }[entryType]

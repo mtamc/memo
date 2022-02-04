@@ -35,7 +35,7 @@ const ProfileListsOrUsernameSetter = ({ error, username }) => initComponent({
 const AuthenticatedHomePage = (username) => initComponent({
   content: () => html`
     <div id="authenticated-home-page" class="row">
-    Hi ${username}! Not much here yet. Why not visit <a href="/profile?user=${username}">your profile</a>?
+      Hi ${username}! Not much here yet. Why not visit <a href="/profile/${username}">your profile</a>?
     </div>
 
     <div class="row">

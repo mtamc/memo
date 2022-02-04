@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="/css/main.css">
+    <style>
+        {% include "css/main.css" %}
+    </style>
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
@@ -70,6 +73,7 @@
       {{ js("js/components/list/add_edit_entry/add_entry_link.js") }}
       {{ js("js/components/list/list.js") }}
       {{ js("js/components/list/index.js") }}
+      {{ js("js/components/router.js") }}
     {% endset %}
     <script>
       {{ scripts | safe }}

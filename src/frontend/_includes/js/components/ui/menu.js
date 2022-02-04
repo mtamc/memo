@@ -19,7 +19,7 @@ const Menu = () => initComponent({
     Netlify.getUserName()
       .map(({ username }) => {
         if (username) {
-          $('#home-menu-item').after(`<li id="home-menu-item"><a href="/profile?user=${username}">Profile</a></li>`)
+          $('#home-menu-item').after(`<li id="home-menu-item"><a href="/profile/${username}">Profile</a></li>`)
         }
       })
       .mapErr(console.log)
