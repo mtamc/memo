@@ -93,13 +93,18 @@ const toEntryCollection = (segment) =>
 /** @type {(collection: ValidCollection) => Result<ValidCollection, Error>} */
 const okEntry = (collection) => ok(collection)
 
-/** @type {([uid, col]: [string, ValidCollection, string | undefined]) => Promise<any>} */
+/** @type {([uid, col, limit]: [string, ValidCollection, string | undefined]) => Promise<any>} */
 const getUserEntries = ([uid, col, limit]) => toResponse(toPromise(
-  db.findAllByField_(col, 'userId', uid, parseInt(limit) || undefined)
+  db.findAllByField_(col, 'userId', uid, parseInt(limit || "100000000"))
     .map(({ data }) => data.map((doc) => ({
       ...doc.data,
       dbRef: doc.ref.id
     })))
+  .mapErr(e => {
+    console.log('Investigating why sometimes retrieving entries randomly fails')
+    console.log(limit)
+    console.log(e)
+  })
 ))
 
 /** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<Response>} */

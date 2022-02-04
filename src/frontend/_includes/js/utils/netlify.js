@@ -10,6 +10,8 @@ const getUserIdFromName = (name) => Http.get(ENDPOINTS.idFromName(name))
 
 const getEntries = (type, username, limit) => Http.get(ENDPOINTS.entries(type, username, limit))
 
+const getStats = (username) => Http.get(ENDPOINTS.stats(username))
+
 const setName = (newName) => Http.post(ENDPOINTS.name, { newName })
 
 const searchWorks = (type, query) => Http.get(
@@ -56,19 +58,21 @@ Netlify = {
   createEntry,
   updateEntry,
   deleteEntry,
+  getStats,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const API_URL_BASE = '/.netlify/functions/'
+const API_URL_BASE = '/.netlify/functions'
 
 const ENDPOINTS = {
-  name: API_URL_BASE + 'name',
-  idFromName: (name) => API_URL_BASE + 'name/' + name,
-  entries: (type, username, limit) => `${API_URL_BASE}entries/${type}/${username}${limit ? `/${limit}` : ''}`,
-  searchWorks: (type, query) => `${API_URL_BASE}works/search/${type}/${query}`,
-  retrieveWork: (type, apiRef) => `${API_URL_BASE}works/retrieve/${type}/${apiRef}`,
-  createEntry: (type) => `${API_URL_BASE}entries/${type}`,
-  updateEntry: (type, dbRef) => `${API_URL_BASE}entries/${type}/${dbRef}`,
-  deleteEntry: (type, dbRef) => `${API_URL_BASE}entries/${type}/${dbRef}`,
+  name: API_URL_BASE + '/name',
+  idFromName: (name) => API_URL_BASE + '/name/' + name,
+  entries: (type, username, limit) => `${API_URL_BASE}/entries/${type}/${username}${limit ? `/${limit}` : ''}`,
+  searchWorks: (type, query) => `${API_URL_BASE}/works/search/${type}/${query}`,
+  retrieveWork: (type, apiRef) => `${API_URL_BASE}/works/retrieve/${type}/${apiRef}`,
+  createEntry: (type) => `${API_URL_BASE}/entries/${type}`,
+  updateEntry: (type, dbRef) => `${API_URL_BASE}/entries/${type}/${dbRef}`,
+  deleteEntry: (type, dbRef) => `${API_URL_BASE}/entries/${type}/${dbRef}`,
+  stats: (username) => `${API_URL_BASE}/stats/${username}`,
 }

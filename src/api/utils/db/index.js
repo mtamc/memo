@@ -52,6 +52,9 @@ const findAll = compose(toResponse, _findAllInCollection)
 /** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => Promise<Response>} */
 const updateByRef = compose(toResponse, _updateOneByRef)
 
+/** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => ResultAsync<any, Error>} */
+const updateByRef_ = compose(toResult, _updateOneByRef)
+
 /** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */
 const deleteByRef = compose(toResponse, _deleteOneByRef)
 
@@ -67,6 +70,7 @@ module.exports = {
   findOneByField,
   findOneByField_,
   updateByRef,
+  updateByRef_,
   create,
   deleteByRef,
 }
