@@ -10,7 +10,7 @@
 const faunadb = require('faunadb')
 const { db } = require('./db')
 const { compose } = require('ramda')
-const { throwIt } = require('../general')
+const { throwIt, log } = require('../general')
 const parsers = require('../parsers/')
 const q = faunadb.query
 const {
@@ -58,11 +58,67 @@ const _create = (collection, data) =>
     (err) => throwIt(err)
   )
 
+// For now some code is duplicated, we'll DRY this out later
+/** @type {(collection: ValidCollection, userId: string, limit?: number) => Promise<object>} */
+const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
+  let continuation = undefined
+  let results = []
+  const workCollection = {
+    filmEntries: 'films',
+    gameEntries: 'games',
+    tvShowEntries: 'tvShows',
+    bookEntries: 'books',
+  }[collection]
+
+  do {
+    const after = continuation ? { after: continuation } : {}
+    const resp =
+      await db.query(
+        q.Map(
+          Paginate(Match(at(collection, "userId"), userId), { size: 500, ...after }),
+          q.Lambda(
+            'entry',
+            q.Let(
+              {
+                entry: q.Get(q.Var('entry')),
+                work: q.Get(
+                  q.Ref(
+                    Collection(workCollection),
+                    q.Select(['data', 'workRef'], q.Var('entry'))
+                  )
+                )
+              },
+              {
+                entry: q.Var('entry'),
+                work: q.Var('work'),
+              }
+            )
+          )
+        )
+      )
+
+    continuation = resp.after
+    results = [...results, ...resp.data ?? []]
+  } while (continuation)
+
+  const resultsByLastUpdatedIfPossible =
+    [...results].sort((a, b) => {
+      return (b.data?.updatedDate ?? 0) - (a.data?.updatedDate ?? 0)
+    })
+
+  const finalResults =
+    limit
+      ? resultsByLastUpdatedIfPossible.slice(0, limit)
+      : resultsByLastUpdatedIfPossible
+
+  return { data: finalResults }
+}
 module.exports = {
   _findOneByField,
   _findOneByRef,
   _findAllInCollection,
   _findAllByField,
+  _findAllUserEntriesWithMetadata,
   _updateOneByRef,
   _create,
   _deleteOneByRef,
@@ -91,6 +147,7 @@ const docsInCollectionWithField = (collection, field, value) =>
   Match(at(collection, field), value)
 
 const lambdaGet = Lambda((x) => Get(x))
+
 
 /** @type {(set: ExprArg, limit?: number) => Promise<object>} */
 const findAllUnpaginated = async (set, limit) => {

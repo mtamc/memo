@@ -23,6 +23,10 @@ const filmEntryParser = entryParser(filmParser)
 /** @type Validator<FilmEntry> */
 const filmEntries = (x) => validate(filmEntryParser, x)
 
+/** @type Validator<Film> */
+const films = (x) => validate(filmParser, x)
+
 module.exports = {
-  filmEntries
+  filmEntries,
+  films,
 }

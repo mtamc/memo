@@ -133,8 +133,8 @@ const retrieve = (ref) => ResultAsync.fromPromise(
         studios: studioNames,
         publishers: publisherNames,
         apiRefs: [
-          { name: 'igdb', ref: String(mainData.id) },
-          ...(hltbEntry ? [{ name: 'hltb', ref: String(hltbEntry.id) }] : []),
+          `igdb__${mainData.id}`,
+          ...(hltbEntry ? [`hltb__${hltbEntry.id}`] : []),
         ],
         externalUrls: [
           ...(mainData.url ? [{ name: 'igdb', url: mainData.url }] : []),

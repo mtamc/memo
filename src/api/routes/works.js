@@ -12,7 +12,6 @@ exports.handler = async (event, context) =>
   matchVerbAndNumberOfUrlSegments(event)
 
     .with(['GET', 3], () =>
-
         // GET /api/works/search/:type/:search
         getUrlSegments(event)[0] === 'search'   ? searchForWork(event)
 

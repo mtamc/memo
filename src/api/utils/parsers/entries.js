@@ -17,7 +17,8 @@ const scoreParser = z.union([
 
 /** @param {ZodObject} specificWorkParser */
 const entryParser = (specificWorkParser) => z.object({
-  commonMetadata: specificWorkParser,
+  // commonMetadata: specificWorkParser,
+  workRef: z.string().nullable().or(z.undefined()),
   overrides: specificWorkParser.partial().or(z.undefined()),
   userId: z.string(),
   status: statusParser,

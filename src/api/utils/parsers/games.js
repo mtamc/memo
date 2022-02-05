@@ -24,6 +24,10 @@ const gameEntryParser = entryParser(gameParser)
 /** @type Validator<GameEntry> */
 const gameEntries = (x) => validate(gameEntryParser, x)
 
+/** @type Validator<Game> */
+const games = (x) => validate(gameParser, x)
+
 module.exports = {
-  gameEntries
+  gameEntries,
+  games,
 }

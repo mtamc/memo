@@ -22,6 +22,10 @@ const bookEntryParser = entryParser(bookParser)
 /** @type Validator<BookEntry> */
 const bookEntries = (x) => validate(bookEntryParser, x)
 
+/** @type Validator<Book> */
+const books = (x) => validate(bookParser, x)
+
 module.exports = {
-  bookEntries
+  bookEntries,
+  books,
 }
