@@ -52,6 +52,7 @@ const Tabbed = (title, pages) => initComponent({
     .tab-content.tab-hidden {
       position: absolute;
       left: -99999px;
+      top: -999999999px;
     }
   `
 })
