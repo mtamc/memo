@@ -9,8 +9,8 @@ const { db } = require('../api/utils/db/db')
 // but here's an example of doing it via JS/FQL
 // (might be broken.. need to look into it)
 
-;['books', 'tvShows', 'films', 'games']
-  .forEach(async (collectionName) => {
+;(async () => {
+  for (const collectionName of ['books', 'tvShows', 'films', 'games']) {
     const { ref, name } = await db.query(
       q.CreateCollection({
         name: collectionName
@@ -36,4 +36,6 @@ const { db } = require('../api/utils/db/db')
         ]
       })
     )
-  })
+
+  }
+})()
