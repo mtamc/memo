@@ -2,20 +2,18 @@ const { entryTypes, getStats } = Netlify
 const { col, typeToTitle } = Tables
 const { html, css } = Utils
 const { initComponent, WithRemoteData } = Components
+const { Tabbed } = Components.UI
 
 const ProfileStats = (username) => initComponent({
   content: ({ include }) => html`
-    <h2>Stats</h2>
       ${include(WithRemoteData({
         remoteData: getStats(username),
         component: (stats) => initComponent({
           content: ({ include }) => html`
-            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-              ${include(
-                entryTypes.map(type => ProfileStatsOfType(username, type, stats))
-              )}
-            </div>
-            ${include(GlobalStats(stats))}
+            ${include(Tabbed([
+              { title: "Stats per category", component: SubStats(username, stats) },
+              { title: "Global stats", component: GlobalStats(stats) },
+            ]))}
           `
         })
       }))}
@@ -26,6 +24,16 @@ const ProfileStats = (username) => initComponent({
 Components.Profile.ProfileStats = ProfileStats
 
 ///////////////////////////////////////////////////////////////////////////////
+
+const SubStats = (username, stats) => initComponent({
+  content: ({ include }) => html`
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+      ${include(
+        entryTypes.map(type => ProfileStatsOfType(username, type, stats))
+      )}
+    </div>
+  `
+})
 
 const ProfileStatsOfType = (username, type, stats) => initComponent({
   content: ({ id, include }) => html`
