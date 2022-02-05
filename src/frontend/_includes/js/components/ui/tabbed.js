@@ -33,8 +33,8 @@ const Tabbed = (title, pages) => initComponent({
   style: () => css`
     .tab-title {
       cursor: pointer;
-      padding: 10px 30px;
-      font-size: 16px;
+      padding: 8px 20px;
+      font-size: 13px;
       background: #ddd;
       border-radius: 8px;
       display: inline-block;
