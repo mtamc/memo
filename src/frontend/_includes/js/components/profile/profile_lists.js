@@ -36,6 +36,10 @@ const ProfileList = (username, type) => initComponent({
       width: 48%;
     }
 
+    .profile-list .bootstrap-table {
+      font-size: 12px;
+    }
+
     @media (max-width: 600px) {
       .profile-list {
         width: 100%;
@@ -57,6 +61,7 @@ const initProfileTable = (selector, data) => initTable(selector, data, {
   iconsPrefix: 'fa',
   pageSize: 5,
   onlyInfoPagination: true,
+  showHeader: false,
   columns: profileColumns(),
 })
 

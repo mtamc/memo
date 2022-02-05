@@ -39,6 +39,16 @@ const ProfileStatsOfType = (username, type, stats) => initComponent({
     .profile-stats {
       width: 48%;
     }
+    .profile-stats h3 a {
+      position: relative;
+      z-index: 2;
+    }
+    .profile-stats .apexcharts-canvas {
+      margin-top: -28px;
+    }
+    .profile-stats .apexcharts-toolbar {
+      right: 16px;
+    }
     @media (max-width: 600px) {
       .profile-stats {
         width: 100%;
@@ -72,8 +82,10 @@ const GlobalStats = (stats) => initComponent({
   content: ({ id, include }) => html`
     <div class="profile-global-stats">
       <h3>Global stats</h3>
-      <div id=${id}></div>
-      ${include(AdditionalStats(aggregateStats(stats)))}
+      <div id="profile-global-stats">
+        <div id=${id}></div>
+        ${include(AdditionalStats(aggregateStats(stats)))}
+      </div>
     </div>
   `,
   initializer: ({ id }) => {
@@ -82,7 +94,18 @@ const GlobalStats = (stats) => initComponent({
       toChartOptions(aggregateStats(stats))
     )
       .render()
-  }
+  },
+  style: () => css`
+    #profile-global-stats {
+      width: 48%;
+    }
+
+    @media (max-width: 768px) {
+      #profile-global-stats {
+        width: 100%;
+      }
+    }
+  `
 })
 
 // This is convoluted as heck.
@@ -98,6 +121,7 @@ const aggregateStats = (stats) =>
 
 const toChartOptions = (relevantStats) => ({
   series: [{
+    name: `Scores`,
     data: [
       relevantStats['10'],
       relevantStats['9'],
@@ -113,7 +137,7 @@ const toChartOptions = (relevantStats) => ({
   }],
   chart: {
     type: 'bar',
-    height: 350
+    height: 250,
   },
   plotOptions: {
     bar: {

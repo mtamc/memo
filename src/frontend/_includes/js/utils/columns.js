@@ -26,13 +26,13 @@ const score = (status) =>
     cellStyle: () => ({ css: { 'width': '25px' } })
   })
 
-const scoreNoPlanned = () =>
+const profileScores = () =>
   col('Score', 'score', {
     sortable: true,
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: (score, row) =>
-      row.status === 'Planned' ? '-' : score
+      row.status === 'Planned' ? '-/10' : score + '/10'
   })
 
 const year = () =>
@@ -162,7 +162,7 @@ Columns = {
   index,
   englishTitleAndLastUpdated,
   score,
-  scoreNoPlanned,
+  profileScores,
   year,
   duration,
   playtime,
