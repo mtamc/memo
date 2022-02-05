@@ -4,18 +4,12 @@ const { TextInput } = Components.UI
 const { isArray } = Array
 
 const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
-  console.log(data)
-  console.log(overrides)
-
-  const get = (prop) => overrides?.[prop] ?? data?.[prop]
-
   const Input = (label, id, prop, transformer, type) => {
     const propName = prop ?? id
     const joinIfArray = x => isArray(x) ? x.join(', ') : x
     const transformerFn = transformer ?? (x => x)
     const fromDb = transformerFn(joinIfArray(data?.[propName]))
     const override = transformerFn(joinIfArray(overrides?.[propName]))
-    console.log(`fromDb is ${fromDb}, override is ${override}`)
     const isOverridden = override != null && override !== fromDb
     const valToShow = override ?? fromDb
 
