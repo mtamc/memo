@@ -25,6 +25,10 @@ const tvShowEntryParser = entryParser(tvShowParser)
 /** @type Validator<TVShowEntry> */
 const tvShowEntries = (x) => validate(tvShowEntryParser, x)
 
+/** @type Validator<TVShow> */
+const tvShows = (x) => validate(tvShowParser, x)
+
 module.exports = {
-  tvShowEntries
+  tvShowEntries,
+  tvShows
 }

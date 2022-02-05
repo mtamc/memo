@@ -95,10 +95,11 @@ const okEntry = (collection) => ok(collection)
 
 /** @type {([uid, col, limit]: [string, ValidCollection, string | undefined]) => Promise<any>} */
 const getUserEntries = ([uid, col, limit]) => toResponse(toPromise(
-  db.findAllByField_(col, 'userId', uid, parseInt(limit || "100000000"))
-    .map(({ data }) => data.map((doc) => ({
-      ...doc.data,
-      dbRef: doc.ref.id
+  db.findAllUserEntriesWithMetadata_(col, uid, parseInt(limit || "10000000"))
+    .map(({ data }) => data.map(({ entry, work }) => ({
+      ...entry.data,
+      commonMetadata: work.data,
+      dbRef: entry.ref.id
     })))
   .mapErr(e => {
     console.log('Investigating why sometimes retrieving entries randomly fails')

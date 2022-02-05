@@ -48,7 +48,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
     duration: volumeInfo.pageCount,
     imageUrl: volumeInfo?.imageLinks?.thumbnail,
     authors: volumeInfo?.authors,
-    apiRefs: [{ name: 'ISBN', ref }],
+    apiRefs: [`ISBN__${ref}`],
     externalUrls: volumeInfo?.canonicalVolumeLink
       ? [{ name: 'Google Play', url: volumeInfo?.canonicalVolumeLink }]
       : [],

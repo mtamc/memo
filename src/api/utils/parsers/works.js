@@ -1,16 +1,16 @@
 const { z } = require('zod')
 const entryTypeParser = z.enum(['Game', 'Film', 'TVShow', 'Book'])
-const apiRefParser = z.object({
-  name: z.string(),
-  ref: z.string(),
-})
+// const apiRefParser = z.object({
+  // name: z.string(),
+  // ref: z.string(),
+// })
 const externalUrlParser = z.object({
   name: z.string(),
   url: z.string(),
 })
 
 const workParser = z.object({
-  apiRefs: z.array(apiRefParser),
+  apiRefs: z.array(z.string()),
   externalUrls: z.array(externalUrlParser).nullable().or(z.undefined()),
   entryType: entryTypeParser,
   englishTranslatedTitle: z.string().nullable(),

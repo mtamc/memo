@@ -58,7 +58,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
         // @ts-ignore (library typing is wrong)
         .filter((person) => person.popularity > 6)
         .map((person) => person.name),
-      apiRefs: [{ name: 'tmdb', ref }],
+      apiRefs: [`tmdb__${ref}`],
       externalUrls: [{ name: 'tmdb', url: `https://www.themoviedb.org/tv/${ref}` }],
       episodes: data.seasons.reduce((eps, s) => eps + s.episode_count, 0),
     })),
