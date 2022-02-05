@@ -13,10 +13,12 @@ const DeleteButton = (type, data) => Button({
     }
   `,
   onClick: () => {
-    deleteEntry(type, data.dbRef)
-      .map(() => location.reload())
-      .mapErr((err) => showNotification(`Error deleting this entry: ${err}`)
-      )
+    if (confirm(`Are you sure you want to delete this entry from your list?`)) {
+      deleteEntry(type, data.dbRef)
+        .map(() => location.reload())
+        .mapErr((err) => showNotification(`Error deleting this entry: ${err}`)
+        )
+    }
   }
 })
 
