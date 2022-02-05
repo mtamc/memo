@@ -3,7 +3,6 @@
 /** @typedef {import('../utils/external_api_adapters/types').Adapter} Adapter */
 /** @typedef {import('../utils/errors').Error} Error */
 const { toPromise } = require('../utils/general')
-const tmdb = require('../utils/external_api_adapters/films/tmdb')
 const { getUrlSegments } = require('./utils')
 const { Result, ok, err } = require('neverthrow')
 const { match } = require('ts-pattern')
@@ -37,5 +36,5 @@ const withAdapter = (action, event) => toPromise(
 
 /** @type {(event: Event) => Result<Adapter, Error>} */
 const getAdapter = (event) => match(getUrlSegments(event)[1])
-  .with('films', 'tv_shows', 'games', 'books', (type) => ok(adapters[type]))
+  .with('films', 'tv', 'games', 'books', (type) => ok(adapters[type]))
   .otherwise(() => err(errors.notFound()))
