@@ -1,0 +1,80 @@
+const { initComponent, setContent, Div } = Components
+const { html, css } = Utils
+const { identity } = R
+
+/**
+ * pages = [
+ *   { title: 'Tab title', component: MyComponent() },
+ *   { title: 'Another tab title', component: SomethingElse() },
+ * ]
+ */
+const Tabbed = (pages) => initComponent({
+  content: ({ id, include }) => html`
+    <div id="${id}">
+      <div class="tab-titles">
+        ${include(pages.map(Title))}
+      </div>
+      <div class="tab-contents">
+        ${include(pages.map(Content))}
+      </div>
+    </div>
+  `,
+  initializer: ({ id }) => {
+    $(`#${id} .tab-title`).click(function() {
+      $(`#${id} .tab-title`).removeClass('tab-active')
+      $(this).addClass('tab-active')
+      $(`#${id} .tab-contents > *`).addClass('tab-hidden').fadeOut()
+      $(`#${id} .tab-contents > *`).eq($(this).data('index')).removeClass('tab-hidden').fadeIn()
+    })
+  },
+  style: () => css`
+    .tab-title {
+      cursor: pointer;
+      padding: 10px 30px;
+      font-size: 16px;
+      background: #ddd;
+      border-radius: 8px;
+      display: inline-block;
+      color: #aaa;
+      font-weight: bold;
+    }
+    .tab-title.tab-active {
+      color: white;
+      background: #0E9CE0;
+    }
+    .tab-content * {
+      position: relative;
+      left: unset;
+    }
+    .tab-content.tab-hidden {
+      position: absolute;
+      left: -99999px;
+    }
+  `
+})
+
+Components.UI.Tabbed = Tabbed
+
+///////////////////////////////////////////////////////////////////////////////
+
+const Title = ({ title }, index) => initComponent({
+  content: () => html`
+    <div
+      class="tab-title ${index === 0 ? 'tab-active' : ''}"
+      data-index="${index}"
+    >
+      ${title}
+    </div>
+  `
+})
+
+const Content = ({ component }, index) => initComponent({
+  content: ({ include }) => html`
+    <div
+      class="tab-content ${index === 0 ? '' : 'tab-hidden'}"
+      data-index="${index}"
+    >
+      ${include(component)}
+    </div>
+  `
+})

@@ -13,6 +13,7 @@ const ProfileLists = (username) => initComponent({
         .join('')
       }
     </div>
+    <hr>
   `
 })
 

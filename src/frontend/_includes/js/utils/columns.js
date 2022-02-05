@@ -32,7 +32,7 @@ const profileScores = () =>
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: (score, row) =>
-      row.status === 'Planned' ? '-/10' : score + '/10'
+      row.status === 'Planned' ? '-/10' : (score ?? '-') + '/10'
   })
 
 const year = () =>
