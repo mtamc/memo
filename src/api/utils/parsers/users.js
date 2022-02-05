@@ -32,7 +32,8 @@ const userParser = z.object({
       tv: scoreTallyParser,
       games: scoreTallyParser,
     })
-  }).nullable().or(z.undefined())
+  }).nullable().or(z.undefined()),
+  biography: z.string().nullable().or(z.undefined()),
 })
 
 /** @typedef {z.infer<typeof userParser>} User
