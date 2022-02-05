@@ -70,7 +70,7 @@ const generateEntry = (data, type) => ({
   commonMetadata: data?.commonMetadata
   ? {
       ...data.commonMetadata,
-      duration: data.commonMetadata.duration * (console.log(data), type === 'games' ? 60 : 1)
+      duration: data.commonMetadata.duration
     }
     : emptyMetadata(type),
   overrides: getOverrides(data?.commonMetadata, type),
@@ -98,12 +98,16 @@ const emptyMetadata = (type) => ({
 
 const getOverrides = (api, type) => {
   const englishTranslatedTitle = getIfDifferent(api?.englishTranslatedTitle, $('#title').val())
-  const duration = getIfDifferent(api?.duration, getFloat('duration'))
+  const duration =
+    api?.duration === (getFloat('duration') * (type === 'games' ? 60 : 1))
+      ? null
+      : getFloat('duration') * (type === 'games' ? 60 : 1)
+    getIfDifferent(api?.duration, getFloat('duration'))
   return {
     englishTranslatedTitle,
     originalTitle: getIfDifferent(api?.originalTitle, $('#original-title').val()) ?? englishTranslatedTitle,
     releaseYear: getIfDifferent(api?.releaseYear, getInt('release-year')),
-    duration: duration ? duration * 60 : null,
+    duration,
     imageUrl: getIfDifferent(api?.imageUrl, $('#image-url').val()),
     genres: getIfDifferent(api?.genres, getCommaSeparated('genres')),
     ...(
