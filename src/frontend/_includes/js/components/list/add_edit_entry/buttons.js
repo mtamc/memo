@@ -101,7 +101,7 @@ const getOverrides = (api, type) => {
     getIfDifferent(api?.duration, getFloat('duration'))
   return {
     englishTranslatedTitle,
-    originalTitle: getIfDifferent(api?.originalTitle, $('#original-title').val()) ?? englishTranslatedTitle,
+    originalTitle: getIfDifferent(api?.originalTitle, $('#original-title').val()) ?? null,
     releaseYear: getIfDifferent(api?.releaseYear, getInt('release-year')),
     duration,
     imageUrl: getIfDifferent(api?.imageUrl, $('#image-url').val()),

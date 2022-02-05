@@ -1,44 +1,93 @@
 const { html, css } = Utils
 const { initComponent } = Components
 const { TextInput } = Components.UI
+const { isArray } = Array
 
 const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
+  console.log(data)
+  console.log(overrides)
+
   const get = (prop) => overrides?.[prop] ?? data?.[prop]
+
+  const Input = (label, id, prop, transformer, type) => {
+    const propName = prop ?? id
+    const joinIfArray = x => isArray(x) ? x.join(', ') : x
+    const transformerFn = transformer ?? (x => x)
+    const fromDb = transformerFn(joinIfArray(data?.[propName]))
+    const override = transformerFn(joinIfArray(overrides?.[propName]))
+    console.log(`fromDb is ${fromDb}, override is ${override}`)
+    const isOverridden = override != null && override !== fromDb
+    const valToShow = override ?? fromDb
+
+    return initComponent({
+      content: ({ include }) => html`
+        <div style="margin: 15px 0">
+          ${include(TextInput({ label, id, defaultValue: valToShow, type }))}
+          ${isOverridden ?
+              html`<div class="override-hint">You have overriden this field.<br>Database value: <strong>${fromDb}</strong></div>`
+          : ''}
+        </div>
+      `,
+      style: () => css`
+      .override-hint {
+        font-size: 10px;
+        margin-top: 4px;
+        color: #E0480E;
+      }
+      `
+    })
+  }
+
+  const durationUnit =
+    type === 'books'    ? 'pages' :
+    type === 'tv_shows' ? 'minutes per ep' :
+    type === 'games'    ? 'hours' :
+    /* type films */      'minutes'
+
+  const filmFields = [
+    Input('Director(s) (comma-separated)', 'directors'),
+    Input('Actors (comma-separated)', 'actors'),
+  ]
+
+  const bookFields = [
+    Input('Author(s) (comma-separated)', 'authors'),
+  ]
+
+  const gameFields = [
+    Input('Platforms (comma-separated)', 'platforms'),
+    Input('Studios (comma-separated)', 'studios'),
+    Input('Publishers (comma-separated)', 'publishers'),
+  ]
+
+  const tvFields = [
+    Input('Director(s) (comma-separated)', 'directors'),
+    Input('Actors (comma-separated)', 'actors'),
+    Input('Episodes', 'episodes'),
+  ]
 
   return initComponent({
     content: ({ include }) => html`
       <div id="external-fields" style="width: 200px">
         ${include([
-          Input('Title', 'title', get('englishTranslatedTitle')),
-          Input('Original title', 'original-title',
-            get('originalTitle') === get('englishTranslatedTitle')
-              ? ''
-              : get('originalTitle') || ''
+          Input('Title', 'title', 'englishTranslatedTitle'),
+          Input('Original title', 'original-title', 'originalTitle'),
+          Input('Release year', 'release-year', 'releaseYear', undefined, 'number'),
+          Input(
+            `Duration (${durationUnit})`,
+            'duration',
+            undefined,
+            type === 'games'
+              ? (x => (x ?? 0) / 60)
+              : (x => x),
+            'number'
           ),
-          Input('Release year', 'release-year', get('releaseYear'), 'number'),
-          Input(`Duration (${
-            type === 'books'    ? 'pages' :
-            type === 'tv_shows' ? 'minutes per ep' :
-            type === 'games'    ? 'hours' :
-            /* type films */      'minutes'
-          })`, 'duration', type === 'games' ? (get('duration')??0)/60 : get('duration')),
-          Input('Image URL', 'image-url', get('imageUrl')),
-          Input('Genres (comma-separated)', 'genres', get('genres')?.join(', ')),
+          Input('Image URL', 'image-url', 'imageUrl'),
+          Input('Genres (comma-separated)', 'genres'),
           ...(
-            type === 'films' ? [
-              Input('Director(s) (comma-separated)', 'directors', get('directors')?.join(', ')),
-              Input('Actors (comma-separated)', 'actors', get('actors')?.join(', ')),
-            ] : type === 'books' ? [
-              Input('Author(s) (comma-separated)', 'authors', get('authors')?.join(', ')),
-            ] : type === 'games' ? [
-              Input('Platforms (comma-separated)', 'platforms', get('platforms')?.join(', ')),
-              Input('Studios (comma-separated)', 'studios', get('studios')?.join(', ')),
-              Input('Publishers (comma-separated)', 'publishers', get('publishers')?.join(', ')),
-            ] : /* type === 'tv_shows' */ [
-              Input('Director(s) (comma-separated)', 'directors', get('directors')?.join(', ')),
-              Input('Actors (comma-separated)', 'actors', get('actors')?.join(', ')),
-              Input('Episodes', 'episodes', get('episodes')),
-            ]
+            type === 'films' ? filmFields :
+            type === 'books' ? bookFields :
+            type === 'games' ? gameFields :
+            /* type tv */      tvFields
           ),
         ])}
       </div>
@@ -47,13 +96,3 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
 }
 
 Components.List.ExternalFields = ExternalFields
-
-///////////////////////////////////////////////////////////////////////////////
-
-const Input = (label, id, defaultValue, type) => initComponent({
-  content: ({ include }) => html`
-    <div style="margin: 15px 0">
-      ${include(TextInput({ label, id, defaultValue, type }))}
-    </div>
-  `
-})
