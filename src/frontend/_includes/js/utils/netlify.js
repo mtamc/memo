@@ -16,6 +16,8 @@ const getStats = (username) => Http.get(ENDPOINTS.stats(username))
 
 const setName = (newName) => Http.post(ENDPOINTS.name, { newName })
 
+const setBio = (newBio) => Http.post(ENDPOINTS.bio, { newBio })
+
 const searchWorks = (type, query) => Http.get(
   ENDPOINTS.searchWorks(type, encodeURIComponent(query))
 )
@@ -62,6 +64,7 @@ Netlify = {
   updateEntry,
   deleteEntry,
   getStats,
+  setBio,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,4 +82,5 @@ const ENDPOINTS = {
   updateEntry: (type, dbRef) => `${API_URL_BASE}/entries/${type}/${dbRef}`,
   deleteEntry: (type, dbRef) => `${API_URL_BASE}/entries/${type}/${dbRef}`,
   stats: (username) => `${API_URL_BASE}/stats/${username}`,
+  bio: `${API_URL_BASE}/bio/`,
 }
