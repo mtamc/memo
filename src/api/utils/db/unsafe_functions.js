@@ -75,7 +75,7 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
     const resp =
       await db.query(
         q.Map(
-          Paginate(Match(at(collection, "userId"), userId), { size: 500, ...after }),
+          Paginate(Match(at(collection, "userId"), userId), { size: 400, ...after }),
           q.Lambda(
             'entry',
             q.Let(
@@ -156,7 +156,7 @@ const findAllUnpaginated = async (set, limit) => {
   do {
     const after = continuation ? { after: continuation } : {}
     const resp =
-      await db.query(q.Map(Paginate(set, { size: 500, ...after }), lambdaGet))
+      await db.query(q.Map(Paginate(set, { size: 400, ...after }), lambdaGet))
 
     continuation = resp.after
     results = [...results, ...resp.data ?? []]
