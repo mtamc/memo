@@ -2,7 +2,7 @@
 
 require('dotenv').config()
 const fs = require('fs')
-const { createManyFromBackup, deleteAllEntries } = require('./utils')
+const { createManyFromBackup, updateMany, deleteAllEntries } = require('./utils')
 
 const backups = [
   './backup_bookEntries_2022-02-04T16:04:00.514Z.json',
