@@ -10,7 +10,12 @@ const { db } = require('../api/utils/db/db')
 // (might be broken.. need to look into it)
 
 ;(async () => {
-  for (const collectionName of ['books', 'tvShows', 'films', 'games']) {
+  for (const collectionName of [
+    // 'books',
+    'tvShows',
+    // 'films',
+    // 'games'
+  ]) {
     const { ref, name } = await db.query(
       q.CreateCollection({
         name: collectionName
