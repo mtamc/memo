@@ -117,25 +117,9 @@ span:lang(cn) {
   }
 }
 
-.memo-menu {
-  margin-top: 180px;
-}
-
-@media (max-width: 768px) {
-  .memo-menu {
-    margin-top: 20px;
-  }
-  .memo-menu ul {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  .nav-stacked > li + li {
-    margin-top: 0px;
-    margin-left: 0;
-  }
-  h1 {
-    text-align: center;
-  }
+h1 {
+  text-align: center;
+  padding-bottom: 1px;
 }
 
 .summary-stats {

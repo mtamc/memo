@@ -1,5 +1,5 @@
 const { initComponent } = Components
-const { html } = Utils
+const { html, css } = Utils
 
 const Menu = () => initComponent({
   content: ({ include }) => html`
@@ -8,6 +8,9 @@ const Menu = () => initComponent({
       id="sidebar"
       role="navigation"
     >
+      <div id="menu-logo">
+        <img src="/img/memo_logo.png">
+      </div>
       <hr>
       <ul class="nav nav-pills nav-stacked">
         <li id="home-menu-item"><a href="/">Home</a></li>
@@ -23,7 +26,35 @@ const Menu = () => initComponent({
         }
       })
       .mapErr(console.log)
-  }
+  },
+  style: () => css`
+    .memo-menu {
+      /* margin-top: 180px; */
+    }
+
+    #menu-logo {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    #menu-logo img {
+      width: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .memo-menu {
+        margin-top: 20px;
+      }
+      .memo-menu ul {
+        display: flex;
+        justify-content: space-evenly;
+      }
+      .nav-stacked > li + li {
+        margin-top: 0px;
+        margin-left: 0;
+      }
+    }
+  `
 })
 
 Components.UI.Menu = Menu
