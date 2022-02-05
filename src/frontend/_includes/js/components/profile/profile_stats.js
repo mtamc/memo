@@ -10,10 +10,13 @@ const ProfileStats = (username) => initComponent({
         remoteData: getStats(username),
         component: (stats) => initComponent({
           content: ({ include }) => html`
-            ${include(Tabbed([
-              { title: "Stats per category", component: SubStats(username, stats) },
-              { title: "Global stats", component: GlobalStats(stats) },
-            ]))}
+            ${include(Tabbed(
+              "Stats",
+              [
+                { title: "Stats per category", component: SubStats(username, stats) },
+                { title: "Global stats", component: GlobalStats(stats) },
+              ]
+              ))}
           `
         })
       }))}

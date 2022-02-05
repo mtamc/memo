@@ -8,11 +8,14 @@ const { identity } = R
  *   { title: 'Another tab title', component: SomethingElse() },
  * ]
  */
-const Tabbed = (pages) => initComponent({
+const Tabbed = (title, pages) => initComponent({
   content: ({ id, include }) => html`
     <div id="${id}">
-      <div class="tab-titles">
-        ${include(pages.map(Title))}
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+        <h2 style="margin: unset;">${title}</h2>
+        <div class="tab-titles">
+          ${include(pages.map(Title))}
+        </div>
       </div>
       <div class="tab-contents">
         ${include(pages.map(Content))}
