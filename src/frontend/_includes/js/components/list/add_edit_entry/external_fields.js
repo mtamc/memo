@@ -23,12 +23,12 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
         </div>
       `,
       style: () => css`
-      .override-hint {
-        font-size: 10px;
-        margin-top: 4px;
-        color: #E0480E;
-      }
-      `
+        .override-hint {
+          font-size: 10px;
+          margin-top: 4px;
+          color: #E0480E;
+        }
+      `,
     })
   }
 
@@ -71,7 +71,7 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
             'duration',
             undefined,
             type === 'games'
-              ? (x => (x ?? 0) / 60)
+              ? (x => x ? (x / 60) : undefined)
               : (x => x),
             'number'
           ),
