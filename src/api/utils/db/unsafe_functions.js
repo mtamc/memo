@@ -109,7 +109,7 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
 
   const resultsByLastUpdatedIfPossible =
     [...results].sort((a, b) => {
-      return (b.data?.updatedDate ?? 0) - (a.data?.updatedDate ?? 0)
+      return (b.entry?.data?.updatedDate ?? 0) - (a.entry?.data?.updatedDate ?? 0)
     })
 
   const finalResults =
