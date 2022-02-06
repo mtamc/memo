@@ -7,7 +7,11 @@ const Biography = (userdata) => initComponent({
   content: ({ include }) => html`
     <h2 id="biography-heading">About ${userdata.username}</h2>
     <div id="biography-content">
-      ${marked.parse(userdata.biography ?? `*${userdata.username} has not written anything yet!*`)}
+      ${DOMPurify.sanitize(
+        marked.parse(
+          userdata.biography ?? `*${userdata.username} has not written anything yet!*`
+        )
+      )}
     </div>
     <hr>
   `,
