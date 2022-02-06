@@ -101,11 +101,11 @@ const getUserEntries = ([uid, col, limit]) => toResponse(toPromise(
       commonMetadata: work.data,
       dbRef: entry.ref.id
     })))
-  .mapErr(e => {
-    console.log('Investigating why sometimes retrieving entries randomly fails')
-    console.log(limit)
-    console.log(e)
-  })
+    .mapErr(e => {
+      console.log('Investigating why sometimes retrieving entries randomly fails')
+      console.log(limit)
+      console.log(e)
+    })
 ))
 
 /** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<Response>} */

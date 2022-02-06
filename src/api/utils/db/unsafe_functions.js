@@ -77,15 +77,16 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
         q.Map(
           Paginate(Match(at(collection, "userId"), userId), { size: 400, ...after }),
           q.Lambda(
-            'entry',
+            'entryRef',
             q.Let(
               {
-                entry: q.Get(q.Var('entry')),
-                work: q.Get(
-                  q.Ref(
-                    Collection(workCollection),
-                    q.Select(['data', 'workRef'], q.Var('entry'))
-                  )
+                entry: q.Get(q.Var('entryRef')),
+                workId: q.Select(['data', 'workRef'], q.Var('entry'), 0),
+                workRef: q.Ref(Collection(workCollection), q.Var('workId')),
+                work: q.If(
+                  q.Exists(q.Var('workRef')),
+                  q.Get(q.Var('workRef')),
+                  { data: {} } // empty work
                 )
               },
               {

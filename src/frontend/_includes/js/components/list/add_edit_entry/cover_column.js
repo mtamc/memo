@@ -15,10 +15,11 @@ const CoverColumn = (data) => initComponent({
             <b>External links</b><br>
             ${data.commonMetadata.externalUrls
               .map(({ name, url }) => `<a href="${url}">${name}</a><br>`)
-              .join('')}
+              .join('')
+            }
           </div>
         `
-        : ''
+          : '<div style="margin-top: 25px;">Entry created from scratch.</div>'
       }
     </div>
   `,

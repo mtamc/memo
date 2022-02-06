@@ -10,7 +10,7 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
     const transformerFn = transformer ?? (x => x)
     const fromDb = transformerFn(joinIfArray(data?.[propName]))
     const override = transformerFn(joinIfArray(overrides?.[propName]))
-    const isOverridden = override != null && override !== fromDb
+    const isOverridden = fromDb != null && override != null && override !== fromDb
     const valToShow = override ?? fromDb
 
     return initComponent({
