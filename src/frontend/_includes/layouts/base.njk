@@ -90,6 +90,11 @@
       window.setTimeout(async () => {
         {{ content | safe }}
         await netlifyIdentity.currentUser()?.jwt?.()
+        // Keep refreshing the token every 10 minutes so it doesn't expire
+        // if we leave the tab open without doing anything on it
+        window.setInterval(() => {
+          netlifyIdentity.currentUser()?.jwt?.()
+        }, 600000)
         Components.setContent('#site', Components.Router())
       }, 0)
     </script>
