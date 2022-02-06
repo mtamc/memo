@@ -70,7 +70,7 @@ const getFloat = (id) => parseFloat($(`#${id}`).val()) || undefined
 
 const generateEntry = (data, type) => ({
   commonMetadata: null, // We used to use this but now we use workRef instead
-  workRef: data.commonMetadata.internalRef,
+  workRef: data?.commonMetadata.internalRef,
   overrides: getOverrides(data?.commonMetadata, type),
   status: $('#status').val(),
   score: parseInt($('#score').val()) || null,
