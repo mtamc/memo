@@ -20,9 +20,13 @@ const {
   Create,
   Match,
   Index,
+  Let,
   Paginate,
+  Exists,
+  Var,
   Documents,
   Lambda,
+  Select,
   Update,
   Delete,
 } = q
@@ -69,6 +73,7 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
     tvShowEntries: 'tvShows',
     bookEntries: 'books',
   }[collection]
+  const emptyWork = { data: {} }
 
   do {
     const after = continuation ? { after: continuation } : {}
@@ -76,22 +81,22 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
       await db.query(
         q.Map(
           Paginate(Match(at(collection, "userId"), userId), { size: 400, ...after }),
-          q.Lambda(
+          Lambda(
             'entryRef',
-            q.Let(
+            Let(
               {
-                entry: q.Get(q.Var('entryRef')),
-                workId: q.Select(['data', 'workRef'], q.Var('entry'), 0),
-                workRef: q.Ref(Collection(workCollection), q.Var('workId')),
+                entry: Get(Var('entryRef')),
+                workId: Select(['data', 'workRef'], Var('entry'), 0),
+                workRef: Ref(Collection(workCollection), Var('workId')),
                 work: q.If(
-                  q.Exists(q.Var('workRef')),
-                  q.Get(q.Var('workRef')),
-                  { data: {} } // empty work
+                  Exists(Var('workRef')),
+                  Get(Var('workRef')),
+                  emptyWork,
                 )
               },
               {
-                entry: q.Var('entry'),
-                work: q.Var('work'),
+                entry: Var('entry'),
+                work: Var('work'),
               }
             )
           )
