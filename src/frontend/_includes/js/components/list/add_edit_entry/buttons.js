@@ -129,7 +129,7 @@ const getOverrides = (api, type) => {
 
 const getIfDifferent = (apiVal, userVal) => {
   const areEqual = isArray(apiVal) ? areArraysIdentical : (a, b) => a === b
-  return areEqual(apiVal, userVal) ? undefined : (userVal || undefined)
+  return areEqual(apiVal, userVal) ? null : (userVal || null)
 }
 
 const areArraysIdentical = (arr1, arr2) =>
