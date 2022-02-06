@@ -68,7 +68,7 @@ const detailFormatter = (_, row) => {
       <p>
         <b><a href="#${anchorId}"><i class="fas fa-link"></i></a> Comments:</b>
           ${cover}
-          ${marked.parse(row.review || '*None yet...*')}
+          ${DOMPurify.sanitize(marked.parse(row.review || '*None yet...*'))}
         </p>
     </div>
   `
