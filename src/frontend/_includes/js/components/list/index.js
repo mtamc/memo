@@ -2,7 +2,7 @@ const { initComponent, Error404, WithRemoteData } = Components
 const { getUserIdFromName } = Netlify
 const { getNameFromUrl, getEntryTypeFromUrl } = Http
 const { List } = Components.List
-const { typeToTitle } = Tables
+const { typeToTitle } = Conversions
 
 const ListPage = () => initComponent({
   content: ({ include }) => include(

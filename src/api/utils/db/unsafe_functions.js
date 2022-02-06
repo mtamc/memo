@@ -73,7 +73,13 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
     tvShowEntries: 'tvShows',
     bookEntries: 'books',
   }[collection]
-  const emptyWork = { data: {} }
+  const entryType = {
+    filmEntries: 'Film',
+    gameEntries: 'Game',
+    tvShowEntries: 'TVShow',
+    bookEntries: 'Book',
+  }[collection]
+  const emptyWork = { data: { entryType } }
 
   do {
     const after = continuation ? { after: continuation } : {}

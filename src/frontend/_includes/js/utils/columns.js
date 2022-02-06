@@ -1,10 +1,19 @@
 const { html } = Utils
 const { round } = Math
+const { apiTypeToType, statusToTitle } = Conversions
 
 const title = () =>
   col('Title', 'commonMetadata.englishTranslatedTitle', {
     formatter: titleFormatter,
     sortable: true,
+  })
+
+// Currently unused
+const status = () =>
+  col('Status', 'status', {
+    cellStyle: () => ({ css: { 'width': '15px' } }),
+    formatter: (status, row) =>
+      statusToTitle(apiTypeToType[row.commonMetadata.entryType], status) ?? status
   })
 
 const index = () =>
@@ -159,6 +168,7 @@ const authors = () =>
 
 Columns = {
   title,
+  status,
   index,
   englishTitleAndLastUpdated,
   score,
@@ -212,7 +222,7 @@ const englishTitleAndLastUpdatedFormatter = (_, row) => {
   const { englishTranslatedTitle } = get(row, ['englishTranslatedTitle'])
   const link = toWikipediaLink(englishTranslatedTitle, englishTranslatedTitle)
   return row.updatedDate
-    ? `${link}<i style="font-size:.85em; float: right; position: relative; top: 3px;">${relativeTime(row.updatedDate)}</i>`
+    ? `${link}<i style="font-size:.85em; float: right; position: relative; top: 3px;">${statusToTitle(apiTypeToType[row.commonMetadata.entryType], row.status)} ${relativeTime(row.updatedDate)}</i>`
     : link
 }
 

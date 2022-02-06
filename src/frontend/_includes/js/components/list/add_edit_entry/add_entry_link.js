@@ -2,7 +2,7 @@ const { html, css } = Utils
 const { initComponent, setContent, WithRemoteData } = Components
 const { Modal, InputWithAction, showNotification, Button } = Components.UI
 const { searchWorks } = Netlify
-const { typeToTitle } = Tables
+const { typeToTitle } = Conversions
 const { SearchResults, EntryForm } = Components.List
 
 const AddEntryButton = (type) => initComponent({

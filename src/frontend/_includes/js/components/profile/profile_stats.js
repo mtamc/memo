@@ -1,5 +1,6 @@
 const { entryTypes, getStats } = Netlify
-const { col, typeToTitle } = Tables
+const { col } = Tables
+const { typeToTitle } = Conversions
 const { html, css } = Utils
 const { initComponent, WithRemoteData } = Components
 const { Tabbed } = Components.UI

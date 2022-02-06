@@ -1,5 +1,6 @@
 const { entryTypes, getEntries } = Netlify
-const { col, initTable, typeToTitle, profileColumns } = Tables
+const { col, initTable, profileColumns } = Tables
+const { typeToTitle } = Conversions
 const { html, css } = Utils
 const { UsernameSetter } = Components.Profile
 const { initComponent, WithRemoteData } = Components
@@ -54,7 +55,7 @@ const ProfileTable = (type, data) => initComponent({
     <table id="summary-${type}"></table>
   `,
   initializer: () => {
-    initProfileTable(typeToCssId(type), [...data].sort((a, b) => (b.updatedDate ?? 0) - (a.updatedDate ?? 0)))
+    initProfileTable(typeToCssId(type), data)
   }
 })
 
