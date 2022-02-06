@@ -1,7 +1,7 @@
 const { html, css } = Utils
 const { Button, showNotification } = Components.UI
 const { updateEntry, createEntry, deleteEntry } = Netlify
-const { typeToAPIType } = Tables
+const { typeToAPIType } = Conversions
 const { isArray } = Array
 
 const DeleteButton = (type, data) => Button({

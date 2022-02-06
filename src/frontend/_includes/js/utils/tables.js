@@ -78,37 +78,6 @@ const statuses = ['InProgress', 'Completed', 'Dropped', 'Planned']
 
 const filmStatuses = ['Completed', 'Planned']
 
-const typeToTitle = {
-  films: 'Films',
-  books: 'Literature',
-  games: 'Video Games',
-  tv: 'TV Shows',
-}
-
-const typeToAPIType = {
-  films: 'Film',
-  books: 'Book',
-  games: 'Game',
-  tv: 'TVShow',
-}
-
-const statusToTitle = (entryType, status) => ({
-  InProgress: {
-    films: 'Watching',
-    tv: 'Watching',
-    games: 'Playing',
-    books: 'Reading'
-  }[entryType],
-  Completed: 'Completed',
-  Dropped: 'Dropped',
-  Planned: {
-    films: 'To watch',
-    tv: 'To watch',
-    games: 'To play',
-    books: 'To read'
-  }[entryType]
-}[status])
-
 const formatApiRefs = (apiRefs) =>
   apiRefs
     .map(({ name, ref }) =>
@@ -120,11 +89,8 @@ const formatApiRefs = (apiRefs) =>
 Tables = {
   initTable,
   detailFormatter,
-  typeToTitle,
-  typeToAPIType,
   profileColumns,
   statuses,
   filmStatuses,
   entryTypeToFullColumns,
-  statusToTitle,
 }

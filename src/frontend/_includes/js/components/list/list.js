@@ -1,6 +1,7 @@
 const { html, css } = Utils
 const { getEntries, getUserName } = Netlify
-const { col, initTable, typeToTitle, detailFormatter, allColumns, statuses, entryTypeToFullColumns, statusToTitle, editColumn, filmStatuses } = Tables
+const { col, initTable, detailFormatter, allColumns, statuses, entryTypeToFullColumns, editColumn, filmStatuses } = Tables
+const { typeToTitle, statusToTitle } = Conversions
 const { initComponent, WithRemoteData, appendContent, Nothing } = Components
 const { Modal_ } = Components.UI
 const { AddEntryButton } = Components.List

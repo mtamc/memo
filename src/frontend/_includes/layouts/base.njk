@@ -48,6 +48,7 @@
       {{ js("js/packages/neverthrow.js") }}
       {{ js("js/utils/general.js") }}
       {{ js("js/utils/nullable.js") }}
+      {{ js("js/utils/conversions.js") }}
       {{ js("js/utils/http.js") }}
       {{ js("js/utils/netlify.js") }}
       {{ js("js/utils/columns.js") }}
@@ -95,7 +96,7 @@
       }
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        await refreshTokenWhenDue()
+        refreshTokenWhenDue()
 
         // Include the router
         Components.setContent('#site', Components.Router())

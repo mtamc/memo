@@ -12,7 +12,6 @@ const Biography = (userdata) => initComponent({
     <hr>
   `,
   initializer: () => {
-    console.log(userdata)
     getUserName()
       .map(({ username }) => {
         if (username === userdata.username) {

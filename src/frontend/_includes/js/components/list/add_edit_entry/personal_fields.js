@@ -1,6 +1,7 @@
 const { html, css } = Utils
 const { initComponent } = Components
-const { statusToTitle, statuses, filmStatuses } = Tables
+const { statuses, filmStatuses } = Tables
+const { statusToTitle } = Conversions
 
 const PersonalFields = (data, type) => initComponent({
   content: () => html`
