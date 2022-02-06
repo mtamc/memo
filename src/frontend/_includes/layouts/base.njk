@@ -86,15 +86,18 @@
   <body>
     <div id="site"></div>
     <script>
+      // A function that refreshes the token at its expiration time, infinitely
+      const refreshTokenWhenDue = async () => {
+        await netlifyIdentity.currentUser()?.jwt?.()
+        const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
+        const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
+        window.setTimeout(refreshTokenWhenDue, refreshIn + 1000)
+      }
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        {{ content | safe }}
-        await netlifyIdentity.currentUser()?.jwt?.()
-        // Keep refreshing the token every 10 minutes so it doesn't expire
-        // if we leave the tab open without doing anything on it
-        window.setInterval(() => {
-          netlifyIdentity.currentUser()?.jwt?.()
-        }, 600000)
+        refreshTokenWhenDue()
+
+        // Include the router
         Components.setContent('#site', Components.Router())
       }, 0)
     </script>
