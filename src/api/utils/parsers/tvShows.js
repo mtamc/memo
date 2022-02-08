@@ -11,9 +11,9 @@ const { entryParser } = require('./entries')
 
 const tvShowParser = workParser.extend({
   entryType: z.literal('TVShow'),
-  directors: z.array(z.string()).or(z.undefined()),
-  actors: z.array(z.string()).or(z.undefined()),
-  episodes: z.number().or(z.undefined()),
+  directors: z.array(z.string()).nullable().or(z.undefined()),
+  actors: z.array(z.string()).nullable().or(z.undefined()),
+  episodes: z.number().nullable().or(z.undefined()),
 })
 
 /** @typedef {z.infer<typeof tvShowParser>} TVShow */

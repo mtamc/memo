@@ -10,8 +10,8 @@ const { entryParser } = require('./entries')
 
 const filmParser = workParser.extend({
   entryType: z.literal('Film'),
-  directors: z.array(z.string()).or(z.undefined()),
-  actors: z.array(z.string()).or(z.undefined()),
+  directors: z.array(z.string()).nullable().or(z.undefined()),
+  actors: z.array(z.string()).nullable().or(z.undefined()),
 })
 
 /** @typedef {z.infer<typeof filmParser>} Film */

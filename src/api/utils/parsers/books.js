@@ -10,7 +10,7 @@ const { entryParser } = require('./entries')
 
 const bookParser = workParser.extend({
   entryType: z.literal('Book'),
-  authors: z.array(z.string()).or(z.undefined()),
+  authors: z.array(z.string()).nullable().or(z.undefined()),
 })
 
 /** @typedef {z.infer<typeof bookParser>} Book */
