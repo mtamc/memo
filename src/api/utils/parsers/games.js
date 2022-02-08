@@ -10,9 +10,9 @@ const { entryParser } = require('./entries')
 
 const gameParser = workParser.extend({
   entryType: z.literal('Game'),
-  platforms: z.array(z.string()).or(z.undefined()),
-  studios: z.array(z.string()).or(z.undefined()),
-  publishers: z.array(z.string()).or(z.undefined()),
+  platforms: z.array(z.string()).nullable().or(z.undefined()),
+  studios: z.array(z.string()).nullable().or(z.undefined()),
+  publishers: z.array(z.string()).nullable().or(z.undefined()),
 })
 
 /** @typedef {z.infer<typeof gameParser>} Game */
