@@ -47,17 +47,13 @@ const { updateMany } = require('./utils')
       JSON.stringify(works)
     )
 
-    // Create a variable that mirrors `works`, except it's fixed.
-    // You can do it however you want, however if you are curious
-    // about the methodology here, basically the following:
-    // const a = { ...b, foo: 'bar' }
-    // means that a is a copy of b, except we override (or add)
-    // `foo` to be `'bar'`.
+    // Create a variable that mirrors `works`, except it's fixed,
+    // and unchanged properties are *not* included.
+    // You can include the unchanged properties if you want,
+    // but that will waste DB resources.
     const fixed =
       works.map((w) => ({
-        ...w,
-        data: {
-          ...w.data,
+        data: { // documents have their actual content inside a 'data' prop
           apiRefs: w.data.apiRefs?.map(({ name, ref }) => `${name}__${ref}`)
         }
       }))
