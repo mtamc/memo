@@ -11,9 +11,7 @@ const { updateMany } = require('./utils')
   fs.writeFileSync('backup.json', JSON.stringify(entries))
 
   const fixed = entries.map(e => ({
-    ...e,
     data: {
-      ...e.data,
       score: parseInt(e.data.score) || null,
     }
   }))

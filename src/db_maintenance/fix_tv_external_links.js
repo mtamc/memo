@@ -12,11 +12,8 @@ const { updateMany } = require('./utils')
 
   const fixed = entries
     .map((e) => ({
-      ...e,
       data: {
-        ...e.data,
         commonMetadata: {
-          ...e.commonMetadata,
           externalUrls: e.data.commonMetadata.externalUrls?.map(({ name, url }) => ({
             name,
             url: url.replace(/\/movie\//g, '/tv/')
