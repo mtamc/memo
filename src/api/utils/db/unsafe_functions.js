@@ -120,7 +120,6 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
           )
         )
       )
-    console.log(resp)
 
     continuation = limit ? undefined : resp.after
     results = [...results, ...resp.data ?? []]
@@ -182,7 +181,7 @@ const findAllUnpaginated = async (set, limit) => {
   do {
     const after = continuation ? { after: continuation } : {}
     const resp =
-      await db.query(q.Map(Paginate(set, { size: 200, ...after }), lambdaGet))
+      await db.query(q.Map(Paginate(set, { size: 100000, ...after }), lambdaGet))
 
     continuation = resp.after
     results = [...results, ...resp.data ?? []]
