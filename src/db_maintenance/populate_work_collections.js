@@ -37,9 +37,8 @@ const collections = [
 
     const fixedEntries =
       entries.map((e, i) => ({
-        ...e,
+        ref: e.ref,
         data: {
-          ...e.data,
           workRef: result[i].ref.id
         }
       }))

@@ -56,6 +56,16 @@ const entryTypeToFullColumns = (entryType, status) => ({
   ],
 }[entryType])
 
+window.includeReview = (type, entryId) => {
+  Components.setContent(`#review-${entryId}`, Components.WithRemoteData({
+    remoteData: Netlify.getReview(type, entryId),
+    component: (review) => {
+      console.log(review)
+      return Components.Markdown(review?.data?.text || '*None yet...*')
+      
+  }}))
+}
+
 const detailFormatter = (_, row) => {
   const anchorId = `entry-${row.dbRef}`
   const cover =
@@ -63,12 +73,19 @@ const detailFormatter = (_, row) => {
       ? `<img src="${row.commonMetadata.imageUrl}" class="review-cover" style="float:right;">`
       : ''
 
+  const type = Conversions.apiTypeToType[row.commonMetadata.entryType]
+
+  const scriptTag = (content) => '<scr' + 'ipt>' + content + '</scr'+'ipt>'
+
+  // The review text is included by mutation observer in `js/components/list/list.js`
   return html`
     <div class="review">
       <p>
         <b><a href="#${anchorId}"><i class="fas fa-link"></i></a> Comments:</b>
           ${cover}
-          ${DOMPurify.sanitize(marked.parse(row.review || '*None yet...*'))}
+          <div id="review-${row.dbRef}">
+          </div>
+          ${scriptTag(`includeReview('${type}', '${row.dbRef}')`)}
         </p>
     </div>
   `

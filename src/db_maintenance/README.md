@@ -51,8 +51,10 @@ const { updateMany } = require('./utils')
     // and unchanged properties are *not* included.
     // You can include the unchanged properties if you want,
     // but that will waste DB resources.
+    // However, always include the `ref` object, see below
     const fixed =
       works.map((w) => ({
+        ref: w.ref,
         data: { // documents have their actual content inside a 'data' prop
           apiRefs: w.data.apiRefs?.map(({ name, ref }) => `${name}__${ref}`)
         }

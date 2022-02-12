@@ -44,7 +44,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
       entryType: 'TVShow',
       originalTitle: data.original_name,
       englishTranslatedTitle: data.name,
-      releaseYear: parseInt(data.first_air_date.substring(0, 4)),
+      releaseYear: parseInt(data.first_air_date?.substring(0, 4)),
       duration: data.episode_run_time?.[0] || undefined,
       imageUrl: data.poster_path ? 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2' + data.poster_path : undefined,
       genres: data.genres.map(g => g.name),
@@ -78,4 +78,7 @@ const toError = (err) => match(err.errorCode)
   .with(404, () => errors.notFound('tmdb'))
   .with(401, () => errors.unauthorized('tmdb'))
   .with(408, () => errors.internal('tmdb timed out'))
-  .otherwise(() => errors.internal(`unknown tmdb error: ${JSON.stringify(err)}`))
+  .otherwise(() => {
+    console.log(err)
+    return errors.internal(`unknown tmdb error: ${JSON.stringify(err)}`)
+  })

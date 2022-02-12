@@ -36,6 +36,7 @@ const fixDate = (posix) => {
 
   const fixed = entries
     .map((e) => ({
+      ref: e.ref,
       data: {
         startedDate: fixDate(e.data.startedDate),
         completedDate: fixDate(e.data.completedDate),

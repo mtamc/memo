@@ -10,18 +10,22 @@
  */
 
 /** @typedef {(
- * 'filmEntries' | 'gameEntries' | 'tvShowEntries' | 'bookEntries' | 'users' | 'tvShows' | 'films' | 'games' | 'books'
+ * 'filmEntries' | 'gameEntries' | 'tvShowEntries' | 'bookEntries' | 'users' | 'tvShows' | 'films' | 'games' | 'books' | 'bookReviews' | 'gameReviews' | 'tvShowReviews' | 'filmReviews'
  * )} ValidCollection */
 
 /** @type {Record<ValidCollection, Validator<any>>} */
 module.exports = {
   filmEntries: require('./films').filmEntries,
+  filmReviews: require('./reviews').reviews,
   films: require('./films').films,
   gameEntries: require('./games').gameEntries,
+  gameReviews: require('./reviews').reviews,
   games: require('./games').games,
   tvShowEntries: require('./tvShows').tvShowEntries,
+  tvShowReviews: require('./reviews').reviews,
   tvShows: require('./tvShows').tvShows,
   bookEntries: require('./books').bookEntries,
+  bookReviews: require('./reviews').reviews,
   books: require('./books').books,
   users: require('./users').users,
 }
