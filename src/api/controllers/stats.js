@@ -10,18 +10,20 @@ const { getSegment } = require('./utils')
 const { toPromise } = require('../utils/general')
 const db = require('../utils/db/')
 
+const CACHE_STATS = true
+
 /** @type {(event: Event) => Promise<Response>} */
 const getUserStats = (event) => toPromise(
   db.findOneByField_('users', 'username', getSegment(0, event))
     .andThen(result => {
       // We can cache stats if we want by uncommenting this
-      //const stats = result?.data?.stats
-      // const lastUpdated = stats?.updatedDate
-      // if (!lastUpdated || isMoreThan24HoursAgo(lastUpdated)) {
+      const stats = result?.data?.stats
+      const lastUpdated = stats?.updatedDate
+      if (!CACHE_STATS || !lastUpdated || isMoreThan48HoursAgo(lastUpdated)) {
         return refreshStats(result)
-      // } else {
-        // return okAsync(responses.ok(stats))
-      // }
+      } else {
+        return okAsync(responses.ok(stats))
+      }
     }
   )
   .mapErr(responses.fromError)
@@ -94,5 +96,5 @@ const getTallyOfScore = (score, entries) =>
 const MS_IN_DAY = 86400000
 
 /** @type {(timestamp: number) => boolean} */
-const isMoreThan24HoursAgo = (timestamp) =>
-  Date.now() - timestamp > MS_IN_DAY
+const isMoreThan48HoursAgo = (timestamp) =>
+  Date.now() - timestamp > (2*MS_IN_DAY)
