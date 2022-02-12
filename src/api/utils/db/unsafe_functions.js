@@ -34,6 +34,11 @@ const {
 /** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<object>} */
 const _findOneByField = (collection, field, value) =>
   findOne(docsInCollectionWithField(collection, field, value))
+    .catch((err) => {
+      console.log('err!!')
+      console.log(err)
+      throw err
+    })
 
 /** @type {(collection: ValidCollection, ref: ExprArg) => Promise<object>} */
 const _findOneByRef = (collection, ref) =>
@@ -86,7 +91,7 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
     const resp =
       await db.query(
         q.Map(
-          Paginate(Match(at(collection, "userId"), userId), { size: 400, ...after }),
+          Paginate(Match(at(collection, "userId"), userId), { size: 200, ...after }),
           Lambda(
             'entryRef',
             Let(

@@ -15,8 +15,13 @@ const Nothing = () => initComponent({ content: () => '' })
 
 const Div = (content) => initComponent({ content: () => content })
 
+const Markdown = (mdText) => initComponent({
+  content: () => DOMPurify.sanitize(marked.parse(mdText))
+})
+
 
 Components.Error404 = Error404
 Components.Redirect = Redirect
 Components.Nothing = Nothing
 Components.Div = Div
+Components.Markdown = Markdown

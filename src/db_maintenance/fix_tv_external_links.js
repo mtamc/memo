@@ -12,6 +12,7 @@ const { updateMany } = require('./utils')
 
   const fixed = entries
     .map((e) => ({
+      ref: e.ref,
       data: {
         commonMetadata: {
           externalUrls: e.data.commonMetadata.externalUrls?.map(({ name, url }) => ({

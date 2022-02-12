@@ -26,11 +26,9 @@ const collections = [
 
   const fixed = entries
     .map((e) => ({
-      ...e,
+      ref: e.ref,
       data: {
-        ...e.data,
         commonMetadata: {
-          ...e.data.commonMetadata,
           duration: e.data.overrides?.duration || e.data.commonMetadata?.duration
         }
       }

@@ -132,5 +132,9 @@ const getIfDifferent = (apiVal, userVal) => {
   return areEqual(apiVal, userVal) ? null : (userVal || null)
 }
 
-const areArraysIdentical = (arr1, arr2) =>
-  arr1.length === arr2.length && arr1.every((el, i) => arr2[i] === el)
+const areArraysIdentical = (arr1, arr2) => {
+  const arr1NoEmpty = arr1.filter(e => e !== '')
+  const arr2NoEmpty = arr2.filter(e => e !== '')
+  return arr1NoEmpty.length === arr2NoEmpty.length
+    && arr1NoEmpty.every((el, i) => arr2NoEmpty[i] === el)
+}

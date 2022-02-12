@@ -20,9 +20,8 @@ const { updateMany } = require('./utils')
 
     const fixed =
       works.map((w) => ({
-        ...w,
+        ref: w.ref,
         data: {
-          ...w.data,
           apiRefs: w.data.apiRefs?.map(({ name, ref }) => `${name}__${ref}`)
         }
       }))

@@ -12,6 +12,8 @@ const getUserFromName = (name) => Http.get(ENDPOINTS.user(name))
 
 const getEntries = (type, username, limit) => Http.get(ENDPOINTS.entries(type, username, limit))
 
+const getReview = (type, entryId) => Http.get(ENDPOINTS.retrieveReview(type, entryId))
+
 const getStats = (username) => Http.get(ENDPOINTS.stats(username))
 
 const setName = (newName) => Http.post(ENDPOINTS.name, { newName })
@@ -61,6 +63,7 @@ Netlify = {
   entryTypes,
   isLoggedIn,
   createEntry,
+  getReview,
   updateEntry,
   deleteEntry,
   getStats,
@@ -83,4 +86,5 @@ const ENDPOINTS = {
   deleteEntry: (type, dbRef) => `${API_URL_BASE}/entries/${type}/${dbRef}`,
   stats: (username) => `${API_URL_BASE}/stats/${username}`,
   bio: `${API_URL_BASE}/bio/`,
+  retrieveReview: (type, entryRef) => `${API_URL_BASE}/reviews/${type}/${entryRef}`,
 }
