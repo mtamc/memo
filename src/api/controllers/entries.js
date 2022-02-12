@@ -95,7 +95,7 @@ const okEntry = (collection) => ok(collection)
 
 /** @type {([uid, col, limit]: [string, ValidCollection, string | undefined]) => Promise<any>} */
 const getUserEntries = ([uid, col, limit]) => toResponse(toPromise(
-  db.findAllUserEntriesWithMetadata_(col, uid, parseInt(limit || "10000000"))
+  db.findAllUserEntriesWithMetadata_(col, uid, parseInt(limit ?? '') || undefined)
     .map(({ data }) => data.map(({ entry, work }) => ({
       ...entry.data,
       commonMetadata: work.data,
