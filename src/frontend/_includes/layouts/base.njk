@@ -95,9 +95,10 @@
         const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
         window.setTimeout(refreshTokenWhenDue, refreshIn + 1000)
       }
+
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        refreshTokenWhenDue()
+        await refreshTokenWhenDue()
 
         // Include the router
         Components.setContent('#site', Components.Router())
