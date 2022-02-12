@@ -25,6 +25,7 @@ const {
   Exists,
   Var,
   Documents,
+  Join,
   Lambda,
   Select,
   Update,
@@ -91,9 +92,15 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
     const resp =
       await db.query(
         q.Map(
-          Paginate(Match(at(collection, "userId"), userId), { size: 200, ...after }),
+          Paginate(
+            Join(
+              Match(at(collection, "userId"), userId),
+              Index(`${collection}__updatedDate`)
+            ),
+            { size: limit ?? 100000, ...after }
+          ),
           Lambda(
-            'entryRef',
+            ['entry_', 'entryRef'],
             Let(
               {
                 entry: Get(Var('entryRef')),
@@ -113,15 +120,17 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
           )
         )
       )
+    console.log(resp)
 
-    continuation = resp.after
+    continuation = limit ? undefined : resp.after
     results = [...results, ...resp.data ?? []]
   } while (continuation)
 
   const resultsByLastUpdatedIfPossible =
-    [...results].sort((a, b) => {
-      return (b.entry?.data?.updatedDate ?? 0) - (a.entry?.data?.updatedDate ?? 0)
-    })
+    results
+    // [...results].sort((a, b) => {
+      // return (b.entry?.data?.updatedDate ?? 0) - (a.entry?.data?.updatedDate ?? 0)
+    // })
 
   const finalResults =
     limit
@@ -173,7 +182,7 @@ const findAllUnpaginated = async (set, limit) => {
   do {
     const after = continuation ? { after: continuation } : {}
     const resp =
-      await db.query(q.Map(Paginate(set, { size: 400, ...after }), lambdaGet))
+      await db.query(q.Map(Paginate(set, { size: 200, ...after }), lambdaGet))
 
     continuation = resp.after
     results = [...results, ...resp.data ?? []]
