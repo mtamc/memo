@@ -89,7 +89,12 @@
     <div id="site"></div>
     <script>
       // A function that refreshes the token at its expiration time, infinitely
-      const refreshToken = () => netlifyIdentity.currentUser()?.jwt?.(true)
+      const refreshToken = () => {
+        console.log('refreshing token')
+        console.log('current user is: ')
+        console.log(netlifyIdentity.currentUser())
+        netlifyIdentity.currentUser()?.jwt?.(true)
+      }
 
       const refreshTokenWhenDue = async () => {
         await refreshToken
@@ -98,7 +103,7 @@
         window.setTimeout(refreshTokenWhenDue, refreshIn + 1000)
       }
 
-      ;['init', 'login', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
+      ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
