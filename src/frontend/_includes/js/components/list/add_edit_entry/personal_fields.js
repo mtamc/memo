@@ -56,7 +56,7 @@ const PersonalFields = (data, type) => {
           ? html`
             <div
               id="started-date-container"
-              style="margin: 15px 0; display: ${data.status !== 'Planned' ? 'block' : 'none'};}"
+              style="margin: 15px 0; display: ${data.status !== 'Planned' ? 'block' : 'none'};"
             >
               <label for="started-date">Started Date</label><br>
               <input
@@ -71,14 +71,14 @@ const PersonalFields = (data, type) => {
         }
         <div
           id="completed-date-container"
-          style="margin: 15px 0; display: ${data.status === 'Completed' ? 'block' : 'none'};}"
+          style="margin: 15px 0; display: ${!isEdit || data.status === 'Completed' ? 'block' : 'none'};}"
         >
           <label for="completed-date">Completed Date</label><br>
           <input
             data-toggle="datepicker"
             id="completed-date"
             autocomplete="off"
-            value=${data.completedDate ? timestampToString(data.completedDate) : ''}
+            value=${data.completedDate ? timestampToString(data.completedDate) : today()}
           >
         </div>
           ${include(

@@ -90,10 +90,7 @@
     <script>
       // A function that refreshes the token at its expiration time, infinitely
       const refreshToken = () => {
-        console.log('refreshing token')
-        console.log('current user is: ')
-        console.log(netlifyIdentity.currentUser())
-        netlifyIdentity.currentUser()?.jwt?.(true)
+        return netlifyIdentity.currentUser()?.jwt?.(true)
       }
 
       const refreshTokenWhenDue = async () => {
