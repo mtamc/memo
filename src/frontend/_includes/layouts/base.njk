@@ -114,7 +114,7 @@
         const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
         const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
         const one_min = 60000
-        window.setTimeout(refreshTokenWhenDue, Math.min(one_min, refreshIn))
+        window.setTimeout(refreshTokenWhenDue, Math.min(one_min, refreshIn - 10000))
       }
 
       ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
