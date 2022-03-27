@@ -94,7 +94,9 @@
       }
 
       const refreshTokenWhenDue = async () => {
+        console.log('refreshing token')
         await refreshToken()
+        console.log(netlifyIdentity.currentUser().token)
         const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
         const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
         const one_min = 60000
