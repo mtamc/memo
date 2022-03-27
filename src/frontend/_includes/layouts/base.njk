@@ -94,17 +94,17 @@
       }
 
       const refreshTokenWhenDue = async () => {
-        console.log('refreshing token')
-        await refreshToken()
-        console.log(netlifyIdentity.currentUser()?.token)
-        console.log(new Date(netlifyIdentity.currentUser()?.token?.expires_at))
-        const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
-        const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
-        const one_min = 60000
-        window.setTimeout(refreshTokenWhenDue, Math.min(one_min, refreshIn))
+        // console.log('refreshing token')
+        // await refreshToken()
+        // console.log(netlifyIdentity.currentUser()?.token)
+        // console.log(new Date(netlifyIdentity.currentUser()?.token?.expires_at))
+        // const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
+        // const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
+        // const one_min = 60000
+        // window.setTimeout(refreshTokenWhenDue, Math.min(one_min, refreshIn))
       }
 
-      ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
+      // ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
