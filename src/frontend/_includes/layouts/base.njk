@@ -117,11 +117,11 @@
         window.setTimeout(refreshTokenWhenDue, refreshIn - one_min)
       }
 
-      ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
+      // ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        await refreshTokenWhenDue()
+        // await refreshTokenWhenDue()
 
         // Include the router
         Components.setContent('#site', Components.Router())
