@@ -66,6 +66,7 @@ const getFirstPathnameSegment = () => {
 }
 
 const refreshTokenIfNecessary = () => {
+  console.log("in fn")
   // If the token in the local storage is newer than the one
   // on the current tab, then use the one in the local storage
   // (This happens when you're on multiple memo tabs at once)
@@ -85,6 +86,7 @@ const refreshTokenIfNecessary = () => {
     netlifyIdentity.currentUser()?.token?.expires_at &&
     netlifyIdentity.currentUser()?.token?.expires_at < Date.now
   ) {
+    console.log("Refreshing token")
     return netlifyIdentity.currentUser()?.jwt?.(true)
   }
 }
