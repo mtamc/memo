@@ -84,7 +84,7 @@ const refreshTokenIfNecessary = () => {
 
   if (
     netlifyIdentity.currentUser()?.token?.expires_at &&
-    netlifyIdentity.currentUser()?.token?.expires_at < Date.now
+    netlifyIdentity.currentUser()?.token?.expires_at < Date.now()
   ) {
     console.log("Refreshing token")
     return netlifyIdentity.currentUser()?.jwt?.(true)
