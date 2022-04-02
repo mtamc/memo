@@ -257,7 +257,7 @@ const playtimeFormatter = (_, row) => {
   const { duration: durationInMin } = get(row, ['duration'])
   const hours = Math.floor(durationInMin/60)
   const mins = durationInMin % 60
-  const hltbRef = row.commonMetadata.apiRefs.find(ref => ref.name === 'hltb')?.ref
+  const hltbRef = row.commonMetadata.apiRefs?.find(ref => ref.name === 'hltb')?.ref
   return durationInMin && hltbRef
     ? `<a href="https://howlongtobeat.com/game?id=${hltbRef}">${hours}h${mins ? mins+'m' : ''}</a>`
     : durationInMin
