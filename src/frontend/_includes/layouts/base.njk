@@ -100,24 +100,31 @@
             return undefined
           }
         })()
+
         if (localStorageToken?.expires_at > netlifyIdentity.currentUser()?.token?.expires_at) {
           netlifyIdentity.currentUser().token = localStorageToken
         }
-        return netlifyIdentity.currentUser()?.jwt?.(true)
+
+        if (
+          netlifyIdentity.currentUser()?.token?.expires_at &&
+          netlifyIdentity.currentUser()?.token?.expires_at < Date.now
+        ) {
+          return netlifyIdentity.currentUser()?.jwt?.(true)
+        }
       }
 
-      const refreshTokenWhenDue = async () => {
-        console.log('refreshing token')
-        await refreshToken()
-        console.log(netlifyIdentity.currentUser()?.token)
-        console.log(new Date(netlifyIdentity.currentUser()?.token?.expires_at))
-        const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
-        const refreshIn = expireTime ? (expireTime - Date.now()) : 600000
-        const one_min = 60000
-        window.setTimeout(refreshTokenWhenDue, refreshIn - one_min)
-      }
+      {# const refreshTokenWhenDue = async () => { #}
+        {# console.log('refreshing token') #}
+        {# await refreshToken() #}
+        {# console.log(netlifyIdentity.currentUser()?.token) #}
+        {# console.log(new Date(netlifyIdentity.currentUser()?.token?.expires_at)) #}
+        {# const expireTime = netlifyIdentity.currentUser()?.token?.expires_at #}
+        {# const refreshIn = expireTime ? (expireTime - Date.now()) : 600000 #}
+        {# const one_min = 60000 #}
+        {# window.setTimeout(refreshTokenWhenDue, refreshIn - one_min) #}
+      {# } #}
 
-      // ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
+      ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
