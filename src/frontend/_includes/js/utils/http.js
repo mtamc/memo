@@ -43,10 +43,11 @@ const getErrorStatusCode = (error) => error.response?.status ?? 500
 const toAuthHeader = (token) => ({ Authorization: `Bearer ${token}` })
 
 const makeRequest = (method, url, data) => (
-  refreshTokenIfNecessary(),
   NT.ResultAsync.fromPromise(
-    axios({ method, url, data, ...tokenIfLoggedIn() })
-      .then(({ data }) => data),
+    refreshTokenIfNecessary().then(() =>
+      axios({ method, url, data, ...tokenIfLoggedIn() })
+        .then(({ data }) => data),
+    ),
     getErrorStatusCode
   )
 )
@@ -66,7 +67,7 @@ const getFirstPathnameSegment = () => {
 }
 
 const refreshTokenIfNecessary = () => {
-  console.log("in fn")
+  console.log("in xhr refresh fn")
   // If the token in the local storage is newer than the one
   // on the current tab, then use the one in the local storage
   // (This happens when you're on multiple memo tabs at once)
@@ -82,12 +83,14 @@ const refreshTokenIfNecessary = () => {
     netlifyIdentity.currentUser().token = localStorageToken
   }
 
-  if (
-    netlifyIdentity.currentUser()?.token?.expires_at &&
-    netlifyIdentity.currentUser()?.token?.expires_at < Date.now()
-  ) {
-    console.log("Refreshing token")
+  if (netlifyIdentity.currentUser()?.token?.expires_at == null) {
+    console.log("no token found, trying to refresh but doubtful")
     return netlifyIdentity.currentUser()?.jwt?.(true)
+  } else if (netlifyIdentity.currentUser()?.token?.expires_at < Date.now()) {
+    console.log("token must be refreshed, refreshing")
+    return netlifyIdentity.currentUser()?.jwt?.(true)
+  } else {
+    console.log('not refreshing token')
   }
 }
 
