@@ -89,7 +89,7 @@
     <div id="site"></div>
     <script>
       // A function that refreshes the token at its expiration time, infinitely
-      const refreshToken = () => {
+      const refreshToken = (force) => {
         // If the token in the local storage is newer than the one
         // on the current tab, then use the one in the local storage
         // (This happens when you're on multiple memo tabs at once)
@@ -107,7 +107,7 @@
 
         if (
           netlifyIdentity.currentUser()?.token?.expires_at &&
-          netlifyIdentity.currentUser()?.token?.expires_at < Date.now
+          netlifyIdentity.currentUser()?.token?.expires_at < Date.now()
         ) {
           console.log('Refreshing')
           return netlifyIdentity.currentUser()?.jwt?.(true)
