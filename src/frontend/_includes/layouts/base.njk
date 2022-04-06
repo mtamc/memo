@@ -89,7 +89,7 @@
     <div id="site"></div>
     <script>
       // A function that refreshes the token at its expiration time, infinitely
-      const refreshToken = (force) => {
+      const refreshToken = () => {
         // If the token in the local storage is newer than the one
         // on the current tab, then use the one in the local storage
         // (This happens when you're on multiple memo tabs at once)
@@ -100,24 +100,14 @@
             return undefined
           }
         })()
-
         if (localStorageToken?.expires_at > netlifyIdentity.currentUser()?.token?.expires_at) {
           netlifyIdentity.currentUser().token = localStorageToken
         }
-
-        if (
-          netlifyIdentity.currentUser()?.token?.expires_at &&
-          netlifyIdentity.currentUser()?.token?.expires_at < Date.now()
-        ) {
-          console.log('Refreshing')
-          return netlifyIdentity.currentUser()?.jwt?.(true)
-        } else {
-          console.log('not refreshing')
-        }
+        return netlifyIdentity.currentUser()?.jwt?.(true)
       }
 
       const refreshTokenWhenDue = async () => {
-        console.log('checking if needing to refresh token')
+        console.log('refreshing token')
         await refreshToken()
         console.log(netlifyIdentity.currentUser()?.token)
         console.log(new Date(netlifyIdentity.currentUser()?.token?.expires_at))
@@ -127,11 +117,11 @@
         window.setTimeout(refreshTokenWhenDue, refreshIn - one_min)
       }
 
-      ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
+      // ;['init', 'logout'].forEach((evt) => netlifyIdentity.on(evt, refreshToken))
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        await refreshTokenWhenDue()
+        // await refreshTokenWhenDue()
 
         // Include the router
         Components.setContent('#site', Components.Router())
