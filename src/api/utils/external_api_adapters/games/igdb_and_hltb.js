@@ -127,9 +127,9 @@ const retrieve = (ref) => ResultAsync.fromPromise(
           ?.name,
         releaseYear,
         duration,
-        imageUrl: 'https:' + mainData.cover.url,
-        genres: mainData.genres.map((g) => g.name),
-        platforms: mainData.platforms.map((p) => p.abbreviation),
+        imageUrl: mainData.cover.url ? 'https:' + mainData.cover.url : '',
+        genres: mainData.genres?.map((g) => g.name) ?? [],
+        platforms: mainData.platforms?.map((p) => p.abbreviation) ?? [],
         studios: studioNames,
         publishers: publisherNames,
         apiRefs: [
