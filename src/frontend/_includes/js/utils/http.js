@@ -80,6 +80,7 @@ const refreshTokenIfNecessary = async () => {
 }
 
 const _refreshTokenIfNecessary = async () => {
+  return
   console.log("in xhr refresh fn")
   if (netlifyIdentity.currentUser()?.token?.expires_at == null) {
     console.log("no token found, trying to refresh but doubtful")
