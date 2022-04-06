@@ -66,7 +66,7 @@ const getFirstPathnameSegment = () => {
   return segments?.[0]
 }
 
-const refreshTokenIfNecessary = () => {
+const refreshTokenIfNecessary = async () => {
   console.log("in xhr refresh fn")
   // If the token in the local storage is newer than the one
   // on the current tab, then use the one in the local storage
