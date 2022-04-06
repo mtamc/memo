@@ -81,21 +81,6 @@ const refreshTokenIfNecessary = async () => {
 
 const _refreshTokenIfNecessary = async () => {
   console.log("in xhr refresh fn")
-  // If the token in the local storage is newer than the one
-  // on the current tab, then use the one in the local storage
-  // (This happens when you're on multiple memo tabs at once)
-  const localStorageToken = (() => {
-    try {
-      return JSON.parse(localStorage.getItem('gotrue.user')).token
-    } catch {
-      return undefined
-    }
-  })()
-
-  if (localStorageToken?.expires_at > netlifyIdentity.currentUser()?.token?.expires_at) {
-    netlifyIdentity.currentUser().token = localStorageToken
-  }
-
   if (netlifyIdentity.currentUser()?.token?.expires_at == null) {
     console.log("no token found, trying to refresh but doubtful")
     return netlifyIdentity.currentUser()?.jwt?.(true)
