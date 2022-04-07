@@ -88,22 +88,6 @@
   <body>
     <div id="site"></div>
     <script>
-      const refreshToken = () => {
-        console.log('refreshing token')
-        return netlifyIdentity.currentUser()?.jwt?.(true)
-      }
-
-      const refreshTokenWhenDue = async (isFirst) => {
-        if (!isFirst) await refreshToken()
-        console.log(netlifyIdentity.currentUser()?.token)
-        console.log(new Date(netlifyIdentity.currentUser()?.token?.expires_at))
-        const expireTime = netlifyIdentity.currentUser()?.token?.expires_at
-        const refreshIn = expireTime ? (expireTime - Date.now()) : 300000
-        const FIVE_MIN = 300000
-        window.setTimeout(refreshTokenWhenDue, Math.max(refreshIn - FIVE_MIN, 0))
-      }
-
-      // Bind to events
       netlifyIdentity.on('init', user => console.log('init', user));
       netlifyIdentity.on('login', user => console.log('login', user));
       netlifyIdentity.on('logout', () => console.log('Logged out'));
@@ -113,7 +97,6 @@
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        await refreshTokenWhenDue(true)
         // Include the router
         Components.setContent('#site', Components.Router())
       }, 0)
