@@ -44,16 +44,16 @@ const toAuthHeader = (token) => ({ Authorization: `Bearer ${token}` })
 
 const makeRequest = (method, url, data) => (
   NT.ResultAsync.fromPromise(
-    refreshTokenIfNecessary().then(() =>
-      axios({ method, url, data, ...tokenIfLoggedIn() })
+    refreshTokenIfNecessary().then((jwt) =>
+      axios({ method, url, data, ...tokenIfLoggedIn(jwt) })
         .then(({ data }) => data),
     ),
     getErrorStatusCode
   )
 )
 
-const tokenIfLoggedIn = () => ({
-  headers: Nullable.map(getToken(), toAuthHeader) ?? {}
+const tokenIfLoggedIn = (jwt) => ({
+  headers: Nullable.map(jwt ?? getToken(), toAuthHeader) ?? {}
 })
 
 const getLastPathnameSegment = () => {
@@ -67,30 +67,5 @@ const getFirstPathnameSegment = () => {
 }
 
 const refreshTokenIfNecessary = async () => {
-  return
-  console.log("in xhr refresh fn")
-  if (netlifyIdentity.currentUser()?.token?.expires_at == null) {
-    console.log("no token found, trying to refresh but doubtful")
-    return netlifyIdentity.currentUser()?.jwt?.(true)
-  } else if (netlifyIdentity.currentUser()?.token?.expires_at < Date.now()) {
-    console.log("token must be refreshed, refreshing")
-    return netlifyIdentity.currentUser()?.jwt?.(true)
-  } else {
-    console.log('not refreshing token')
-  }
+  return netlifyIdentity.currentUser()?.jwt?.()
 }
-
-const _refreshTokenIfNecessary = async () => {
-  console.log("in xhr refresh fn")
-  if (netlifyIdentity.currentUser()?.token?.expires_at == null) {
-    console.log("no token found, trying to refresh but doubtful")
-    return netlifyIdentity.currentUser()?.jwt?.(true)
-  } else if (netlifyIdentity.currentUser()?.token?.expires_at < Date.now()) {
-    console.log("token must be refreshed, refreshing")
-    return netlifyIdentity.currentUser()?.jwt?.(true)
-  } else {
-    console.log('not refreshing token')
-  }
-}
-
-
