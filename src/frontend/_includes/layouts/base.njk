@@ -91,7 +91,7 @@
       const refreshTokenWhenNecessary = async (isFirst) => {
         if (!isFirst) await netlifyIdentity?.currentUser?.()?.jwt?.(true)
         const expiryDate = netlifyIdentity?.currentUser?.()?.token?.expires_at ?? 0
-        const delayUntilRefresh = Math.min(10, Math.max(0, (expiryDate - Date.now()) / 3))
+        const delayUntilRefresh = Math.min(10, Math.max(0, (expiryDate - Date.now()) / 2.1))
         window.setTimeout(refreshTokenWhenNecessary, delayUntilRefresh)
       }
 
@@ -104,7 +104,7 @@
 
       // The 0 timeout is necessary to detect netlify auth token
       window.setTimeout(async () => {
-        await refreshTokenWhenNecessary(true)
+        // await refreshTokenWhenNecessary(true)
         // Include the router
         Components.setContent('#site', Components.Router())
       }, 0)
