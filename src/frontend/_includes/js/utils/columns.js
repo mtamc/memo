@@ -62,7 +62,7 @@ const duration = () =>
   })
 
 const playtime = () =>
-  col('Playtime', 'playtime', {
+  col('Playtime', 'commonMetadata.duration', {
     sortable: true,
     align: 'center',
     visible: false,
