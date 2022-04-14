@@ -42,7 +42,7 @@ const search = (titleSearch) => ResultAsync.fromPromise(
       const results = req.data.map(({ name, id, release_dates, cover, platforms }) => {
         const earliest_date = release_dates?.sort((a,b) => a.date - b.date)[0]?.date * 1000
         return {
-          title: name + ` [${platforms?.map((p) => p.abbreviation)?.join(', ') ?? '?'}]`,
+          title: name + ` [${platforms?.map((p) => p.abbreviation ?? '?')?.join(', ') ?? '?'}]`,
           ref: id,
           year: earliest_date ? (new Date(earliest_date)).toISOString().substring(0, 4) : undefined,
           imageUrl: cover?.url ? 'https:' + cover.url : undefined,
@@ -129,7 +129,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
         duration,
         imageUrl: mainData.cover.url ? 'https:' + mainData.cover.url : '',
         genres: mainData.genres?.map((g) => g.name) ?? [],
-        platforms: mainData.platforms?.map((p) => p.abbreviation) ?? [],
+        platforms: mainData.platforms?.map((p) => p.abbreviation ?? '?') ?? [],
         studios: studioNames,
         publishers: publisherNames,
         apiRefs: [
