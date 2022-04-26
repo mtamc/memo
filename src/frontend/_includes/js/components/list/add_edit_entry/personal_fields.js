@@ -131,7 +131,7 @@ const PersonalFields = (data, type) => {
           $('label[for="score"]').html('Score')
           $('#started-date-container').show()
           $('#completed-date').val('')
-          $('#started-date').val(today())
+          $('#started-date').val(data.startedDate ? timestampToString(data.startedDate) : today())
           $('#completed-date-container').hide()
           $('#progress-container').show()
         }
