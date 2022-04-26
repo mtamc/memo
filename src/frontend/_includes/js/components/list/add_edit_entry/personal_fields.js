@@ -67,21 +67,26 @@ const PersonalFields = (data, type) => {
               >
             </div>
           `
-          : html`
-            <div
-              id="completed-date-container"
-              style="margin: 15px 0; display: ${!isEdit || data.status === 'Completed' ? 'block' : 'none'};}"
-            >
-              <label for="completed-date">Completed Date</label><br>
-              <input
-                data-toggle="datepicker"
-                id="completed-date"
-                autocomplete="off"
-                value=${data.completedDate ? timestampToString(data.completedDate) : today()}
-              >
-            </div>
-          `
+          : ''
         }
+        <div
+          id="completed-date-container"
+          style="margin: 15px 0; display: ${data.status === 'Completed' ? 'block' : 'none'};}"
+        >
+          <label for="completed-date">Completed Date</label><br>
+          <input
+            data-toggle="datepicker"
+            id="completed-date"
+            autocomplete="off"
+            value=${
+              data.completedDate
+                ? timestampToString(data.completedDate)
+                : type === 'films'
+                ? today()
+                : ''
+            }
+          >
+        </div>
         ${include(
           isEdit
             ? WithRemoteData({
