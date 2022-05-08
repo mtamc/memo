@@ -71,7 +71,15 @@ const PersonalFields = (data, type) => {
         }
         <div
           id="completed-date-container"
-          style="margin: 15px 0; display: ${data.status === 'Completed' || type === 'films' ? 'block' : 'none'};}"
+          style="
+            margin: 15px 0;
+            display: ${
+              data.status === 'Completed' ||
+              (type === 'films' && data.status !== 'Planned')
+                ? 'block'
+                : 'none'
+            };
+          "
         >
           <label for="completed-date">Completed Date</label><br>
           <input
