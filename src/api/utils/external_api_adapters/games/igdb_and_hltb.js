@@ -71,6 +71,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
 
       const hltbEntry = await hltb.search(mainData.name)
         .then((results) => results[0])
+        .catch(() => undefined)
 
       const duration = hltbEntry ? hltbEntry.gameplayMain * 60 : undefined
 
