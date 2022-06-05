@@ -36,7 +36,7 @@ const PersonalFields = (data, type) => {
             }
           </select>
         </div>
-        ${type === 'tv_shows'
+        ${type === 'tv'
           ? html`
             <div
               id="progress-container"
