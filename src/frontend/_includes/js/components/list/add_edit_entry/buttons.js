@@ -82,7 +82,7 @@ const generateEntry = (data, type) => ({
       : { startedDate: Date.parse($('#started-date').val()) || null }
   ),
   ...(
-    type === 'tv_shows'
+    type === 'tv'
       ? { progress: getInt('progress') || null }
       : {}
   ),
@@ -118,7 +118,7 @@ const getOverrides = (api, type) => {
         platforms: getIfDifferent(api?.platforms, getCommaSeparated('platforms')),
         studios: getIfDifferent(api?.studios, getCommaSeparated('studios')),
         publishers: getIfDifferent(api?.publishers, getCommaSeparated('publishers')),
-      } : /* type === 'tv_shows' */ {
+      } : /* type === 'tv' */ {
         directors: getIfDifferent(api?.directors, getCommaSeparated('directors')),
         actors: getIfDifferent(api?.actors, getCommaSeparated('actors')),
         episodes: getIfDifferent(api?.episodes, getInt('episodes')),

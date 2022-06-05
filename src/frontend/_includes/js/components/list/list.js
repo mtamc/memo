@@ -246,7 +246,7 @@ const toStats = (entries, entryType) => {
   const meanScore = scores.reduce((a,b) => a+b, 0) / (scores.length || 1)
   const entriesNoDropped = entries.filter((e) => e.status !== 'Dropped')
   const days =
-    entryType === 'tv_shows'
+    entryType === 'tv'
       ? (entriesNoDropped
         .reduce((mins, e) => mins + ((get(e, 'duration') ?? 0) * (get(e, 'episodes') ?? 0)), 0)
       ) / 60 / 24
@@ -262,7 +262,7 @@ const toStats = (entries, entryType) => {
         .reduce((mins, e) => mins + (get(e, 'duration') ?? 0), 0)
       ) / 60 / 24
 
-  return `Total entries: ${entries.length}${entryType === 'tv_shows' ? ` ${icon} Episodes seen: ${totalEpsSeen}` : ''} ${icon} Days spent: ${days.toFixed(2)} ${icon} Mean score: ${meanScore.toFixed(2)}`
+  return `Total entries: ${entries.length}${entryType === 'tv' ? ` ${icon} Episodes seen: ${totalEpsSeen}` : ''} ${icon} Days spent: ${days.toFixed(2)} ${icon} Mean score: ${meanScore.toFixed(2)}`
 }
 
 /** get override or api data */

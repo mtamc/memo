@@ -33,10 +33,10 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
   }
 
   const durationUnit =
-    type === 'books'    ? 'pages' :
-    type === 'tv_shows' ? 'minutes per ep' :
-    type === 'games'    ? 'hours' :
-    /* type films */      'minutes'
+    type === 'books' ? 'pages' :
+    type === 'tv'    ? 'minutes per ep' :
+    type === 'games' ? 'hours' :
+    /* type films */   'minutes'
 
   const filmFields = [
     Input('Director(s) (comma-separated)', 'directors'),
