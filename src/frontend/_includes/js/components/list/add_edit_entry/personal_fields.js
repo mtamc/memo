@@ -63,7 +63,13 @@ const PersonalFields = (data, type) => {
                 data-toggle="datepicker"
                 id="started-date"
                 autocomplete="off"
-                value="${data.startedDate ? timestampToString(data.startedDate) : today()}"
+                value="${
+                  data.startedDate
+                    ? timestampToString(data.startedDate)
+                    : data.status === 'Planned'
+                    ? null
+                    : today()
+                }"
               >
             </div>
           `
