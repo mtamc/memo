@@ -2,7 +2,7 @@
  * This file is fairly large, should probably be
  * refactored into multiple files?
  */
-const { html, css } = Utils
+const { html, css, waitForEl } = Utils
 const { initComponent } = Components
 const { SubmitButton, DeleteButton, ExternalFields, PersonalFields, CoverColumn } = Components.List
 
@@ -31,7 +31,18 @@ const EntryForm = (type, data) => {
       #submit-button-add-entry-wrapper {
         text-align: center;
       }
-    `
+    `,
+    initializer: () => {
+      window.hasUnsavedChange = false
+      const markUnsavedChange = () => {
+        window.hasUnsavedChange = true
+      }
+      $(`#add-entry-fields input`).on('input', markUnsavedChange)
+      $(`#add-entry-fields select`).on('change', markUnsavedChange)
+      waitForEl(`#add-entry-fields textarea`).then(() => {
+        $(`#add-entry-fields textarea`).on('input', markUnsavedChange)
+      })
+    }
   })
 }
 

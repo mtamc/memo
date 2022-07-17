@@ -232,7 +232,8 @@ const initFullTable = (selector, data, entryType, isOwner, status) => {
   window.editEntry = (data) => {
     appendContent('body', Modal_({
       title: "Edit an entry",
-      content: EntryForm(entryType, data)
+      content: EntryForm(entryType, data),
+      showCloseConfirmationDialog: () => window.hasUnsavedChange === true
     }))
   }
 }
