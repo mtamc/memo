@@ -1,23 +1,25 @@
 const { html, css } = Utils
 const { initComponent, appendContent } = Components
 
-const Modal = ({ title, content, openButtonHtml }) => initComponent({
+const Modal = ({ title, content, openButtonHtml, showCloseConfirmationDialog }) => initComponent({
   content: ({ id, include }) => html`
     <div id="${id}">${openButtonHtml({ include, id })}</div>
   `,
   initializer: ({ id }) => {
     $(`#${id}`).click(() => {
-      appendContent('body', Modal_({ title, content }))
+      appendContent('body', Modal_({ title, content, showCloseConfirmationDialog }))
     })
   }
 })
 
-const Modal_ = ({ title, content }) => initComponent({
+const log = x => (console.log(x), x)
+
+const Modal_ = ({ title, content, showCloseConfirmationDialog }) => initComponent({
   content: ({ id, include }) => html`
     <div id=${id}>
-      ${include(Overlay(id))}
+      ${include(Overlay(id, showCloseConfirmationDialog))}
       <div id="td-modal-window-${id}" class="td-modal-window">
-        ${include(ModalHeader(title, id))}
+        ${include(ModalHeader(title, id, showCloseConfirmationDialog))}
         <div id="td-modal-content-wrapper-${id}" class="td-modal-content-wrapper">
           <div class="td-modal-content">
             ${include(content)}
@@ -74,11 +76,11 @@ Components.UI.Modal_ = Modal_
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const ModalHeader = (title, parentId) => initComponent({
+const ModalHeader = (title, parentId, showCloseConfirmationDialog) => initComponent({
   content: ({ include }) => html`
     <div class="td-modal-header modal-header">
       <div class="td-modal-title">${title}</div>
-      ${include(CloseButton(parentId))}
+      ${include(CloseButton(parentId, showCloseConfirmationDialog))}
     </div>
   `,
   style: () => css`
@@ -91,7 +93,7 @@ const ModalHeader = (title, parentId) => initComponent({
   `
 })
 
-const Overlay = (parentId) => initComponent({
+const Overlay = (parentId, showCloseConfirmationDialog) => initComponent({
   content: () => html`
     <div id="overlay-${parentId}"></div>
   `,
@@ -110,12 +112,12 @@ const Overlay = (parentId) => initComponent({
   `,
   initializer: () => {
     $(`#overlay-${parentId}`).click(() => {
-      closeModal(parentId)
+      closeModal(parentId, showCloseConfirmationDialog)
     })
   }
 })
 
-const CloseButton = (parentId) => initComponent({
+const CloseButton = (parentId, showCloseConfirmationDialog) => initComponent({
   content: () => html`
     <div id="cancel-button-${parentId}" class="cancel-button"><i class="fas fa-window-close"></i></div>
   `,
@@ -133,13 +135,18 @@ const CloseButton = (parentId) => initComponent({
   `,
   initializer: () => {
     $(`#cancel-button-${parentId}`).click(() => {
-      closeModal(parentId)
+      closeModal(parentId, showCloseConfirmationDialog)
     })
   }
 })
 
-const closeModal = (parentId) => {
-  $(`#td-modal-window-${parentId}`).fadeOut(200)
-  $(`#overlay-${parentId}`).hide()
-  $(`#${parentId}`).remove()
+const closeModal = (parentId, showCloseConfirmationDialog) => {
+  if (
+    (!showCloseConfirmationDialog?.() ?? true) ||
+    (confirm('Are you sure you want to close me? Your changes will not be saved.') == true)
+  ) {
+    $(`#td-modal-window-${parentId}`).fadeOut(200)
+    $(`#overlay-${parentId}`).hide()
+    $(`#${parentId}`).remove()
+  }
 }

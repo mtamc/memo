@@ -9,6 +9,7 @@ const AddEntryButton = (type) => initComponent({
   content: ({ include }) => include(Modal({
     title: "Add an entry",
     content: AddEntryModal(type),
+    showCloseConfirmationDialog: () => window.hasUnsavedChange === true,
     openButtonHtml: () => html`
       <h2 class="text-center" id="add-entry">
         <i class="far fa-plus-square"></i><span id="add-entry-text">Add an entry</span>
