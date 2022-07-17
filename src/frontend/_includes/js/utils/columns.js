@@ -65,7 +65,6 @@ const playtime = () =>
   col('Playtime', 'commonMetadata.duration', {
     sortable: true,
     align: 'center',
-    visible: false,
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: playtimeFormatter,
   })
@@ -256,12 +255,18 @@ const durationFormatter = (_, row) => {
 const playtimeFormatter = (_, row) => {
   const { duration: durationInMin } = get(row, ['duration'])
   const hours = Math.floor(durationInMin/60)
-  const mins = durationInMin % 60
+  const rawMins = durationInMin % 60
+  const minsAsHrFraction =
+    rawMins < 10 ? ''
+    : rawMins < 20 ? '¼'
+    : rawMins < 40 ?  '&frac12'
+    : '&frac34'
+  const durationText = `${hours}h${minsAsHrFraction}`
   const hltbRef = row.commonMetadata.apiRefs?.find(ref => ref.name === 'hltb')?.ref
   return durationInMin && hltbRef
-    ? `<a href="https://howlongtobeat.com/game?id=${hltbRef}">${hours}h${mins ? mins+'m' : ''}</a>`
+    ? `<a href="https://howlongtobeat.com/game?id=${hltbRef}">${durationText}</a>`
     : durationInMin
-    ? `${hours}h${mins ? mins+'m' : ''}`
+    ? durationText
     : '-'
 }
 
