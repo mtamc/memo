@@ -61,9 +61,10 @@ const duration = () =>
     formatter: durationFormatter,
   })
 
-const playtime = () =>
+const playtime = (status) =>
   col('Playtime', 'commonMetadata.duration', {
     sortable: true,
+    visible: status === 'Planned',
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } }),
     formatter: playtimeFormatter,

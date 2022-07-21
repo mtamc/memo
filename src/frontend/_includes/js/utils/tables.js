@@ -37,7 +37,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.title(),
     Columns.score(status),
     Columns.year(),
-    Columns.playtime(),
+    Columns.playtime(status),
     Columns.platforms(),
     Columns.studios(),
     Columns.publishers(),
