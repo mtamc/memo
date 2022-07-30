@@ -26,8 +26,8 @@ const Tabbed = (title, pages) => initComponent({
     $(`#${id} .tab-title`).click(function() {
       $(`#${id} .tab-title`).removeClass('tab-active')
       $(this).addClass('tab-active')
-      $(`#${id} .tab-contents > *`).addClass('tab-hidden').fadeOut()
-      $(`#${id} .tab-contents > *`).eq($(this).data('index')).removeClass('tab-hidden').fadeIn()
+      $(`#${id} .tab-contents > *`).addClass('tab-hidden')
+      $(`#${id} .tab-contents > *`).eq($(this).data('index')).removeClass('tab-hidden')
     })
   },
   style: () => css`
@@ -50,9 +50,7 @@ const Tabbed = (title, pages) => initComponent({
       left: unset;
     }
     .tab-content.tab-hidden {
-      position: absolute;
-      left: -99999px;
-      top: -999999999px;
+      display: none;
     }
   `
 })
