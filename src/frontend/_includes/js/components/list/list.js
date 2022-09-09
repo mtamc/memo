@@ -26,7 +26,8 @@ const List = (username) => initComponent({
           }))}
           ${include(WithRemoteData({
             remoteData: getEntries(getEntryTypeFromUrl(), username),
-            component: (entries) => SubLists(getEntryTypeFromUrl(), entries.sort((a,b) => a.commonMetadata.englishTranslatedTitle - b.commonMetadata.englishTranslatedTitle))
+            component: (entries) => SubLists(getEntryTypeFromUrl(), [...entries].sort((a,b) => a.commonMetadata.englishTranslatedTitle - b.commonMetadata.englishTranslatedTitle).map((entry) => ({ ...entry, commonMetadata: { ...entry.commonMetadata, ...entry.overrides }
+            })))
           }))}
       </div>
     </div>
@@ -266,6 +267,5 @@ const toStats = (entries, entryType) => {
   return `Total entries: ${entries.length}${entryType === 'tv' ? ` ${icon} Episodes seen: ${totalEpsSeen}` : ''} ${icon} Days spent: ${days.toFixed(2)} ${icon} Mean score: ${meanScore.toFixed(2)}`
 }
 
-/** get override or api data */
 const get = (entry, prop) =>
-  entry.overrides?.[prop] ?? entry.commonMetadata?.[prop]
+  entry.commonMetadata?.[prop]
