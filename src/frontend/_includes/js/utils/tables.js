@@ -59,11 +59,8 @@ const entryTypeToFullColumns = (entryType, status) => ({
 window.includeReview = (type, entryId) => {
   Components.setContent(`#review-${entryId}`, Components.WithRemoteData({
     remoteData: Netlify.getReview(type, entryId),
-    component: (review) => {
-      console.log(review)
-      return Components.Markdown(review?.data?.text || '*None yet...*')
-      
-  }}))
+    component: (review) => Components.Markdown(review?.data?.text || '*None yet...*'),
+  }))
 }
 
 const detailFormatter = (_, row) => {

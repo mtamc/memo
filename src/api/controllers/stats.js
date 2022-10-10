@@ -1,4 +1,3 @@
-/** @typedef {import('faunadb').ExprArg} ExprArg */
 /** @typedef {import('@netlify/functions').HandlerEvent} Event */
 /** @typedef {import('@netlify/functions').HandlerContext} Context */
 /** @typedef {import('../utils/parsers').ValidCollection} ValidCollection */
@@ -43,10 +42,9 @@ const refreshStats = (userDocument) => {
     entryCollections
       .flatMap((col) =>
         db.findAllByField_(col, 'userId', userDocument.data.userId)
-          .map(({ data }) =>
-            data
-              .filter((doc) => doc.data.status !== 'Planned' )
-              .map((doc) => [col, doc])
+          .map((data) => data
+            .filter((doc) => doc.data.status !== 'Planned' )
+            .map((doc) => [col, doc])
           )
       )
   )
