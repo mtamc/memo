@@ -303,4 +303,3 @@ const makeSafeForCSS = (name) =>
 
 const getOverrideOrMetadata = (prop) => (_, row) =>
   row.overrides?.[prop] ?? row.commonMetadata?.[prop]
-

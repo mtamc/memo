@@ -26,9 +26,24 @@ const List = (username) => initComponent({
           }))}
           ${include(WithRemoteData({
             remoteData: getEntries(getEntryTypeFromUrl(), username),
-            component: (entries) => SubLists(getEntryTypeFromUrl(), [...entries].sort((a,b) => a.commonMetadata.englishTranslatedTitle - b.commonMetadata.englishTranslatedTitle).map((entry) => ({ ...entry, commonMetadata: { ...entry.commonMetadata, ...entry.overrides }
-            })))
-          }))}
+            component: (entries) => SubLists(
+              getEntryTypeFromUrl(),
+              [...entries]
+                .sort((a, b) =>
+                  a.commonMetadata.englishTranslatedTitle
+                    - b.commonMetadata.englishTranslatedTitle
+                )
+                .map((entry) => ({
+                  ...entry,
+                  commonMetadata: {
+                    ...entry.commonMetadata,
+                    ...Object.fromEntries(
+                      Object.entries(entry.overrides)
+                        .filter(([_k, v]) => v !== null)
+                    ),
+                  },
+                }))
+            )}))}
       </div>
     </div>
   `,

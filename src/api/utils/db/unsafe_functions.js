@@ -5,74 +5,52 @@
  * pefore being re-exported.
  */
 /** @typedef {import('../parsers').ValidCollection} ValidCollection */
-/** @typedef {import('faunadb').ExprArg} ExprArg */
-/** @typedef {import('faunadb').Expr} Expr */
-const faunadb = require('faunadb')
-const { db } = require('./db')
-const { compose } = require('ramda')
-const { throwIt, log } = require('../general')
+/** @typedef {import('mongodb').ObjectId} ObjectId */
+const { mongo } = require('./db')
+const { v4: uuidv4 } = require('uuid')
+const { throwIt } = require('../general')
 const parsers = require('../parsers/')
-const q = faunadb.query
-const {
-  Get,
-  Ref,
-  Collection,
-  Create,
-  Match,
-  Index,
-  Let,
-  Paginate,
-  Exists,
-  Var,
-  Documents,
-  Join,
-  Lambda,
-  Select,
-  Update,
-  Delete,
-} = q
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<object>} */
+/** @type {(collection: ValidCollection, field: string, value: any) => Promise<object>} */
 const _findOneByField = (collection, field, value) =>
-  findOne(docsInCollectionWithField(collection, field, value))
-    .catch((err) => {
-      console.log('err!!')
-      console.log(err)
-      throw err
-    })
+  findFirst(collection, { [field]: value })
 
-/** @type {(collection: ValidCollection, ref: ExprArg) => Promise<object>} */
+/** @type {(collection: ValidCollection, ref: string) => Promise<object>} */
 const _findOneByRef = (collection, ref) =>
-  findOne(getDocRef(collection, ref))
+  findFirst(collection, { _id: ref })
 
 /** @type {(collection: ValidCollection) => Promise<object>} */
 const _findAllInCollection = (collection) =>
-  findAllUnpaginated(getCollectionDocs(collection))
+  findAll(collection, {})
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg, limit?: number) => Promise<object>} */
-const _findAllByField = (collection, field, value, limit) =>
-  findAllUnpaginated(Match(at(collection, field), value), limit)
+/** @type {(collection: ValidCollection, field: string, value: any) => Promise<object>} */
+const _findAllByField = (collection, field, value) =>
+  findAll(collection, { [field]: value })
 
-/** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => Promise<object>} */
+/** @type {(collection: ValidCollection, ref: string, update: any) => Promise<object>} */
 const _updateOneByRef = (collection, ref, update) =>
-  updateOne(getDocRef(collection, ref), { data: update })
+  mongo((db) => db
+    .collection(collection)
+    .updateOne({ _id: ref }, { $set: update })
+  )
 
-/** @type {(collection: ValidCollection, ref: ExprArg) => Promise<object>} */
+/** @type {(collection: ValidCollection, ref: string) => Promise<object>} */
 const _deleteOneByRef = (collection, ref) =>
-  db.query(Delete(getDocRef(collection, ref)))
+  mongo((db) => db
+    .collection(collection)
+    .deleteOne({ _id: ref })
+  )
 
-/** @type {(collection: ValidCollection, data: ExprArg) => Promise<object>} */
+/** @type {(collection: ValidCollection, data: any) => Promise<object>} */
 const _create = (collection, data) =>
   parsers[collection](data).match(
     (validDoc) => unsafeCreateDoc(collection, validDoc),
     (err) => throwIt(err)
   )
 
-// For now some code is duplicated, we'll DRY this out later
-/** @type {(collection: ValidCollection, userId: string, limit?: number) => Promise<object>} */
+/** @type {(collection: 'filmEntries' | 'gameEntries' | 'tvShowEntries' | 'bookEntries', userId: string, limit?: number) => Promise<object>} */
 const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
-  let continuation = undefined
-  let results = []
+  console.log('in _findAllUserEntriesWithMetadata')
   const workCollection = {
     filmEntries: 'films',
     gameEntries: 'games',
@@ -87,49 +65,30 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
   }[collection]
   const emptyWork = { data: { entryType } }
 
-  do {
-    const after = continuation ? { after: continuation } : {}
-    const resp =
-      await db.query(
-        q.Map(
-          Paginate(
-            Join(
-              Match(at(collection, "userId"), userId),
-              Index(`${collection}__updatedDate`)
-            ),
-            { size: limit ?? 100000, ...after }
-          ),
-          Lambda(
-            ['entry_', 'entryRef'],
-            Let(
-              {
-                entry: Get(Var('entryRef')),
-                workId: Select(['data', 'workRef'], Var('entry'), 0),
-                workRef: Ref(Collection(workCollection), Var('workId')),
-                work: q.If(
-                  Exists(Var('workRef')),
-                  Get(Var('workRef')),
-                  emptyWork,
-                )
-              },
-              {
-                entry: Var('entry'),
-                work: Var('work'),
-              }
-            )
-          )
-        )
-      )
-
-    continuation = limit ? undefined : resp.after
-    results = [...results, ...resp.data ?? []]
-  } while (continuation)
+  const results = await mongo((db) => db
+    .collection(collection)
+    .aggregate([
+      { $match: { userId } },
+      {
+        $lookup: {
+          from: workCollection,
+          localField: 'workRef',
+          foreignField: '_id',
+          as: 'work',
+        },
+      },
+    ])
+    .toArray()
+    .then((arr) => arr
+      .map(toSameFormatAsFaunaDb)
+      .map((entry) => ({ entry, work: { data: entry.data.work?.[0] ?? emptyWork }}))
+    )
+  )
 
   const resultsByLastUpdatedIfPossible =
-    results
-    // [...results].sort((a, b) => {
-      // return (b.entry?.data?.updatedDate ?? 0) - (a.entry?.data?.updatedDate ?? 0)
-    // })
+    [...results].sort((a, b) =>
+      (b.entry?.data?.updatedDate ?? 0) - (a.entry?.data?.updatedDate ?? 0)
+    )
 
   const finalResults =
     limit
@@ -138,6 +97,7 @@ const _findAllUserEntriesWithMetadata = async (collection, userId, limit) => {
 
   return { data: finalResults }
 }
+
 module.exports = {
   _findOneByField,
   _findOneByRef,
@@ -151,59 +111,41 @@ module.exports = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** @type {(ref: faunadb.ExprArg) => Promise<object>} */
-const findOne = (ref) =>
-  db.query(Get(ref))
-    .catch((e) => e.name === 'NotFound' ? {} : throwIt(e))
+/** @type {(collection: ValidCollection, filter: {}) => Promise<object>} */
+const findFirst = (collection, filter) =>
+  find(collection, filter).then((results) => results[0] ?? {})
 
-/** @type {(ref: ExprArg, params: ExprArg) => Promise<object>} */
-const updateOne = (ref, params) =>
-  db.query(Update(ref, params))
+/** @type {(collection: ValidCollection, filter: {}) => Promise<object>} */
+const findAll = (collection, filter) =>
+  find(collection, filter)
 
-/** @type {(ref: ExprArg, params: ExprArg) => Promise<object>} */
+/** @type {(collection: ValidCollection, filter: {}) => Promise<object>} */
+const find = (collection, filter) =>
+  mongo((db) => db
+    .collection(collection)
+    .aggregate([{ $match: filter }])
+    .toArray()
+    .then((arr) => arr.map(toSameFormatAsFaunaDb))
+  )
+
+/**
+ * @type {(docOrDocs: any) => { data: any, ref: { id: string }}}
+ * @info This function exists because we migrated from FaunaDB to MongoDB.
+ */
+const toSameFormatAsFaunaDb = (dcmt) => ({
+  data: dcmt,
+  ref: { id: dcmt._id },
+})
+
+/** @type {(collection: ValidCollection, data: any) => Promise<object>} */
 const unsafeCreateDoc = (collection, data) =>
-  db.query(Create(Collection(collection), { data }))
-
-/** @type {(collection: ValidCollection, field: string) => Expr} */
-const at = (collection, field) => Index(`${collection}__${field}`)
-
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => Expr} */
-const docsInCollectionWithField = (collection, field, value) =>
-  Match(at(collection, field), value)
-
-const lambdaGet = Lambda((x) => Get(x))
-
-
-/** @type {(set: ExprArg, limit?: number) => Promise<object>} */
-const findAllUnpaginated = async (set, limit) => {
-  let continuation = undefined
-  let results = []
-  do {
-    const after = continuation ? { after: continuation } : {}
-    const resp =
-      await db.query(q.Map(Paginate(set, { size: 100000, ...after }), lambdaGet))
-
-    continuation = resp.after
-    results = [...results, ...resp.data ?? []]
-  } while (continuation)
-
-  // It'd be better to let the consumer specify if they want this behavior
-  // but let's roll with hardcoding it for simplicity for now
-  const resultsByLastUpdatedIfPossible =
-    [...results].sort((a, b) => {
-      return (b.data?.updatedDate ?? 0) - (a.data?.updatedDate ?? 0)
+  mongo((db) => db
+    .collection(collection)
+    .insertOne({
+      _id: uuidv4(),
+      ...data,
     })
-
-  const finalResults =
-    limit
-      ? resultsByLastUpdatedIfPossible.slice(0, limit)
-      : resultsByLastUpdatedIfPossible
-
-  return { data: finalResults }
-}
-
-const getCollectionDocs = compose(Documents, Collection)
-
-/** @type {(collection: ValidCollection, ref: ExprArg) => Expr } */
-const getDocRef = (collection, ref) =>
-  Ref(Collection(collection), ref)
+    .then(({ insertedId }) =>
+      findFirst(collection, { _id: insertedId })
+    )
+  )

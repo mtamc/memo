@@ -101,11 +101,6 @@ const getUserEntries = ([uid, col, limit]) => toResponse(toPromise(
       commonMetadata: work.data,
       dbRef: entry.ref.id
     })))
-    .mapErr(e => {
-      console.log('Investigating why sometimes retrieving entries randomly fails')
-      console.log(limit)
-      console.log(e)
-    })
 ))
 
 /** @type {([userId, body, collection]: [string, any, ValidCollection]) => Promise<Response>} */
@@ -115,12 +110,10 @@ const createEntry = ([userId, body, collection]) => {
   const reviewCollection = collection.replace('Entries', 'Reviews')
 
   return db.create_(collection, { ...entryWithoutReview, userId, updatedDate: Date.now() })
-    .andThen((entry) =>
-      db.create_(reviewCollection, {
-        text: review,
-        entryRef: entry.ref.id,
-      })
-    )
+    .andThen((entry) => db.create_(reviewCollection, {
+      text: review,
+      entryRef: entry.ref.id,
+    }))
     .match(responses.ok, responses.internalError)
 }
 

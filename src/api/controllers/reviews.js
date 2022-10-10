@@ -3,8 +3,6 @@
 const { getSegment } = require('./utils')
 const responses = require('../utils/responses')
 const db = require('../utils/db/')
-const faunadb = require('faunadb')
-const q = faunadb.query
 
 /** @type {(event: Event) => Promise<Response>} */
 const getReview = async (event) => {

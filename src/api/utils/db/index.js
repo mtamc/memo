@@ -8,42 +8,35 @@
  * Functions PREFIXED with `_` are unsafe (may throw) and should
  * be considered private to this module.
  *
- * Basics to make FaunaDb queries:
- * https://fireship.io/lessons/fauna-db-quickstart/
+ * Basics to make MongoDB queries:
+ * https://www.mongodb.com/docs/drivers/node/current/usage-examples/
  *
- * Function reference:
- * https://docs.fauna.com/fauna/current/api/fql/functions/
- *
- * NOTE: In order to find by field, you must create FaunaDB indexes
- * in the dashboard named `${collection}__${field}`
  */
-/** @typedef {import('faunadb').ExprArg} ExprArg */
-/** @typedef {import('faunadb').Expr} Expr */
 /** @typedef {import('zod').ZodType} ZodType */
 /** @typedef {import('../responses').Response} Response */
 /** @typedef {import('../parsers').ValidCollection} ValidCollection */
 /** @typedef {import('../errors').Error} Error */
 const { ResultAsync } = require('neverthrow')
 const { _findOneByField, _findOneByRef, _findAllByField, _findAllInCollection, _updateOneByRef, _create, _deleteOneByRef, _findAllUserEntriesWithMetadata } = require('./unsafe_functions')
-const {compose} = require('ramda')
+const { compose } = require('ramda')
 const { toResponse, toResult } = require('./into_safe_values')
 
-/** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, ref: string) => Promise<Response>} */
 const findOneByRef = compose(toResponse, _findOneByRef)
 
-/** @type {(collection: ValidCollection, ref: ExprArg) => ResultAsync<any, Error>} */
+/** @type {(collection: ValidCollection, ref: string) => ResultAsync<any, Error>} */
 const findOneByRef_ = compose(toResult, _findOneByRef)
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, field: string, value: any) => Promise<Response>} */
 const findOneByField = compose(toResponse, _findOneByField)
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg) => ResultAsync<any, Error>} */
+/** @type {(collection: ValidCollection, field: string, value: any) => ResultAsync<any, Error>} */
 const findOneByField_ = compose(toResult, _findOneByField)
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg, limit?: number) => Promise<Response>} */
+/** @type {(collection: ValidCollection, field: string, value: any, limit?: number) => Promise<Response>} */
 const findAllByField = compose(toResponse, _findAllByField)
 
-/** @type {(collection: ValidCollection, field: string, value: ExprArg, limit?: number) => ResultAsync<any, Error>} */
+/** @type {(collection: ValidCollection, field: string, value: any, limit?: number) => ResultAsync<any, Error>} */
 const findAllByField_ = compose(toResult, _findAllByField)
 
 /** @type {(collection: ValidCollection, userId: string, limit?: number) => ResultAsync<any, Error>} */
@@ -52,13 +45,13 @@ const findAllUserEntriesWithMetadata_ = compose(toResult, _findAllUserEntriesWit
 /** @type {(collection: ValidCollection) => Promise<Response>} */
 const findAll = compose(toResponse, _findAllInCollection)
 
-/** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, ref: string, update: any) => Promise<Response>} */
 const updateByRef = compose(toResponse, _updateOneByRef)
 
-/** @type {(collection: ValidCollection, ref: ExprArg, update: ExprArg) => ResultAsync<any, Error>} */
+/** @type {(collection: ValidCollection, ref: string, update: any) => ResultAsync<any, Error>} */
 const updateByRef_ = compose(toResult, _updateOneByRef)
 
-/** @type {(collection: ValidCollection, ref: ExprArg) => Promise<Response>} */
+/** @type {(collection: ValidCollection, ref: string) => Promise<Response>} */
 const deleteByRef = compose(toResponse, _deleteOneByRef)
 
 /** @type {(collection: ValidCollection, data: ExprArg) => Promise<Response>} */
