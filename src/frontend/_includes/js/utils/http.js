@@ -13,7 +13,7 @@ const patch = (url, data) => makeRequest('patch', url, data)
 const del = (url) => makeRequest('delete', url)
 
 /** Returns the Netlify token or undefined if not logged in */
-const getToken = () => netlifyIdentity?.currentUser()?.token?.access_token
+const getToken = () => cookies().nf_jwt
 
 const getNameFromUrl = () => {
   const urlParams = new URLSearchParams(window.location.search)
@@ -66,6 +66,15 @@ const getFirstPathnameSegment = () => {
   return segments?.[0]
 }
 
+const cookies = () =>
+  Object.fromEntries(
+    document
+      .cookie
+      .split('; ')
+      .map((cookieString) => cookieString.split('='))
+  )
+
+
 const refreshTokenIfNecessary = async () => {
-  return netlifyIdentity.currentUser()?.jwt?.()
+  return cookies().nf_jwt
 }
