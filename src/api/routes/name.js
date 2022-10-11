@@ -8,12 +8,12 @@ exports.handler = async (event, context) =>
   matchVerbAndNumberOfUrlSegments(event)
 
     // GET /api/name
-    .with(['GET', 0], () => findOwnName(event, context))
+    .with(['GET', 0], () => findOwnName(event))
 
     // GET /api/name/:someName
     .with(['GET', 1], () => getUserIdFromName(event))
 
     // GET /api/name/:newName
-    .with(['POST', 0], () => setOwnName(event, context))
+    .with(['POST', 0], () => setOwnName(event))
 
     .otherwise(() => responses.badRequest())

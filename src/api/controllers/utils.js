@@ -5,10 +5,13 @@ const { Result, ResultAsync } = require('neverthrow')
 const errors = require('../utils/errors')
 const db = require('../utils/db')
 const { validateExists } = require('../utils/general')
+const { JWT } = require("jose")
 
-/** @type {(context: Context) => Result<string, Error>} */
-const getUserId = (context) =>
-  validateExists(context.clientContext?.user?.sub)
+/** @type {(event: Event) => Result<string, Error>} */
+const getUserId = (event) =>
+   validateExists(event.headers?.authorization)
+    .map((authString) => authString.replace('Bearer ', ''))
+    .map((jwt) => JWT.verify(jwt, process.env.TOKEN_SECRET).sub)
     .mapErr(errors.unauthorized)
 
 /** @type {(segmentIndex: number, event: Event) => string} */
