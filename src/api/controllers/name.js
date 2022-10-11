@@ -9,16 +9,16 @@ const responses = require('../utils/responses')
 const { getUserId, getReqBody, getSegment } = require('./utils')
 const feErrors = require('../utils/frontend_errors')
 
-/** @type {(context: Context) => Promise<Response>} */
-const findOwnName = (context) => toPromise(
+/** @type {(event: Event, context: Context) => Promise<Response>} */
+const findOwnName = (event, context) => (console.log(context), toPromise(
   getUserId(context)
     .asyncAndThen((userId) => findOneByField_('users', 'userId', userId))
     .map(({ data }) => data
       ? responses.ok({ username: data.username })
       : responses.ok(feErrors.noUsernameSet())
     )
-    .mapErr((err) => responses.ok({ err, context }))
-)
+    .mapErr((err) => responses.ok({ err, context, event }))
+))
 
 /** @type {(event: Event) => Promise<Response>} */
 const getUserIdFromName = (event) =>
