@@ -38,7 +38,7 @@ const List = (username) => initComponent({
                   commonMetadata: {
                     ...entry.commonMetadata,
                     ...Object.fromEntries(
-                      Object.entries(entry.overrides)
+                      Object.entries(entry.overrides ?? {})
                         .filter(([_k, v]) => v !== null)
                     ),
                   },
