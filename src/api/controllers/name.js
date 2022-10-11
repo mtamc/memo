@@ -10,7 +10,7 @@ const { getUserId, getReqBody, getSegment } = require('./utils')
 const feErrors = require('../utils/frontend_errors')
 
 /** @type {(context: Context) => Promise<Response>} */
-const findOwnName = (context) => toPromise(
+const findOwnName = (context) => (console.log(JSON.stringify(context)), toPromise(
   getUserId(context)
     .asyncAndThen((userId) => findOneByField_('users', 'userId', userId))
     .map(({ data }) => data
@@ -18,7 +18,7 @@ const findOwnName = (context) => toPromise(
       : responses.ok(feErrors.noUsernameSet())
     )
     .mapErr(() => responses.ok({}))
-)
+))
 
 /** @type {(event: Event) => Promise<Response>} */
 const getUserIdFromName = (event) =>
