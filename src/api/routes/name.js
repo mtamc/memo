@@ -4,7 +4,7 @@ const { matchVerbAndNumberOfUrlSegments, } = require('../router')
 const { findOwnName, setOwnName, getUserIdFromName } = require('../controllers/name')
 
 /** @type Handler */
-exports.handler = async (event, context) => {
+exports.handler = async (event, context) =>
   matchVerbAndNumberOfUrlSegments(event)
 
     // GET /api/name
@@ -17,4 +17,3 @@ exports.handler = async (event, context) => {
     .with(['POST', 0], () => setOwnName(event, context))
 
     .otherwise(() => responses.badRequest())
-}
