@@ -20,8 +20,8 @@ const Menu = () => initComponent({
   initializer: () => {
     const isLoggedIn = Netlify.getToken()
     const menuAuthLink = isLoggedIn
-      ? `<a href="./.netlify/functions/auth/logout">Log out</a>`
-      : `<a href="./.netlify/functions/auth/login">Log in</a>`
+      ? `<a href="/.netlify/functions/auth/logout">Log out</a>`
+      : `<a href="/.netlify/functions/auth/login">Log in</a>`
     $('#home-menu-item').after(`<li>${menuAuthLink}</li>`)
 
     Netlify.getUserName()
