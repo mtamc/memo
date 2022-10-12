@@ -8,6 +8,6 @@ exports.handler = async (event, context) =>
   matchVerbAndNumberOfUrlSegments(event)
 
     // POST /api/bio
-    .with(['POST', 0], () => setBio(event, context))
+    .with(['POST', 0], () => setBio(event))
 
     .otherwise(() => responses.notFound())

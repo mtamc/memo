@@ -10,9 +10,9 @@ const { pair, toPromise } = require('../utils/general')
 const db = require('../utils/db/')
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
-const setBio = (event, context) => toPromise(
+const setBio = (event) => toPromise(
   combine(pair([
-    getUserId(context),
+    getUserId(event),
     getReqBody(event)
   ]))
     .asyncAndThen(([uid, { newBio }]) =>
