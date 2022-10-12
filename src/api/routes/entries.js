@@ -18,12 +18,12 @@ exports.handler = async (event, context) =>
     .with(['GET', 3], () => getAllEntriesForUser(event))
 
     // POST /api/entries/:type
-    .with(['POST', 1], () => createNewUserListEntry(event, context))
+    .with(['POST', 1], () => createNewUserListEntry(event))
 
     // PATCH /api/entries/:type/:dbRef
-    .with(['PATCH', 2], () => updateEntry(event, context))
+    .with(['PATCH', 2], () => updateEntry(event))
 
     // DELETE /api/entries/:type/:dbRef
-    .with(['DELETE', 2], () => deleteEntry(event, context))
+    .with(['DELETE', 2], () => deleteEntry(event))
 
     .otherwise(() => responses.notFound())

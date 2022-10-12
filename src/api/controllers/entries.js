@@ -24,9 +24,9 @@ const getAllEntriesForUser = (event) => toPromise(
 )
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
-const createNewUserListEntry = (event, context) => toPromise(
+const createNewUserListEntry = (event) => toPromise(
   combine(triplet([
-    getUserId(context),
+    getUserId(event),
     getReqBody(event),
     toEntryCollection(getSegment(0, event)),
   ]))
@@ -35,11 +35,11 @@ const createNewUserListEntry = (event, context) => toPromise(
 )
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
-const updateEntry = (event, context) => toPromise(
+const updateEntry = (event) => toPromise(
   toEntryCollection(getSegment(0, event))
     .asyncAndThen((col) =>
       combine(quad([
-        toAsync(getUserId(context)),
+        toAsync(getUserId(event)),
         toAsync(getReqBody(event)),
         okAsync(col),
         db.findOneByRef_(col, getSegment(1, event)),
@@ -54,11 +54,11 @@ const updateEntry = (event, context) => toPromise(
 )
 
 /** @type {(event: Event, context: Context) => Promise<Response>} */
-const deleteEntry = (event, context) => toPromise(
+const deleteEntry = (event) => toPromise(
   toEntryCollection(getSegment(0, event))
     .asyncAndThen((col) =>
       combine(triplet([
-        toAsync(getUserId(context)),
+        toAsync(getUserId(event)),
         okAsync(col),
         db.findOneByRef_(col, getSegment(1, event)),
       ]))
