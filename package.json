@@ -14,7 +14,7 @@
     "url": "https://github.com/philhawksworth/eleventyone"
   },
   "dependencies": {
-    "@11ty/eleventy": "^0.8.3",
+    "@11ty/eleventy": "^1.0.2",
     "@11ty/eleventy-plugin-syntaxhighlight": "^2.0.3",
     "@netlify/functions": "^0.10.0",
     "@types/igdb-api-node": "^5.0.0",
