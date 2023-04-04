@@ -35,6 +35,7 @@ const List = (username) => initComponent({
                 )
                 .map((entry) => ({
                   ...entry,
+                  originalData: entry.commonMetadata,
                   commonMetadata: {
                     ...entry.commonMetadata,
                     ...Object.fromEntries(
