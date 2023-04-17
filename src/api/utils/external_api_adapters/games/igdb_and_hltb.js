@@ -11,7 +11,7 @@
 const { ResultAsync } = require('neverthrow')
 const errors = require('../../errors')
 const igdb = require('igdb-api-node').default
-const axios = require('axios').default
+const axios = require('axios')
 const Hltb = require('howlongtobeat')
 const hltb = new Hltb.HowLongToBeatService()
 
