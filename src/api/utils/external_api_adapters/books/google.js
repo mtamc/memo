@@ -6,7 +6,7 @@
 /** @typedef {import('../../parsers/books').Book} Book */
 const { ResultAsync } = require('neverthrow')
 const errors = require('../../errors')
-const axios = require('axios')
+const axios = require('axios').default
 
 const { GOOGLE_API_KEY } = process.env
 
