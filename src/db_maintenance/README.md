@@ -10,7 +10,9 @@ to create a `.env` file in this folder containing
 
 We migrated from FaunaDB to MongoDB Atlas on 2022-10-10
 
-Currently, no scripts have been written for MongoDB.
+One script has been written to add missing duration data to DB entries:
+./mongodb_add_missing_durations.js
 
-Examples might follow but hopefully we no longer need to manually mess with the
-DB.
+## Backing up the production DB
+
+mongodump --uri="MONGODB_URL_GOES_HERE" --out=./mongobackup
