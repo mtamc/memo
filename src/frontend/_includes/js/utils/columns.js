@@ -49,7 +49,7 @@ const year = () =>
     sortable: true,
     align: 'center',
     cellStyle: () => ({ css: { 'width': '25px' } }),
-    formatter: getOverrideOrMetadata('releaseYear')
+    formatter: getOverrideOrMetadataPreserveNull('releaseYear')
   })
 
 const duration = () =>
@@ -303,3 +303,6 @@ const makeSafeForCSS = (name) =>
 
 const getOverrideOrMetadata = (prop) => (_, row) =>
   row.overrides?.[prop] ?? row.commonMetadata?.[prop]
+
+const getOverrideOrMetadataPreserveNull = (prop) => (_, row) =>
+  row.overrides?.[prop] === null ? null : (row.overrides?.[prop] ?? row.commonMetadata?.[prop])
