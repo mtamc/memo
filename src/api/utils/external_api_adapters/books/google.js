@@ -43,6 +43,7 @@ const retrieve = (ref) => ResultAsync.fromPromise(
     url: `https://www.googleapis.com/books/v1/volumes?q=isbn:${ref}${urlKey}`
   }).then(({ data }) => data.items.map(({ volumeInfo }) => ({
     entryType: 'Book',
+    publishers: volumeInfo.publisher ? [volumeInfo.publisher] : undefined,
     englishTranslatedTitle: volumeInfo.title,
     releaseYear: parseInt(volumeInfo.publishedDate?.substring(0, 4)) || undefined,
     duration: volumeInfo.pageCount,

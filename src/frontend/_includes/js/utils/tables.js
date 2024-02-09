@@ -51,6 +51,7 @@ const entryTypeToFullColumns = (entryType, status) => ({
     Columns.year(),
     Columns.pages(),
     Columns.authors(),
+    Columns.publishers(),
     Columns.date('Started Date', 'startedDate'),
     Columns.date('Completed Date', 'completedDate'),
   ],

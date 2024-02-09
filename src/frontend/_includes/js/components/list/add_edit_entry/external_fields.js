@@ -45,6 +45,7 @@ const ExternalFields = ({ commonMetadata: data, overrides }, type) => {
 
   const bookFields = [
     Input('Author(s) (comma-separated)', 'authors'),
+    Input('Publishers (comma-separated)', 'publishers'),
   ]
 
   const gameFields = [
