@@ -16,7 +16,7 @@
   "dependencies": {
     "@11ty/eleventy": "^1.0.2",
     "@11ty/eleventy-plugin-syntaxhighlight": "^2.0.3",
-    "@netlify/functions": "^0.10.0",
+    "@netlify/functions": "^2.5.1",
     "@types/igdb-api-node": "^5.0.0",
     "autoprefixer": "^9.6.0",
     "axios": "^0.27.2",
@@ -56,7 +56,7 @@
     "babel-loader": "^8.2.3",
     "cross-env": "5.2.0",
     "memfs": "^3.4.1",
-    "netlify-cli": "^8.6.15",
+    "netlify-cli": "^17.16.1",
     "typescript": "^4.5.0-dev.20210930",
     "webpack": "^5.65.0"
   }

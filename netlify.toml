@@ -1,24 +1,27 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  functions = "src/api/routes"
-  NODE_ENV = "14.15.3"
+  NODE_ENV = "18.15.0"
+
+[functions]
+  directory = "src/api/routes"
 
 [dev]
   command = "npm run start"
+  targetPort = 8093
 
 [context.production.environment]
 # https://docs.netlify.com/functions/build-with-javascript/#runtime-settings
 # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
-NODE_VERSION = "14"
-AWS_LAMBDA_JS_RUNTIME = "nodejs14.x"
+NODE_VERSION = "18"
+AWS_LAMBDA_JS_RUNTIME = "nodejs18.x"
 
 [context.staging.environment]
 # https://docs.netlify.com/functions/build-with-javascript/#runtime-settings
 # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
-NODE_VERSION = "14"
-AWS_LAMBDA_JS_RUNTIME = "nodejs14.x"
+NODE_VERSION = "18"
+AWS_LAMBDA_JS_RUNTIME = "nodejs18.x"
 
 [context.deploy-preview.environment]
-NODE_VERSION = "14"
-AWS_LAMBDA_JS_RUNTIME = "nodejs14.x"
+NODE_VERSION = "18"
+AWS_LAMBDA_JS_RUNTIME = "nodejs18.x"
